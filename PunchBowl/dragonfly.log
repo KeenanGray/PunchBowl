@@ -1,55 +1,57 @@
-23:48:00       0  df::LogManager::startUp(): LogManager started.
-23:48:00       0  df::GameManager::setGameOver(): Setting game_over to false
-23:48:00       0  df::GameManager::startUp(): GameManager started.
-23:48:00       0  df::GraphicsManager::startUp(): GraphicsManager started.
-23:48:00       0  df::WorldManager::startUp(): Starting WorldManager
-23:48:00       0  df::InputManager::startUp(): Joystick id 9 connected.
-23:48:00       0  df::InputManager::startUp(): InputManager started.
-23:48:00       0  df::ResourceManager::startUp(): Starting ResourceManager
-23:48:00       0  df::ResourceManager::loadSprite(): Loading sprite from file 'Sprites/testsprite.txt' into label 'test'
-23:48:00       0  Testing Boxes and views and boundaries
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 1
-23:48:00       0  df::Manager::registerInterest(): Registering object of type ViewObject with manager WORLD_MANAGER for event type df::view
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 2
-23:48:00       0  df::Manager::registerInterest(): Registering object of type ViewObject with manager WORLD_MANAGER for event type df::view
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 3
-23:48:00       0  df::Manager::registerInterest(): Registering object of type ViewObject with manager WORLD_MANAGER for event type df::view
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 4
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 5
-23:48:00       0  df::ObjectList::insert(): Object list allocating additional memory for 8 objects
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 6
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 7
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 8
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::ObjectList::insert(): Object list allocating additional memory for 8 objects
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::ObjectList::insert(): Object list allocating additional memory for 8 objects
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 9
-23:48:00       0  df::ObjectList::insert(): Object list allocating additional memory for 16 objects
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 10
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 11
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::WorldManager::insertObject(): Adding object to world id: 12
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
-23:48:00       0  df::ObjectList::insert(): Object list allocating additional memory for 16 objects
-23:48:00       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
-23:48:00       0  df::ObjectList::insert(): Object list allocating additional memory for 16 objects
-23:48:00       1  df::InputManager::getInput(): Sending EVENT_MOUSE MOUSE_MOVED to objects.
-23:48:00       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
-23:48:00       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
-23:48:00       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
-23:48:00       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
-23:48:00       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
+11:30:37       0  df::LogManager::startUp(): LogManager started.
+11:30:37       0  df::GameManager::setGameOver(): Setting game_over to false
+11:30:37       0  df::GameManager::startUp(): GameManager started.
+11:30:37       0  df::GraphicsManager::startUp(): GraphicsManager started.
+11:30:37       0  df::WorldManager::startUp(): Starting WorldManager
+11:30:37       0  df::InputManager::startUp(): Joystick id 0 connected.
+11:30:37       0  df::InputManager::startUp(): Joystick id 9 connected.
+11:30:37       0  df::InputManager::startUp(): InputManager started.
+11:30:37       0  df::ResourceManager::startUp(): Starting ResourceManager
+11:30:37       0  df::ResourceManager::loadSprite(): Loading sprite from file 'Sprites/testsprite.txt' into label 'test'
+11:30:37       0  Testing Boxes and views and boundaries
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 1
+11:30:37       0  df::Manager::registerInterest(): Registering object of type ViewObject with manager WORLD_MANAGER for event type df::view
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 2
+11:30:37       0  df::Manager::registerInterest(): Registering object of type ViewObject with manager WORLD_MANAGER for event type df::view
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 3
+11:30:37       0  df::Manager::registerInterest(): Registering object of type ViewObject with manager WORLD_MANAGER for event type df::view
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 4
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 5
+11:30:37       0  df::ObjectList::insert(): Object list allocating additional memory for 8 objects
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 6
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 7
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 8
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::ObjectList::insert(): Object list allocating additional memory for 8 objects
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::ObjectList::insert(): Object list allocating additional memory for 8 objects
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 9
+11:30:37       0  df::ObjectList::insert(): Object list allocating additional memory for 16 objects
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 10
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 11
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::WorldManager::insertObject(): Adding object to world id: 12
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager INPUT_MANAGER for event type df::keyboard
+11:30:37       0  df::ObjectList::insert(): Object list allocating additional memory for 16 objects
+11:30:37       0  df::Manager::registerInterest(): Registering object of type TestObject with manager GAME_MANAGER for event type df::step
+11:30:37       0  df::ObjectList::insert(): Object list allocating additional memory for 16 objects
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_MOUSE MOUSE_MOVED to objects.
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.
+11:30:37       1  df::InputManager::getInput(): Sending EVENT_JOYSTICK BUTTON_DOWN to objects.

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\lwang-engine\test\TestViewObjects.cpp">
+    <ClCompile Include="..\include\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
