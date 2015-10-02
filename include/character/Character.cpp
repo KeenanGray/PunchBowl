@@ -235,7 +235,5 @@ StickDirection Character::getFacingDirection() const {
 }
 
 int Character::out() {
-    df::Position pos(96, 40);
-    this->setPos(pos);
-    return 1;
+    return 0;
 }

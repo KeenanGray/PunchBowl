@@ -70,4 +70,5 @@ void startStage(Stage *p_s) {
     world_manager.setBoundary(df::Box(df::Position(0, 0), p_s->getPos().getX() + 10, p_s->getPos().getY()));
 
     world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 1, p_s->getStageBounds().getVertical()));
-    world_manager.setView(df::Box(df::Position(), 96, 32));}
+    world_manager.setView(df::Box(df::Position(), 96, 32));
+}

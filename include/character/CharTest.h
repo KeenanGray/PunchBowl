@@ -10,10 +10,12 @@
 
 class CharTest : public Character {
     private:
-
+        int out();
     public:
         CharTest();
         ~CharTest();
+
+        int eventHandler(const df::Event *p_e);
 };
 
 #endif // __CHAR_TEST_H__

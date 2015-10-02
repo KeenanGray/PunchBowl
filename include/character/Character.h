@@ -47,6 +47,8 @@ class Character : public df::Object {
         // Stored value of the joystick y axis
         float y_axis;
 
+        int out();
+        
     public:
         Character();
         ~Character();
@@ -66,7 +68,6 @@ class Character : public df::Object {
         // Returns either left, right, or neutral
         StickDirection getFacingDirection() const;
 
-        int out();
 };
 
 #endif // __CHARACTER_H__
