@@ -11,7 +11,7 @@
 #include "Stage.h"
 
 const int ut_bound_width = 192;
-const int ut_bound_height = 48;
+const int ut_bound_height = 72;
 
 class UltimateTerminal : public Stage {
     private:
