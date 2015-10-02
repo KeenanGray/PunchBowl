@@ -25,14 +25,16 @@ UltimateTerminal::UltimateTerminal() {
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
 
+    ut_bound_height = 48;
+    ut_bound_width = p_temp_sprite->getWidth();
+
+    setStageBounds(df::Box(df::Position(), ut_bound_width, ut_bound_width));
+
     // Set initial position to middle of left side
-    df::Position pos(ut_bound_width/2, ut_bound_height*2/3);
+    df::Position pos(ut_bound_width / 2, ut_bound_height * 2 / 3);
     this->setPos(pos);
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
-
-    world_manager.setBoundary(df::Box(df::Position(), ut_bound_width, ut_bound_height));
-    world_manager.setView(df::Box(df::Position(), 96, 32));
 }
 
 UltimateTerminal::~UltimateTerminal() {

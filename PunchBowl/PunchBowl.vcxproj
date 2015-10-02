@@ -71,6 +71,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\game.cpp" />
+    <ClCompile Include="..\include\Organizer.cpp" />
+    <ClCompile Include="..\include\Platform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Sprites\platform.txt" />
+    <Text Include="Sprites\testsprite.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Organizer.h" />
+    <ClInclude Include="..\include\Platform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

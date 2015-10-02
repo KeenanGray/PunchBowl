@@ -13,6 +13,8 @@
 // Punchbowl headers
 #include "character/CharTest.h"
 #include "stage/UltimateTerminal.h"
+#include "Organizer.h"
+#include "Platform.h"
 
 void loadResources();
 void startUpGame();
@@ -38,16 +40,19 @@ int main(int argc, char *argv[]) {
 void loadResources() {
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-
     // Load sprite
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
+    resource_manager.loadSprite("Sprites/platform.txt", "platform");
 
-    
 }
 
 void startUpGame() {
     // Start up the game stuff
+    //Add an organizer to listen for keyboard input (q for quit);
+    Organizer &org = Organizer::getInstance();
+
+    //Load the stage;
     Stage *p_s = new UltimateTerminal();
     startStage(p_s);
 
@@ -56,7 +61,13 @@ void startUpGame() {
 
 void startStage(Stage *p_s) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
+    Platform *p1 = new Platform();
+    Platform *p2 = new Platform();
+    p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 10));
+    p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 10));
 
+    world_manager.setView(df::Box(df::Position(0, 0), 35, 35));
+    world_manager.setBoundary(df::Box(df::Position(0, 0), p_s->getPos().getX() + 10, p_s->getPos().getY()));
 
-
-}
+    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 1, p_s->getStageBounds().getVertical()));
+    world_manager.setView(df::Box(df::Position(), 96, 32));}
