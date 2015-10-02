@@ -172,7 +172,6 @@ int Character::jump(const df::EventJoystick *p_je) {
                 // the user holds the button
                 // Full hop
                 this->setYVelocity(-0.08, true);
-                this->setXVelocity(this->x_axis / 200.0);
             }
         }
     }
@@ -205,8 +204,7 @@ int Character::move(const df::EventJoystick *p_je) {
                 this->setXVelocity(temp_val/4000.0, true);
             }
         }
-
-    } else {
+    } else if (this->on_ground) {
         this->frame_last_stood = df::GameManager::getInstance().getStepCount();
         this->setXVelocity(0);
         this->current_movement = STANDING;
