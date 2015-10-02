@@ -13,6 +13,7 @@
 // Punchbowl headers
 #include "character/CharTest.h"
 #include "stage/UltimateTerminal.h"
+#include "Organizer.h"
 
 void loadResources();
 void startUpGame();
@@ -46,6 +47,10 @@ void loadResources() {
 
 void startUpGame() {
     // Start up the game stuff
+    //Add an organizer to listen for keyboard input (q for quit);
+   Organizer &org = Organizer::getInstance();
+
+   //Load the stage;
     Stage *p_s = new UltimateTerminal();
     startStage(p_s);
 
