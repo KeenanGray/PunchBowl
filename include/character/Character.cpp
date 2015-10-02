@@ -28,38 +28,43 @@ Character::Character() {
     setType("char_default");
     this->setSolidness(df::SOFT);
 
-    // Setup sprite
+    // Setup setup default sprites
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
+    this->setSprite(p_temp_sprite);
+    this->setSpriteSlowdown(0);
+    this->setTransparency('#');
 
+    this->current_anim = "undefined";
     this->l_spr = "alien-left-spr";
     this->r_spr = "alien-right-spr";
     this->l_wspr = "alien-left-wspr";
     this->r_wspr = "alien-right-wspr";
     
-    this->l_spr_s = 0;
-    this->r_spr_s = 0;
-    this->l_wspr_s = 0;
-    this->r_wspr_s = 0;
+    this->spr_s = 0;
+    this->wspr_s = 0;
+    this->dspr_s = 0;
 
-    this->setSprite(p_temp_sprite);
-    this->setSpriteSlowdown(0);
-
-    startPos = df::Position(96, 10);
-    this->setPos(startPos);
-
+    // Register interest for events
     this->registerInterest(df::JOYSTICK_EVENT);
     this->registerInterest(df::KEYBOARD_EVENT);
     this->registerInterest(df::STEP_EVENT);
     this->registerInterest(df::OUT_EVENT);
 
+    // Assign character to a joystick
     df::InputManager &input_manager = df::InputManager::getInstance();
     if (input_manager.getJoystickCount() > 0) {
         this->joystick_id = input_manager.getJoysticks()[0];
     }
 
+    // Initialize character state values
     this->on_ground = true;
-    this->stunned = false;
+
+    this->stun_frames = 0;
+    this->attack_frames = 0;
+    this->attack_type = UNDEFINED_ATTACK;
+    this->cancel_frames = 0;
+    this->recovery_available = true;
 
     this->jump_frames = 1024;
     this->jump_this_frame = false;
@@ -71,6 +76,9 @@ Character::Character() {
     this->y_axis = 0;
 
     this->frame_last_stood = 0;
+    this->current_movement = STANDING;
+
+    this->damage = 0;
 }
 
 Character::~Character() {
@@ -97,14 +105,25 @@ int Character::eventHandler(const df::Event *p_e) {
 }
 
 int Character::controls(const df::EventJoystick *p_je) {
+    // Cannot do input while locked in an animation
+    if (this->cancel_frames > 0) {
+        return 0;
+    } else if (this->stun_frames > 0) {
+        // Insert tech recovery here
+        return 0;
+    }
     // Axis events
     if (p_je->getAction() == df::AXIS) {
         if (p_je->getAxis() == df::Input::AXIS_X) {
-            this->x_axis = p_je->getAxisValue();
+            if (p_je->getAxisValue() != 0) {
+                this->x_axis = p_je->getAxisValue();
+            }
             return this->move(p_je);
         }
         else if (p_je->getAxis() == df::Input::AXIS_Y) {
-            this->y_axis = p_je->getAxisValue();
+            if (p_je->getAxisValue() != 0) {
+                this->y_axis = p_je->getAxisValue();
+            }
             return this->jump(p_je);
         }
     }
@@ -139,28 +158,20 @@ int Character::jump(const df::EventJoystick *p_je) {
             // Only one call of this function can be made per frame
             this->jump_this_frame = true;
             // Initiate a new jump if not currently in a jump
-            if (this->on_ground && !this->currently_in_jump) {
-                // Short hop
-                // this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()-1));
-                this->setYVelocity(jumpSpeedDefault);
-                this->setXVelocity(this->x_axis/200.0);
-                this->count_multi_jumps++;
-                this->currently_in_jump = true;
-                this->jump_frames = 0;
-            } else if (!this->currently_in_jump &&
-                this->count_multi_jumps < this->num_multi_jumps
-                ) {
-                // Air jump
-                this->setYVelocity(jumpSpeedDefault);
-                this->setXVelocity(this->x_axis/200.0);
-                this->count_multi_jumps++;
-                this->currently_in_jump = true;
-                this->jump_frames = 0;
+            if (!this->currently_in_jump) {
+                // Ground jump or air jump
+                if (this->on_ground || this->count_multi_jumps < this->num_multi_jumps) {
+                    this->setYVelocity(jumpSpeedDefault);
+                    this->setXVelocity(this->x_axis/200.0);
+                    this->count_multi_jumps++;
+                    this->currently_in_jump = true;
+                    this->jump_frames = 0;
+                }
             } else if (this->jump_frames > shorthopFrames && this->jump_frames < longhopFrames) {
                 // The strength of a jump can be increased by how long 
                 // the user holds the button
                 // Full hop
-                this->setYVelocity(-0.28, true);
+                this->setYVelocity(-0.08, true);
                 this->setXVelocity(this->x_axis / 200.0);
             }
         }
@@ -173,14 +184,18 @@ int Character::move(const df::EventJoystick *p_je) {
     if (std::abs(temp_val) > moveThreshold) {
         if (this->on_ground) {
 
-            this->setXVelocity(temp_val/200.0);
+            this->setXVelocity(temp_val/250.0);
+            this->current_movement = WALKING;
             int step_count = df::GameManager::getInstance().getStepCount();
+            // If joystick was moved fast enough, then begin dashing
             if (std::abs(temp_val) > dashThreshold) {
                 if (step_count - this->frame_last_stood <= dashingFrames) {
                     this->setXVelocity(temp_val/100.0);
                     this->frame_last_stood = step_count;
+                    this->current_movement = DASHING;
                 }
             }
+
         } else if (temp_val < 0) {
             if (this->getXVelocity() > -.5) {
                 this->setXVelocity(temp_val/4000.0, true);
@@ -194,6 +209,7 @@ int Character::move(const df::EventJoystick *p_je) {
     } else {
         this->frame_last_stood = df::GameManager::getInstance().getStepCount();
         this->setXVelocity(0);
+        this->current_movement = STANDING;
     }
     return 0;
 }
@@ -202,62 +218,13 @@ int Character::step() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
-    //Get direction and change sprite
-    StickDirection dir = getFacingDirection();
-    switch (dir){
-        case FACING_RIGHT:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->r_wspr);
-                setSprite(p_temp_sprite);
-                setSpriteSlowdown(this->r_wspr_s);
-                break;
-            }
-        case FACING_LEFT:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_wspr);
-                setSprite(p_temp_sprite);
-                setSpriteSlowdown(this->l_wspr_s);
-                break;
-            }
-        case FACING_NEUTRAL:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->r_spr);
-                setSprite(p_temp_sprite);
-                setSpriteSlowdown(this->l_spr_s);
-                break;
-            }
-        case FACING_UP:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_spr);
-                setSprite(p_temp_sprite);
-                setSpriteSlowdown(this->r_spr_s);
-                break;
-            }
-        case FACING_DOWN:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->r_spr);
-                setSprite(p_temp_sprite);
-                setSpriteSlowdown(this->l_spr_s);
-                break;
-            }
-        default:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_spr);
-                setSprite(p_temp_sprite);
-                setSpriteSlowdown(this->r_spr_s);
-                break;
-            }
-    }
-
-
     df::Box world_box = df::worldBox(this);
     // Get objects below this character
     df::Position temp_pos(world_box.getPos().getX(), world_box.getPos().getY()+world_box.getVertical());
-    df::Box temp_box(
-        temp_pos,
-        this->getBox().getHorizontal(), 
-        0
-        );
+    df::Box temp_box(temp_pos, this->getBox().getHorizontal(), 0);
     df::ObjectList obj_below = world_manager.objectsInBox(temp_box);
-
     // Get objects inside this character
-    df::ObjectList obj_inside = world_manager.objectsInBox(world_box());
-
-    this->on_ground = false;
+    df::ObjectList obj_inside = world_manager.objectsInBox(world_box);
 
     // If a jump was not attempted in the past frame, a new jump can be attempted
     if (this->jump_this_frame == false) {
@@ -267,7 +234,8 @@ int Character::step() {
     this->jump_this_frame = false;
 
     // Check if grounded
-    if (!below.isEmpty() && this->jump_frames >= shorthopFrames) {
+    this->on_ground = false;
+    if (!obj_below.isEmpty() && this->jump_frames >= shorthopFrames) {
         df::ObjectListIterator li(&obj_below);
         for (li.first(); !li.isDone(); li.next()) {
             df::Object *p_temp_o = li.currentObject();
@@ -278,23 +246,30 @@ int Character::step() {
                         ) {
                         this->setYVelocity(0);
                         this->on_ground = true;
+                        this->recovery_available = true;
                         this->count_multi_jumps = 0;
+                        // TODO: Tech recovery when touching ground
                     }
                 }
             }
         }
     }
 
+    // Aerial 
     if (!this->on_ground) {
-        float y_vel = this->getYVelocity();
         if (this->count_multi_jumps == 0) {
             this->count_multi_jumps = 1;
         }
+        // Gravity
+        float y_vel = this->getYVelocity();
         if (y_vel < .32) {
             this->setYVelocity(gravityDefault, true);
         }
         this->jump_frames++;
     }
+
+    // Determine which animation to use
+    this->animationSelector();
 
     return 1;
 }
@@ -331,15 +306,99 @@ StickDirection Character::getJoystickDirection() const {
 
 StickDirection Character::getFacingDirection() const {
     float temp_x = this->x_axis;
-    if (std::abs(temp_x) > moveThreshold) {
-        if (temp_x > 0) {
-            return FACING_RIGHT;
-        }
-        else {
-            return FACING_LEFT;
-        }
+    if (temp_x > 0) {
+        return FACING_RIGHT;
     }
-    return FACING_NEUTRAL;
+    else {
+        return FACING_LEFT;
+    }
+}
+
+int Character::animationSelector() {
+
+    // Decrement animation frames
+    if (this->stun_frames > 0) {
+        this->stun_frames--;
+    }
+    if (this->attack_frames > 0) {
+        this->attack_frames--;
+    }
+    if (this->cancel_frames > 0) {
+        this->cancel_frames--; 
+    }
+
+    // Check if in attack animation
+    if (this->attack_type != UNDEFINED_ATTACK) {
+        if (this->attack_frames > 0) {
+            // Select some attack animation
+        } else {
+            this->attack_type = UNDEFINED_ATTACK;
+        }
+    } else if (this->stun_frames > 0) {
+        // Select stun animation
+    } else if (this->on_ground) {
+        // Select some ground animation
+        if (this->getFacingDirection() == FACING_LEFT) {
+            if (this->current_movement == STANDING) {
+                this->switchToSprite(this->l_spr, this->spr_s);
+            } else if (this->current_movement == WALKING) {
+                this->switchToSprite(this->l_wspr, this->wspr_s);
+            } else if (this->current_movement == DASHING) {
+                this->switchToSprite(this->l_dspr, this->dspr_s);
+            }
+        } else {
+            if (this->current_movement == STANDING) {
+                this->switchToSprite(this->r_spr, this->spr_s);
+            } else if (this->current_movement == WALKING) {
+                this->switchToSprite(this->r_wspr, this->wspr_s);
+            } else if (this->current_movement == DASHING) {
+                this->switchToSprite(this->r_dspr, this->dspr_s);
+            }
+        }
+    } else {
+        // select some air animation
+    }
+}
+
+void Character::switchToSprite(std::string sprite_tag, int new_sprite_slowdown) {
+    // Check if not switching to current sprite
+    if (sprite_tag.compare(this->current_anim) != 0) {
+        this->setSpriteIndex(0);
+        // Store previous sprite height
+        int height_difference = this->getSprite()->getHeight();
+        
+        df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
+        df::Sprite *p_temp_sprite = resource_manager.getSprite(sprite_tag);
+        setSprite(p_temp_sprite);
+        setSpriteSlowdown(new_sprite_slowdown);
+
+        // Calculate height difference
+        height_difference -= this->getSprite()->getHeight();
+        this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()+height_difference));
+        this->current_anim = sprite_tag;
+    }
+}
+
+void Character::hit(int stun, int damage_dealt, float knockback, df::Position direction) {
+
+    // Instantly stop current attack
+    this->attack_frames = 0;
+    this->attack_type = UNDEFINED_ATTACK;
+    this->cancel_frames = 0;
+
+    // Reset recovery moce
+    this->recovery_available = true;
+
+    // Add stun and damage
+    this->stun_frames = stun;
+    this->damage += damage_dealt;
+    // Use manhattan distance rather than euclidean distance for direction vectors
+    int direction_normalization = direction.getX() + direction.getY();
+    float x_component = float(direction.getX())/float(direction_normalization);
+    float y_component = float(direction.getY())/float(direction_normalization);
+
+    this->setXVelocity(knockback*x_component*(1.0+float(this->damage)/100));
+    this->setXVelocity(knockback*y_component*(1.0+float(this->damage)/100));
 }
 
 int Character::out() {
