@@ -10,11 +10,10 @@
 // Punchbowl headers
 #include "Stage.h"
 
-
 class UltimateTerminal : public Stage {
 private:
     int ut_bound_width = 337;
-    int ut_bound_height = 48;
+    int ut_bound_height = 72;
 public:
     UltimateTerminal();
     ~UltimateTerminal();

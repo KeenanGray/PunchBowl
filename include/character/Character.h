@@ -13,16 +13,44 @@
 // Object
 #include "Object.h"
 
+enum StickDirection {
+    FACING_NEUTRAL = 0,
+    FACING_UP,
+    FACING_RIGHT,
+    FACING_DOWN,
+    FACING_LEFT,
+};
+
+const float jumpThreshold = -48;
+const float moveThreshold = 16;
+
 class Character : public df::Object {
     private:
         unsigned int joystick_id;
 
         bool on_ground;
         bool stunned;
+        // Used for determining whether a jump is a short hop or full jump
+        int jump_frames;
+        // Whether or not jump was called during this frame
+        bool jump_this_frame;
+        // Whether or not a character is currently in a jump
+        bool currently_in_jump;
+
+        // The number of simultaneous jumps the character can do
+        int num_multi_jumps;
+        // The current jump number the character is on
+        int count_multi_jumps;
 
         df::Position startPos;
 
+        // Stored value of the joystick x axis
+        float x_axis;
+        // Stored value of the joystick y axis
+        float y_axis;
 
+        int out();
+        
     public:
         Character();
         ~Character();
@@ -37,7 +65,11 @@ class Character : public df::Object {
 
         virtual int step();
 
-        int out();
+        // Returns a joystick direction in one of 4 directions and neutal
+        StickDirection getJoystickDirection() const;
+        // Returns either left, right, or neutral
+        StickDirection getFacingDirection() const;
+
 };
 
 #endif // __CHARACTER_H__
