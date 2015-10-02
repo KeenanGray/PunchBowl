@@ -32,6 +32,8 @@ const int shorthopFrames = 3;
 const int longhopFrames = 6;
 // Default jump speed for ground and air jumps
 const float jumpSpeedDefault = -0.32;
+// Amount of gravity
+const float gravityDefault = 0.03;
 
 class Character : public df::Object {
     private:

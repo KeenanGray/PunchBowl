@@ -19,21 +19,16 @@ In this game, two players face off in an arena.  The objective is for one player
   * Gameplay design
     * Moves
     * Names
-  * Sprites
-    * Standing
-    * Movement
   * Code
 * Controls/ Movement
   * Code
     * Death
     * Knockback
     * Air Movement
-    * Combo attacks
+    * Rolling (Optional)
 * Stages
   * Code
     * End of fight
-  * Art
-    * Background (optional)
   * Music (Borrowed from other games)
 * Menus
   * Code
@@ -43,7 +38,6 @@ In this game, two players face off in an arena.  The objective is for one player
   * Music (Borrowed from other games)
 * Fighting
   * Code
-  * Sprites
   * Sounds (SFXR)
 * Items
   * Code
@@ -55,6 +49,31 @@ In this game, two players face off in an arena.  The objective is for one player
     * Like home run contest or target break in Smash Bros.
 
 # Schedule:
+* Art assets
+  * Character Sprites
+    * Standing
+    * Walking
+    * Dashing
+    * Jumping
+    * In air
+    * Grabbed ledge/recovery
+      * Roll
+      * Get-up
+      * Attack
+    * Roll
+    * Attacks
+      * Directional Attacks
+      * Jabs
+      * Air attacks
+    * Hit
+    * On ground/recovery
+      * Roll
+      * Get-up
+      * Attack
+  * Stages
+    * Sprite
+    * Background
+
 * Plan Thurs oct 1
   * Tasks to complete before checkpoint:
     * Engine Changes

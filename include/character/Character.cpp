@@ -26,6 +26,7 @@
 Character::Character() {
     // Set type attribute
     setType("char_default");
+    this->setSolidness(df::SOFT);
 
     // Setup sprite
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
@@ -243,21 +244,18 @@ int Character::step() {
     }
 
 
-    //fall from jump
-
     df::Box world_box = df::worldBox(this);
+    // Get objects below this character
     df::Position temp_pos(world_box.getPos().getX(), world_box.getPos().getY()+world_box.getVertical());
     df::Box temp_box(
         temp_pos,
         this->getBox().getHorizontal(), 
         0
         );
-    df::ObjectList below = world_manager.objectsInBox(temp_box);
+    df::ObjectList obj_below = world_manager.objectsInBox(temp_box);
 
-    temp_pos.setY(temp_pos.getY()-1);
-    temp_box.setPos(temp_pos);
-    
-    df::ObjectList at = world_manager.objectsInBox(temp_box);
+    // Get objects inside this character
+    df::ObjectList obj_inside = world_manager.objectsInBox(world_box());
 
     this->on_ground = false;
 
@@ -270,11 +268,11 @@ int Character::step() {
 
     // Check if grounded
     if (!below.isEmpty() && this->jump_frames >= shorthopFrames) {
-        df::ObjectListIterator li(&below);
+        df::ObjectListIterator li(&obj_below);
         for (li.first(); !li.isDone(); li.next()) {
             df::Object *p_temp_o = li.currentObject();
             if (!(p_temp_o == this)) {
-                if (!at.contains(p_temp_o)) {
+                if (!obj_inside.contains(p_temp_o)) {
                     if (dynamic_cast <const Stage *> (p_temp_o) || 
                         dynamic_cast <const Platform *> (p_temp_o)
                         ) {
@@ -293,7 +291,7 @@ int Character::step() {
             this->count_multi_jumps = 1;
         }
         if (y_vel < .32) {
-            this->setYVelocity(.03, true);
+            this->setYVelocity(gravityDefault, true);
         }
         this->jump_frames++;
     }
