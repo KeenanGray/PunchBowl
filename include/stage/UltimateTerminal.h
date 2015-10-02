@@ -12,8 +12,8 @@
 
 class UltimateTerminal : public Stage {
 private:
-    int ut_bound_width;
-    int ut_bound_height;
+    int ut_bound_width = 337;
+    int ut_bound_height = 72;
 public:
     UltimateTerminal();
     ~UltimateTerminal();

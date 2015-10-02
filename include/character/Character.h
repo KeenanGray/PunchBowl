@@ -42,6 +42,8 @@ class Character : public df::Object {
         // The current jump number the character is on
         int count_multi_jumps;
 
+        df::Position startPos;
+
         // Stored value of the joystick x axis
         float x_axis;
         // Stored value of the joystick y axis

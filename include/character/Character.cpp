@@ -32,7 +32,10 @@ Character::Character() {
     df::Sprite *p_temp_sprite = resource_manager.getSprite("test");
 
     this->setSprite(p_temp_sprite);
-    this->setSpriteSlowdown(20);
+    this->setSpriteSlowdown(0);
+
+    startPos = df::Position(96, 10);
+    this->setPos(startPos);
 
     this->registerInterest(df::JOYSTICK_EVENT);
     this->registerInterest(df::KEYBOARD_EVENT);
@@ -69,9 +72,11 @@ int Character::eventHandler(const df::Event *p_e) {
             return 0;
         }
         return this->controls(p_je);
-    } else if (p_e->getType() == df::STEP_EVENT) {
+    }
+    else if (p_e->getType() == df::STEP_EVENT) {
         return this->step();
-    } else if (p_e->getType() == df::OUT_EVENT) {
+    }
+    else if (p_e->getType() == df::OUT_EVENT) {
         return this->out();
     }
     return 0;
@@ -169,6 +174,7 @@ int Character::move(const df::EventJoystick *p_je) {
 
 int Character::step() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
+
     df::Box world_box = df::worldBox(this);
     df::Position temp_pos(world_box.getPos().getX(), world_box.getPos().getY()+world_box.getVertical());
     df::Box temp_box(
@@ -182,7 +188,7 @@ int Character::step() {
     temp_box.setPos(temp_pos);
     
     df::ObjectList at = world_manager.objectsInBox(temp_box);
-    
+
     this->on_ground = false;
 
     // If a jump was not attempted in the past frame, a new jump can be attempted
