@@ -1,7 +1,7 @@
 /**
  * Stage class
  */
- 
+
 // Dragonfly Engine headers
 // Events
 #include "EventKeyboard.h"
@@ -14,7 +14,6 @@
 #include "Stage.h"
 
 Stage::Stage() {
-    this->registerInterest(df::KEYBOARD_EVENT);
 
 }
 
@@ -24,14 +23,13 @@ Stage::~Stage() {
 
 int Stage::eventHandler(const df::Event *p_e) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
-    if (p_e->getType() == df::KEYBOARD_EVENT) {
-        const df::EventKeyboard *keyboard_event = static_cast<const df::EventKeyboard *> (p_e);
-        if (keyboard_event->getKey() == df::Input::Q) {
-            df::GameManager &game_manager = df::GameManager::getInstance();
-            game_manager.setGameOver();
-        }
-        return 1;
-    }
     return 0;
+}
 
+//Getter and setter for stage bounds
+df::Box Stage::getStageBounds() const{
+    return stage_bounds;
+}
+void Stage::setStageBounds(df::Box new_stage_bounds){
+    stage_bounds = new_stage_bounds;
 }

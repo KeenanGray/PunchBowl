@@ -1,4 +1,4 @@
-frames 2
+frames 1
 width 38
 height 4
 color red
@@ -6,10 +6,5 @@ color red
  /                                 \  
 /                                   \ 
 \___________________________________/ 
-end
-                                      
-                                      
-                                      
-                                      
 end
 eof
