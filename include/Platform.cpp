@@ -18,7 +18,7 @@ Platform::Platform(){
 
     // Set object type.
     setType("Platform");
-    setSolidness(df::HARD);
+    setSolidness(df::SOFT);
 
     setPos(df::Position(20, 10));
 

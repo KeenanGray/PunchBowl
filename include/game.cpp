@@ -63,8 +63,8 @@ void startStage(Stage *p_s) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     Platform *p1 = new Platform();
     Platform *p2 = new Platform();
-    p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 10));
-    p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 10));
+    p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 9));
+    p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 9));
 
     world_manager.setView(df::Box(df::Position(0, 0), 35, 35));
     world_manager.setBoundary(df::Box(df::Position(0, 0), p_s->getPos().getX() + 10, p_s->getPos().getY()));
