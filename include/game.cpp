@@ -44,6 +44,11 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
     resource_manager.loadSprite("Sprites/platform.txt", "platform");
+
+    resource_manager.loadSprite("Sprites/bull-spr/bull-left-spr.txt", "bull-left-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/bull-right-spr.txt", "bull-right-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/bull-left-walk-spr.txt", "bull-left-wspr");
+    resource_manager.loadSprite("Sprites/bull-spr/bull-right-walk-spr.txt", "bull-right-wspr");
     
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-spr.txt", "alien-right-spr");
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-walk-spr.txt", "alien-right-wspr");

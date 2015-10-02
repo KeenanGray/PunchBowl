@@ -18,6 +18,16 @@ CharTest::CharTest() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 
     world_manager.setViewFollowing(this);
+
+    this->l_spr = "bull-left-spr";
+    this->r_spr = "bull-right-spr";
+    this->l_wspr = "bull-left-wspr";
+    this->r_wspr = "bull-right-wspr";
+    
+    this->l_spr_s = 15;
+    this->r_spr_s = 15;
+    this->l_wspr_s = 4;
+    this->r_wspr_s = 4;
 }
 
 CharTest::~CharTest() {

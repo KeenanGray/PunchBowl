@@ -31,6 +31,16 @@ Character::Character() {
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
 
+    this->l_spr = "alien-left-spr";
+    this->r_spr = "alien-right-spr";
+    this->l_wspr = "alien-left-wspr";
+    this->r_wspr = "alien-right-wspr";
+    
+    this->l_spr_s = 0;
+    this->r_spr_s = 0;
+    this->l_wspr_s = 0;
+    this->r_wspr_s = 0;
+
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
 
@@ -166,15 +176,9 @@ int Character::move(const df::EventJoystick *p_je) {
             int step_count = df::GameManager::getInstance().getStepCount();
             if (std::abs(temp_val) > dashThreshold) {
                 if (step_count - this->frame_last_stood <= dashingFrames) {
-                    printf("Dashing\n");
                     this->setXVelocity(temp_val/100.0);
                     this->frame_last_stood = step_count;
-                } else {
-
-                    printf("Not Dashing\n");
                 }
-            } else {
-                printf("Not Dashing\n");
             }
         } else if (temp_val < 0) {
             if (this->getXVelocity() > -.5) {
@@ -201,39 +205,39 @@ int Character::step() {
     StickDirection dir = getFacingDirection();
     switch (dir){
         case FACING_RIGHT:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-wspr");
+                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->r_wspr);
                 setSprite(p_temp_sprite);
-                setSpriteSlowdown(5);
+                setSpriteSlowdown(this->r_wspr_s);
                 break;
             }
         case FACING_LEFT:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-wspr");
+                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_wspr);
                 setSprite(p_temp_sprite);
-                setSpriteSlowdown(5);
+                setSpriteSlowdown(this->l_wspr_s);
                 break;
             }
         case FACING_NEUTRAL:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-spr");
+                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->r_spr);
                 setSprite(p_temp_sprite);
-                setSpriteSlowdown(0);
+                setSpriteSlowdown(this->l_spr_s);
                 break;
             }
         case FACING_UP:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
+                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_spr);
                 setSprite(p_temp_sprite);
-                setSpriteSlowdown(0);
+                setSpriteSlowdown(this->r_spr_s);
                 break;
             }
         case FACING_DOWN:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-spr");
+                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->r_spr);
                 setSprite(p_temp_sprite);
-                setSpriteSlowdown(0);
+                setSpriteSlowdown(this->l_spr_s);
                 break;
             }
         default:{
-                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-wspr");
+                df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_spr);
                 setSprite(p_temp_sprite);
-                setSpriteSlowdown(0);
+                setSpriteSlowdown(this->r_spr_s);
                 break;
             }
     }
@@ -289,7 +293,7 @@ int Character::step() {
             this->count_multi_jumps = 1;
         }
         if (y_vel < .32) {
-            this->setYVelocity(.04, true);
+            this->setYVelocity(.03, true);
         }
         this->jump_frames++;
     }
@@ -330,7 +334,7 @@ StickDirection Character::getJoystickDirection() const {
 StickDirection Character::getFacingDirection() const {
     float temp_x = this->x_axis;
     if (std::abs(temp_x) > moveThreshold) {
-        if (temp_x < 0) {
+        if (temp_x > 0) {
             return FACING_RIGHT;
         }
         else {

@@ -31,7 +31,7 @@ const int shorthopFrames = 3;
 // Max number of frames you can hold a jump for until you reach max jump speed
 const int longhopFrames = 6;
 // Default jump speed for ground and air jumps
-const float jumpSpeedDefault = -0.4;
+const float jumpSpeedDefault = -0.32;
 
 class Character : public df::Object {
     private:
@@ -63,6 +63,18 @@ class Character : public df::Object {
 
         int out();
         
+    protected:
+        // The tags of the sprites
+        // And their slowdowns
+        std::string l_spr;
+        int l_spr_s;
+        std::string r_spr;
+        int r_spr_s;
+        std::string l_wspr;
+        int l_wspr_s;
+        std::string r_wspr;
+        int r_wspr_s;
+
     public:
         Character();
         ~Character();
