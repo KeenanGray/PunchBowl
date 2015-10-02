@@ -16,9 +16,12 @@
 #include "ResourceManager.h"
 #include "WorldManager.h"
 
+#include "utility.h"
+
 // Punchbowl headers
 #include "Character.h"
 #include "../stage/UltimateTerminal.h"
+#include "../Platform.h"
 
 Character::Character() {
     // Set type attribute
@@ -47,7 +50,7 @@ Character::Character() {
     this->on_ground = true;
     this->stunned = false;
 
-    this->jump_frames = 0;
+    this->jump_frames = 1024;
     this->jump_this_frame = false;
 
     this->num_multi_jumps = 2;
@@ -123,23 +126,24 @@ int Character::jump(const df::EventJoystick *p_je) {
             // Only one call of this function can be made per frame
             this->jump_this_frame = true;
             // Initiate a new jump if not currently in a jump
-            if (this->on_ground) {
+            if (this->on_ground && !this->currently_in_jump) {
                 // Short hop
-                this->setYVelocity(-.32);
-                this->setXVelocity(this->x_axis / 200.0);
+                // this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()-1));
+                this->setYVelocity(-.4);
+                this->setXVelocity(this->x_axis/200.0);
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
-            }
-            else if (!this->currently_in_jump &&
+                this->jump_frames = 0;
+            } else if (!this->currently_in_jump &&
                 this->count_multi_jumps < this->num_multi_jumps
                 ) {
                 // Air jump
-                this->setYVelocity(-.72);
-                this->setXVelocity(this->x_axis / 200.0);
+                this->setYVelocity(-.4);
+                this->setXVelocity(this->x_axis/200.0);
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
-            }
-            else if (this->jump_frames > 3 && this->jump_frames < 6) {
+                this->jump_frames = 0;
+            } else if (this->jump_frames > 3 && this->jump_frames < 6) {
                 // The strength of a jump can be increased by how long 
                 // the user holds the button
                 // Full hop
@@ -155,8 +159,16 @@ int Character::move(const df::EventJoystick *p_je) {
     float temp_val = p_je->getAxisValue();
     if (std::abs(temp_val) > moveThreshold) {
         if (this->on_ground) {
-            this->setXVelocity(temp_val / 200.0);
-            return 1;
+
+            this->setXVelocity(temp_val/200.0);
+        } else if (temp_val < 0) {
+            if (this->getXVelocity() > -.5) {
+                this->setXVelocity(temp_val/4000.0, true);
+            }
+        } else if (temp_val > 0) {
+            if (this->getXVelocity() < .5) {
+                this->setXVelocity(temp_val/4000.0, true);
+            }
         }
         else if (std::abs(this->getXVelocity()) < .5) {
             this->setXVelocity(temp_val / 4000.0, true);
@@ -171,8 +183,6 @@ int Character::move(const df::EventJoystick *p_je) {
 int Character::step() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-    df::Position temp_pos = df::Position(this->getPos().getX(), this->getPos().getY() + 1);
-    df::ObjectList below = world_manager.isCollision(this, temp_pos);
 
     //Get direction and change sprite
     StickDirection dir = getFacingDirection();
@@ -217,6 +227,21 @@ int Character::step() {
 
 
     //fall from jump
+
+    df::Box world_box = df::worldBox(this);
+    df::Position temp_pos(world_box.getPos().getX(), world_box.getPos().getY()+world_box.getVertical());
+    df::Box temp_box(
+        temp_pos,
+        this->getBox().getHorizontal(), 
+        0
+        );
+    df::ObjectList below = world_manager.objectsInBox(temp_box);
+
+    temp_pos.setY(temp_pos.getY()-1);
+    temp_box.setPos(temp_pos);
+    
+    df::ObjectList at = world_manager.objectsInBox(temp_box);
+
     this->on_ground = false;
 
     // If a jump was not attempted in the past frame, a new jump can be attempted
@@ -226,7 +251,26 @@ int Character::step() {
     // Reset jump frame
     this->jump_this_frame = false;
 
-    if (below.isEmpty()) {
+    // Check if grounded
+    if (!below.isEmpty() && this->jump_frames >= 3) {
+        df::ObjectListIterator li(&below);
+        for (li.first(); !li.isDone(); li.next()) {
+            df::Object *p_temp_o = li.currentObject();
+            if (!(p_temp_o == this)) {
+                if (!at.contains(p_temp_o)) {
+                    if (dynamic_cast <const Stage *> (p_temp_o) || 
+                        dynamic_cast <const Platform *> (p_temp_o)
+                        ) {
+                        this->setYVelocity(0);
+                        this->on_ground = true;
+                        this->count_multi_jumps = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!this->on_ground) {
         float y_vel = this->getYVelocity();
         if (this->count_multi_jumps == 0) {
             this->count_multi_jumps = 1;
@@ -234,23 +278,9 @@ int Character::step() {
         if (y_vel < .32) {
             this->setYVelocity(.04, true);
         }
-    }
-    else {
-        df::ObjectListIterator li(&below);
-        for (li.first(); !li.isDone(); li.next()) {
-            df::Object *p_temp_o = li.currentObject();
-            if (dynamic_cast <const Stage *> (p_temp_o)) {
-                this->setYVelocity(0);
-                this->on_ground = true;
-                this->jump_frames = 0;
-                this->count_multi_jumps = 0;
-            }
-        }
-    }
-
-    if (!this->on_ground) {
         this->jump_frames++;
     }
+
     return 1;
 }
 

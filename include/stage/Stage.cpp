@@ -13,7 +13,8 @@
 // Punchbowl headers
 #include "Stage.h"
 
-Stage::Stage() {
+Stage::Stage() { 
+    this->stage_bounds = df::Box();
 
 }
 
