@@ -26,7 +26,7 @@ Character::Character() {
 
     // Setup sprite
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-    df::Sprite *p_temp_sprite = resource_manager.getSprite("test");
+    df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
 
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
@@ -119,8 +119,31 @@ int Character::move(const df::EventJoystick *p_je) {
 
 int Character::step() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
+    df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     df::Position temp_pos = df::Position(this->getPos().getX(), this->getPos().getY() + 1);
     df::ObjectList below = world_manager.isCollision(this, temp_pos);
+    //set correct sprite
+    if (getXVelocity() > 0){
+        df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-wspr");
+        setSprite(p_temp_sprite);
+        setSpriteSlowdown(5);
+    }
+    else if (getXVelocity() < 0){
+        df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-wspr");
+        setSprite(p_temp_sprite);
+        setSpriteSlowdown(5);
+    }
+    else if (getSprite()->getLabel() == "alien-left-wspr"){
+        df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-spr");
+        setSprite(p_temp_sprite);
+        setSpriteSlowdown(0);
+    }
+    else {
+        df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-wspr");
+        setSprite(p_temp_sprite);
+        setSpriteSlowdown(0);
+    }
+
     //fall from jump
     this->on_ground = false;
 

@@ -20,6 +20,8 @@ class Character : public df::Object {
         bool on_ground;
         bool stunned;
 
+        df::Position startPos;
+
 
     public:
         Character();
