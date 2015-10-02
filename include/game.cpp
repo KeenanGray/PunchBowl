@@ -1,31 +1,31 @@
-//Dragonfly Engine Includes
-#include "GameManager.h"
-#include "LogManager.h"
-#include "ResourceManager.h"
+/*
+ * PUNCHBOWL
+ *
+ */
 
-//Game includes
-#include "Platform.h"
-#include "Organizer.h"
+// Dragonfly Engine Includes
+
+// Managers
+#include "GameManager.h"
+#include "ResourceManager.h"
+#include "WorldManager.h"
+
+// Punchbowl headers
+#include "character/CharTest.h"
+#include "stage/UltimateTerminal.h"
 
 void loadResources();
-void populateWorld();
+void startUpGame();
+void startStage(Stage *p_s);
 
 int main(int argc, char *argv[]) {
-    // Game manager will startup log manager automatically, but
-    // I want to startup log_manager with logging level 0. 
-    df::LogManager &log_manager = df::LogManager::getInstance();
-    log_manager.startUp(0);
-    log_manager.setFlush(true);
-
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
     loadResources();
-
-    //Populate World
-    populateWorld();
+    startUpGame();
 
     // Run game
     game_manager.run();
@@ -35,12 +35,24 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void loadResources(){
+void loadResources() {
+
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     // Load sprite
-    resource_manager.loadSprite("Sprites/platform.txt", "platform");
+    resource_manager.loadSprite("Sprites/testsprite.txt", "test");
+    resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
+
 }
-void populateWorld(){
-    Organizer &org = Organizer::getInstance();
-    new Platform();
+
+void startUpGame() {
+    // Start up the game stuff
+    Stage *p_s = new UltimateTerminal();
+    startStage(p_s);
+
+    Character *p_c = new CharTest();
+}
+
+void startStage(Stage *p_s) {
+    df::WorldManager &world_manager = df::WorldManager::getInstance();
+
 }

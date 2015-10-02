@@ -18,6 +18,10 @@ ENGINE= ../../dragonfly-lwang5/lib/dragonfly-lwang5-linux64.a
 
 # Location of engine code
 GAMESRC= \
+		../include/character/Character.cpp \
+		../include/character/CharTest.cpp \
+		../include/stage/Stage.cpp \
+		../include/stage/UltimateTerminal.cpp \
 
 GAMEFILES= $(GAMESRC:.cpp=.o)
 
