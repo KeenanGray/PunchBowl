@@ -27,6 +27,7 @@ enum Attack {
     SIDE_STRIKE,
     DOWN_STRIKE,
     UP_STRIKE,
+    DASH_ATTACK,
     NEUTRAL_AIR,
     FORWARD_AIR,
     BACK_AIR,
@@ -36,6 +37,8 @@ enum Attack {
     SIDE_SPECIAL,
     UP_SPECIAL,
     DOWN_SPECIAL,
+    GETUP_ATTACK,
+    LEDGE_ATTACK,
 };
 
 enum Movement {
