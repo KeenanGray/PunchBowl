@@ -26,7 +26,7 @@ Character::Character() {
 
     // Setup sprite
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-    df::Sprite *p_temp_sprite = resource_manager.getSprite("test");
+    df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
 
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
@@ -86,7 +86,8 @@ int Character::controls(const df::EventJoystick *p_je) {
         if (p_je->getAxis() == df::Input::AXIS_X) {
             this->x_axis = p_je->getAxisValue();
             return this->move(p_je);
-        } else if (p_je->getAxis() == df::Input::AXIS_Y) {
+        }
+        else if (p_je->getAxis() == df::Input::AXIS_Y) {
             this->y_axis = p_je->getAxisValue();
             return this->jump(p_je);
         }
@@ -96,7 +97,8 @@ int Character::controls(const df::EventJoystick *p_je) {
         if (p_je->getButton() == 2) {
             // X Button
             return this->jump(p_je);
-        } else if (p_je->getButton() == 3) {
+        }
+        else if (p_je->getButton() == 3) {
             // Y Button
             return this->jump(p_je);
         }
@@ -111,7 +113,8 @@ int Character::jump(const df::EventJoystick *p_je) {
         bool temp_jumped = false;
         if (p_je->getAction() == df::AXIS) {
             temp_jumped = p_je->getAxisValue() < jumpThreshold;
-        } else {
+        }
+        else {
             // Button down
             temp_jumped = true;
         }
@@ -123,23 +126,25 @@ int Character::jump(const df::EventJoystick *p_je) {
             if (this->on_ground) {
                 // Short hop
                 this->setYVelocity(-.32);
-                this->setXVelocity(this->x_axis/200.0);
+                this->setXVelocity(this->x_axis / 200.0);
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
-            } else if (!this->currently_in_jump &&
+            }
+            else if (!this->currently_in_jump &&
                 this->count_multi_jumps < this->num_multi_jumps
                 ) {
                 // Air jump
                 this->setYVelocity(-.72);
-                this->setXVelocity(this->x_axis/200.0);
+                this->setXVelocity(this->x_axis / 200.0);
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
-            } else if (this->jump_frames > 3 && this->jump_frames < 6) {
+            }
+            else if (this->jump_frames > 3 && this->jump_frames < 6) {
                 // The strength of a jump can be increased by how long 
                 // the user holds the button
                 // Full hop
                 this->setYVelocity(-0.28, true);
-                this->setXVelocity(this->x_axis/200.0);
+                this->setXVelocity(this->x_axis / 200.0);
             }
         }
     }
@@ -150,12 +155,14 @@ int Character::move(const df::EventJoystick *p_je) {
     float temp_val = p_je->getAxisValue();
     if (std::abs(temp_val) > moveThreshold) {
         if (this->on_ground) {
-            this->setXVelocity(temp_val/200.0);
+            this->setXVelocity(temp_val / 200.0);
             return 1;
-        } else if (std::abs(this->getXVelocity()) < .5) {
-            this->setXVelocity(temp_val/4000.0, true);
         }
-    } else {
+        else if (std::abs(this->getXVelocity()) < .5) {
+            this->setXVelocity(temp_val / 4000.0, true);
+        }
+    }
+    else {
         this->setXVelocity(0);
     }
     return 0;
@@ -163,8 +170,52 @@ int Character::move(const df::EventJoystick *p_je) {
 
 int Character::step() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
+    df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     df::Position temp_pos = df::Position(this->getPos().getX(), this->getPos().getY() + 1);
     df::ObjectList below = world_manager.isCollision(this, temp_pos);
+
+    //Get direction and change sprite
+    StickDirection dir = getFacingDirection();
+    switch (dir){
+        case FACING_RIGHT:{
+                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-wspr");
+                setSprite(p_temp_sprite);
+                setSpriteSlowdown(5);
+                break;
+            }
+        case FACING_LEFT:{
+                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-wspr");
+                setSprite(p_temp_sprite);
+                setSpriteSlowdown(5);
+                break;
+            }
+        case FACING_NEUTRAL:{
+                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-spr");
+                setSprite(p_temp_sprite);
+                setSpriteSlowdown(0);
+                break;
+            }
+        case FACING_UP:{
+                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
+                setSprite(p_temp_sprite);
+                setSpriteSlowdown(0);
+                break;
+            }
+        case FACING_DOWN:{
+                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-left-spr");
+                setSprite(p_temp_sprite);
+                setSpriteSlowdown(0);
+                break;
+            }
+        default:{
+                df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-wspr");
+                setSprite(p_temp_sprite);
+                setSpriteSlowdown(0);
+                break;
+            }
+    }
+
+
     //fall from jump
     this->on_ground = false;
 
@@ -208,22 +259,27 @@ StickDirection Character::getJoystickDirection() const {
     float temp_y = this->y_axis;
     if (std::abs(temp_x) > std::abs(temp_y)) {
         temp_y = 0;
-    } else {
+    }
+    else {
         temp_x = 0;
     }
     if (std::abs(temp_x) > moveThreshold) {
         if (temp_x < 0) {
             return FACING_RIGHT;
-        } else {
+        }
+        else {
             return FACING_LEFT;
         }
-    } else if (std::abs(temp_y) > moveThreshold) {
+    }
+    else if (std::abs(temp_y) > moveThreshold) {
         if (temp_y < 0) {
             return FACING_UP;
-        } else {
+        }
+        else {
             return FACING_DOWN;
         }
-    } else {
+    }
+    else {
         return FACING_NEUTRAL;
     }
 }
@@ -233,7 +289,8 @@ StickDirection Character::getFacingDirection() const {
     if (std::abs(temp_x) > moveThreshold) {
         if (temp_x < 0) {
             return FACING_RIGHT;
-        } else {
+        }
+        else {
             return FACING_LEFT;
         }
     }

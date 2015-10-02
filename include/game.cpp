@@ -48,7 +48,7 @@ void loadResources() {
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-spr.txt", "alien-right-spr");
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-walk-spr.txt", "alien-right-wspr");
     resource_manager.loadSprite("Sprites//alien-spr/alien-left-spr.txt", "alien-left-spr");
-    resource_manager.loadSprite("Sprites//alien-spr/alien-left-walkspr.txt", "alien-left-wspr");
+    resource_manager.loadSprite("Sprites//alien-spr/alien-left-walk-spr.txt", "alien-left-wspr");
 
 }
 
