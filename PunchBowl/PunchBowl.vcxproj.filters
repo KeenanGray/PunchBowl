@@ -27,6 +27,21 @@
     <ClCompile Include="..\include\Organizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\include\stage\UltimateTerminal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\stage\Stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\character\RobotCharacter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\character\CharTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\character\Character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Sprites\testsprite.txt">
@@ -35,12 +50,30 @@
     <Text Include="Sprites\platform.txt">
       <Filter>Resource Files\Sprites</Filter>
     </Text>
+    <Text Include="Sprites\stages\ultimate_terminal.txt">
+      <Filter>Resource Files\Sprites</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Organizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\stage\UltimateTerminal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\stage\Stage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\character\RobotCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\character\CharTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\character\Character.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
