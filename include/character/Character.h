@@ -23,6 +23,15 @@ enum StickDirection {
 
 const float jumpThreshold = -48;
 const float moveThreshold = 16;
+const float dashThreshold = 80;
+// Number of frames t
+const int dashingFrames = 3;
+// Max number of frames you can hold jump for before a jump becomes a longhop
+const int shorthopFrames = 3;
+// Max number of frames you can hold a jump for until you reach max jump speed
+const int longhopFrames = 6;
+// Default jump speed for ground and air jumps
+const float jumpSpeedDefault = -0.4;
 
 class Character : public df::Object {
     private:
@@ -30,6 +39,9 @@ class Character : public df::Object {
 
         bool on_ground;
         bool stunned;
+
+        // Used to determine whether or not to dash
+        int frame_last_stood;
         // Used for determining whether a jump is a short hop or full jump
         int jump_frames;
         // Whether or not jump was called during this frame

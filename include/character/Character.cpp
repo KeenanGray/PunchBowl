@@ -58,6 +58,8 @@ Character::Character() {
 
     this->x_axis = 0;
     this->y_axis = 0;
+
+    this->frame_last_stood = 0;
 }
 
 Character::~Character() {
@@ -129,7 +131,7 @@ int Character::jump(const df::EventJoystick *p_je) {
             if (this->on_ground && !this->currently_in_jump) {
                 // Short hop
                 // this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()-1));
-                this->setYVelocity(-.4);
+                this->setYVelocity(jumpSpeedDefault);
                 this->setXVelocity(this->x_axis/200.0);
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
@@ -138,12 +140,12 @@ int Character::jump(const df::EventJoystick *p_je) {
                 this->count_multi_jumps < this->num_multi_jumps
                 ) {
                 // Air jump
-                this->setYVelocity(-.4);
+                this->setYVelocity(jumpSpeedDefault);
                 this->setXVelocity(this->x_axis/200.0);
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
                 this->jump_frames = 0;
-            } else if (this->jump_frames > 3 && this->jump_frames < 6) {
+            } else if (this->jump_frames > shorthopFrames && this->jump_frames < longhopFrames) {
                 // The strength of a jump can be increased by how long 
                 // the user holds the button
                 // Full hop
@@ -161,6 +163,19 @@ int Character::move(const df::EventJoystick *p_je) {
         if (this->on_ground) {
 
             this->setXVelocity(temp_val/200.0);
+            int step_count = df::GameManager::getInstance().getStepCount();
+            if (std::abs(temp_val) > dashThreshold) {
+                if (step_count - this->frame_last_stood <= dashingFrames) {
+                    printf("Dashing\n");
+                    this->setXVelocity(temp_val/100.0);
+                    this->frame_last_stood = step_count;
+                } else {
+
+                    printf("Not Dashing\n");
+                }
+            } else {
+                printf("Not Dashing\n");
+            }
         } else if (temp_val < 0) {
             if (this->getXVelocity() > -.5) {
                 this->setXVelocity(temp_val/4000.0, true);
@@ -170,11 +185,9 @@ int Character::move(const df::EventJoystick *p_je) {
                 this->setXVelocity(temp_val/4000.0, true);
             }
         }
-        else if (std::abs(this->getXVelocity()) < .5) {
-            this->setXVelocity(temp_val / 4000.0, true);
-        }
-    }
-    else {
+
+    } else {
+        this->frame_last_stood = df::GameManager::getInstance().getStepCount();
         this->setXVelocity(0);
     }
     return 0;
@@ -252,7 +265,7 @@ int Character::step() {
     this->jump_this_frame = false;
 
     // Check if grounded
-    if (!below.isEmpty() && this->jump_frames >= 3) {
+    if (!below.isEmpty() && this->jump_frames >= shorthopFrames) {
         df::ObjectListIterator li(&below);
         for (li.first(); !li.isDone(); li.next()) {
             df::Object *p_temp_o = li.currentObject();
