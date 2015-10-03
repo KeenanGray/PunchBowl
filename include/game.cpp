@@ -26,6 +26,8 @@ int main(int argc, char *argv[]) {
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
+    df::LogManager::getInstance().setFlush(true);
+
     loadResources();
     startUpGame();
 
@@ -45,12 +47,20 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
     resource_manager.loadSprite("Sprites/platform.txt", "platform");
 
-    resource_manager.loadSprite("Sprites/bull-spr/bull-left-spr.txt", "bull-left-spr");
-    resource_manager.loadSprite("Sprites/bull-spr/bull-right-spr.txt", "bull-right-spr");
-    resource_manager.loadSprite("Sprites/bull-spr/bull-left-walk-spr.txt", "bull-left-wspr");
-    resource_manager.loadSprite("Sprites/bull-spr/bull-right-walk-spr.txt", "bull-right-wspr");
-    resource_manager.loadSprite("Sprites/bull-spr/bull-left-dash-spr.txt", "bull-left-dspr");
-    resource_manager.loadSprite("Sprites/bull-spr/bull-right-dash-spr.txt", "bull-right-dspr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-spr.txt", "bull-left-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-spr.txt", "bull-right-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-walk-spr.txt", "bull-left-walk-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-walk-spr.txt", "bull-right-walk-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-dash-spr.txt", "bull-left-dash-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-dash-spr.txt", "bull-right-dash-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-crouch-spr.txt", "bull-left-crouch-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-crouch-spr.txt", "bull-right-crouch-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-crawl-spr.txt", "bull-left-crawl-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-crawl-spr.txt", "bull-right-crawl-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-jump-spr.txt", "bull-left-jump-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-jump-spr.txt", "bull-right-jump-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-air-spr.txt", "bull-left-air-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-air-spr.txt", "bull-right-air-spr");
     
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-spr.txt", "alien-right-spr");
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-walk-spr.txt", "alien-right-wspr");

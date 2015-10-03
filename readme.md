@@ -50,7 +50,7 @@ In this game, two players face off in an arena.  The objective is for one player
 
 # Schedule:
 * Art assets
-  * Character Sprites
+  * Character Sprites (Each character needs 25 sprites, or 50 if counting left and right)
     * Standing
     * Walking
     * Dashing

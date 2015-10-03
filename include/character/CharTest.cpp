@@ -13,6 +13,7 @@
 #include "CharTest.h"
 
 CharTest::CharTest() {
+    this->setType(char_bull_type);
     df::Position pos(48, 20);
     this->setPos(pos);
 
@@ -21,22 +22,34 @@ CharTest::CharTest() {
 
     world_manager.setViewFollowing(this);
 
-    this->l_spr = "bull-left-spr";
-    this->r_spr = "bull-right-spr";
-    this->l_wspr = "bull-left-wspr";
-    this->r_wspr = "bull-right-wspr";
-    this->l_dspr = "bull-left-dspr";
-    this->r_dspr = "bull-right-dspr";
+    this->l_stand = "bull-left-spr";
+    this->r_stand = "bull-right-spr";
+    this->l_walk = "bull-left-walk-spr";
+    this->r_walk = "bull-right-walk-spr";
+    this->l_dash = "bull-left-dash-spr";
+    this->r_dash = "bull-right-dash-spr";
+    this->l_crouch = "bull-left-crouch-spr";
+    this->r_crouch = "bull-right-crouch-spr";
+    this->l_crawl = "bull-left-crawl-spr";
+    this->r_crawl = "bull-right-crawl-spr";
+    this->l_jump = "bull-left-jump-spr";
+    this->r_jump = "bull-right-jump-spr";
+    this->l_air = "bull-left-air-spr";
+    this->r_air = "bull-right-air-spr";
 
-    this->spr_s = 15;
-    this->wspr_s = 8;
-    this->dspr_s = 6;
+    this->stand_s = 15;
+    this->walk_s = 8;
+    this->dash_s = 6;
+    this->crouch_s = 0;
+    this->crawl_s = 10;
+    this->jump_s = 2;
+    this->air_s = 0;
 
-    this->setObjectColor(df::YELLOW);
+    this->setObjectColor(df::RED);
 
-    df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_spr);
+    df::Sprite *p_temp_sprite = resource_manager.getSprite(this->l_stand);
     this->setSprite(p_temp_sprite);
-    this->setSpriteSlowdown(this->spr_s);
+    this->setSpriteSlowdown(this->stand_s);
 
 }
 

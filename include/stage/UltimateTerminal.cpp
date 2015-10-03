@@ -24,6 +24,7 @@ UltimateTerminal::UltimateTerminal() {
 
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
+    this->setObjectColor(df::BLUE);
 
     this->ut_bound_height = 48;
     this->ut_bound_width = p_temp_sprite->getWidth();
