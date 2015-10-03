@@ -34,10 +34,10 @@ EXECUTABLE= punchbowl
 all: clear $(EXECUTABLE) makefile
 
 $(EXECUTABLE): $(ENGINE) $(GAMEFILES) $(MAINGAME) $(GAMESRC)
-	$(CC) $(WARN) $(MAINGAME) $(GAMEFILES) $(ENGINE) -o $@ $(INCLUDE) $(LINK)
+	$(CC) $(WARN) $(MAINGAME) $(GAMEFILES) $(ENGINE) -o $@ $(INCLUDE) $(LINK) -std=c++11
 
 .cpp.o: 
-	$(CC) $(WARN) -c $(INCLUDE) $< -o $@
+	$(CC) $(WARN) -c $(INCLUDE) $< -o $@ -std=c++11
 
 clean:
 	rm -rf dragonfly.log Makefile.bak $(GAMEFILES) $(EXECUTABLE)

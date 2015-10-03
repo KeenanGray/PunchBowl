@@ -49,6 +49,11 @@ enum Movement {
     CRAWLING,
     JUMPING,
     IN_AIR,
+    ROLLING,
+    DODGING,
+    FALLING,
+    ON_GROUND,
+    ON_LEDGE,
 };
 
 const float jumpThreshold = -48;
@@ -163,6 +168,18 @@ class Character : public df::Object {
         std::string l_air;
         std::string r_air;
         int air_s;
+        // Rolling
+        std::string l_roll;
+        std::string l_roll;
+        int roll_s
+        // Dodging
+        std::string l_dodge;
+        std::string l_dodge;
+        int dodge_s
+        // Falling
+        std::string l_fall;
+        std::string l_fall;
+        int fall_s
         // Fallen on ground
         std::string l_ground;
         std::string r_ground;
