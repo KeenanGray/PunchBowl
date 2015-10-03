@@ -30,9 +30,7 @@ Character::Character() {
 
     // Setup setup default sprites
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-    df::Sprite *p_temp_sprite = resource_manager.getSprite("alien-right-spr");
-    this->setSprite(p_temp_sprite);
-    this->setSpriteSlowdown(0);
+
     this->setTransparency('#');
 
     this->current_anim = "undefined";
@@ -280,6 +278,7 @@ int Character::down(const df::EventJoystick *p_je) {
 }
 
 int Character::move(const df::EventJoystick *p_je) {
+    
     float temp_val = p_je->getAxisValue();
     if (std::abs(temp_val) > moveThreshold) {
         if (this->on_ground) {
