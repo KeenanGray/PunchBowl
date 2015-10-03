@@ -1,17 +1,28 @@
 #ifndef __ORGANIZER_H__
 #define __ORGANIZER_H__
 
-//Engine includes
-#include "GameManager.h"
-#include "LogManager.h"
-#include "WorldManager.h"
-#include "ResourceManager.h"
-#include "Object.h"
+// Dragonfly Engine headers
+// Events
 #include "EventKeyboard.h"
+#include "EventOut.h"
 #include "EventStep.h"
-#include "EventJoystick.h"
+// Managers
+#include "GameManager.h"
+#include "InputManager.h"
+#include "ResourceManager.h"
+#include "WorldManager.h"
 
-//Game includes
+#include "utility.h"
+
+// Punchbowl headers
+#include "character/Character.h"
+#include "stage/UltimateTerminal.h"
+#include "Platform.h"
+#include "stage/Stage.h"
+#include "stage/UltimateTerminal.h"
+#include "character\Character.h"
+#include "character\CharTest.h"
+#include "Platform.h"
 
 class Organizer : public df::Object{
 private:
@@ -22,6 +33,9 @@ private:
 public:
     static Organizer &getInstance();
     int eventHandler(const df::Event *p_e);
+
+    void startUpGame();
+    void startStage(Stage *p_s);
 };
 
 

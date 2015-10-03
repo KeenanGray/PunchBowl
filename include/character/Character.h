@@ -13,6 +13,9 @@
 // Object
 #include "Object.h"
 
+//Game Includes
+#include "PlayerName.h"
+
 enum StickDirection {
     FACING_NEUTRAL = 0,
     FACING_UP,
