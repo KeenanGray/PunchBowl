@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     df::LogManager::getInstance().setFlush(true);
+    df::LogManager::getInstance().setLogLevel(-1);
     loadResources();
 
     Organizer &org = Organizer::getInstance();
@@ -41,7 +42,7 @@ void loadResources() {
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     // Load sprite
-    resource_manager.loadSprite("Sprites/Title.txt", "Title");
+    // resource_manager.loadSprite("Sprites/Title.txt", "Title");
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
     resource_manager.loadSprite("Sprites/platform.txt", "platform");
@@ -61,6 +62,8 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-jump-spr.txt", "bull-right-jump-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-air-spr.txt", "bull-left-air-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-air-spr.txt", "bull-right-air-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-roll-spr.txt", "bull-left-roll-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-roll-spr.txt", "bull-right-roll-spr");
     
     //Alien
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-spr.txt", "alien-right-spr");

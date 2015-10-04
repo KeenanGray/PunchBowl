@@ -55,6 +55,7 @@ Character::Character() {
     this->knocked_down = false;
     this->grabbed_ledge = false;
 
+    this->roll_frames = 0;
     this->stun_frames = 0;
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
@@ -82,18 +83,15 @@ Character::~Character() {
 }
 
 int Character::eventHandler(const df::Event *p_e) {
-    df::WorldManager &world_manager = df::WorldManager::getInstance();
     if (p_e->getType() == df::JOYSTICK_EVENT) {
         const df::EventJoystick *p_je = static_cast<const df::EventJoystick *> (p_e);
         if (p_je->getJoystick() != this->joystick_id) {
             return 0;
         }
         return this->controls(p_je);
-    }
-    else if (p_e->getType() == df::STEP_EVENT) {
+    } else if (p_e->getType() == df::STEP_EVENT) {
         return this->step();
-    }
-    else if (p_e->getType() == df::OUT_EVENT) {
+    } else if (p_e->getType() == df::OUT_EVENT) {
         return this->out();
     }
     return 0;
@@ -169,7 +167,7 @@ int Character::controls(const df::EventJoystick *p_je) {
         } else if (p_je->getButton() == 3) {
             // Y Button
             return this->jump(p_je);
-        } else if (p_je->getButton() == 3) {
+        } else if (p_je->getButton() == 1) {
             // B Button
             switch(this->getJoystickDirection()) {
                 case FACING_NEUTRAL:
@@ -183,8 +181,9 @@ int Character::controls(const df::EventJoystick *p_je) {
                 case FACING_LEFT:
                     return this->side_special();
             }
-        } else if (p_je->getButton() == 3) {
+        } else if (p_je->getButton() == 0) {
             // A Button
+            return this->roll(p_je);
             if (this->on_ground) {
                 switch(this->getJoystickDirection()) {
                     case FACING_NEUTRAL:
@@ -324,6 +323,21 @@ int Character::move(const df::EventJoystick *p_je) {
     return 0;
 }
 
+int Character::roll(const df::EventJoystick *p_je) {
+    if (this->on_ground) {
+        this->roll_frames = rollFrames;
+        this->cancel_frames = rollFrames+4;
+
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            this->setXVelocity(rollSpeed);
+        } else {
+            this->setXVelocity(-rollSpeed);
+        }
+        return 1;
+    }
+    return 0;
+}
+
 int Character::step() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
@@ -441,6 +455,9 @@ int Character::animationSelector() {
     if (this->cancel_frames > 0) {
         this->cancel_frames--; 
     }
+    if (this->roll_frames > 0) {
+        this->roll_frames--;
+    }
 
     // Check if in attack animation
     if (this->attack_type != UNDEFINED_ATTACK) {
@@ -468,7 +485,9 @@ int Character::animationSelector() {
     if (this->on_ground) {
         // Select some ground animation
         if (this->getFacingDirection() == FACING_LEFT) {
-            if (this->current_movement == STANDING) {
+            if (this->roll_frames > 0) {
+                this->switchToSprite(this->l_roll, this->roll_s);
+            } else if (this->current_movement == STANDING) {
                 this->switchToSprite(this->l_stand, this->stand_s);
             } else if (this->current_movement == WALKING) {
                 this->switchToSprite(this->l_walk, this->walk_s);
@@ -480,7 +499,9 @@ int Character::animationSelector() {
                 this->switchToSprite(this->l_crawl, this->crawl_s);
             }
         } else {
-            if (this->current_movement == STANDING) {
+            if (this->roll_frames > 0) {
+                this->switchToSprite(this->r_roll, this->roll_s);
+            }else if (this->current_movement == STANDING) {
                 this->switchToSprite(this->r_stand, this->stand_s);
             } else if (this->current_movement == WALKING) {
                 this->switchToSprite(this->r_walk, this->walk_s);
@@ -505,14 +526,14 @@ int Character::animationSelector() {
 void Character::switchToSprite(std::string sprite_tag, int new_sprite_slowdown) {
     // Check if not switching to current sprite
     if (sprite_tag.compare(this->current_anim) != 0 && this->getType().compare(char_default_type) != 0) {
-        this->setSpriteIndex(0);
         // Store previous sprite height
         int prev_height = this->getSprite()->getHeight();
         
         df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
         df::Sprite *p_temp_sprite = resource_manager.getSprite(sprite_tag);
-        setSprite(p_temp_sprite);
-        setSpriteSlowdown(new_sprite_slowdown);
+        this->setSprite(p_temp_sprite);
+        this->setSpriteSlowdown(new_sprite_slowdown);
+        this->setSpriteIndex(0);
 
         // Calculate height difference
         int new_height = p_temp_sprite->getHeight();
@@ -523,9 +544,10 @@ void Character::switchToSprite(std::string sprite_tag, int new_sprite_slowdown) 
     }
 }
 
-void Character::hit(int stun, int damage_dealt, float knockback, df::Position direction) {
+int Character::hit(int stun, int damage_dealt, float knockback, df::Position direction) {
 
     // Instantly stop current attack
+    this->roll_frames = 0;
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
     this->cancel_frames = 0;
@@ -543,6 +565,8 @@ void Character::hit(int stun, int damage_dealt, float knockback, df::Position di
 
     this->setXVelocity(knockback*x_component*(1.0+float(this->damage)/100));
     this->setXVelocity(knockback*y_component*(1.0+float(this->damage)/100));
+
+    return 1;
 }
 
 int Character::out() {

@@ -52,7 +52,6 @@ enum Movement {
     CRAWLING,
     JUMPING,
     IN_AIR,
-    ROLLING,
     DODGING,
     FALLING,
     ON_GROUND,
@@ -64,7 +63,10 @@ const float moveThreshold = 8;
 const float dashThreshold = 80;
 const float crouchThreshold = 40;
 const float dropDownThreshold = 80;
+const float triggerThreshold = 50;
 
+const float rollSpeed = 1.2;
+const int rollFrames = 16;
 const int dashingFrames = 4;
 // Max number of frames you can hold jump for before a jump becomes a longhop
 const int shorthopFrames = 2;
@@ -93,6 +95,8 @@ class Character : public df::Object {
         // The character is currently grabbed onto the ledge
         bool grabbed_ledge;
 
+        // Whether or not the character is rolling
+        int roll_frames;
         // Frames that this character are stunned for
         int stun_frames;
         // Frames that this character is attacking for
@@ -173,16 +177,16 @@ class Character : public df::Object {
         int air_s;
         // Rolling
         std::string l_roll;
-        std::string l_roll;
-        int roll_s
+        std::string r_roll;
+        int roll_s;
         // Dodging
         std::string l_dodge;
-        std::string l_dodge;
-        int dodge_s
+        std::string r_dodge;
+        int dodge_s;
         // Falling
         std::string l_fall;
-        std::string l_fall;
-        int fall_s
+        std::string r_fall;
+        int fall_s;
         // Fallen on ground
         std::string l_ground;
         std::string r_ground;
@@ -273,6 +277,7 @@ class Character : public df::Object {
         virtual int down(const df::EventJoystick *p_je);
 
         virtual int move(const df::EventJoystick *p_je);
+        virtual int roll(const df::EventJoystick *p_je);
 
         virtual int step();
 
@@ -307,7 +312,7 @@ class Character : public df::Object {
         // Called when this character is hit by an attack
         // Damage takes a flat int
         // Knockback is some float
-        virtual void hit(int stun, int damage_dealt, float knockback, df::Position direction);
+        virtual int hit(int stun, int damage_dealt, float knockback, df::Position direction);
 };
 
 #endif // __CHARACTER_H__

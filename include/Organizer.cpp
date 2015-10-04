@@ -9,7 +9,8 @@ Organizer::Organizer(){
     registerInterest(df::STEP_EVENT);
 
 
-    df::Sprite *tmp_spr = resource_manager.getSprite("Title");
+    // df::Sprite *tmp_spr = resource_manager.getSprite("Title");
+    df::Sprite *tmp_spr = resource_manager.getSprite("test");
     setSprite(tmp_spr);
     setSpriteSlowdown(25);
 
@@ -17,6 +18,8 @@ Organizer::Organizer(){
     world_manager.setBoundary(df::Box(df::Position(), tmp_spr->getWidth() + 10, tmp_spr->getHeight() + 10));
 
     setPos(df::Position(world_manager.getView().getHorizontal() / 2, world_manager.getView().getVertical() / 2));
+
+    this->isStarted = false;
 }
 
 Organizer &Organizer::getInstance(){
@@ -45,15 +48,18 @@ int Organizer::eventHandler(const df::Event *p_e){
 }
 
 void Organizer::startUpGame() {
-    // Start up the game stuff
-    //Add an organizer to listen for keyboard input (q for quit);
-    Organizer &org = Organizer::getInstance();
+    if (!this->isStarted) {
+        this->isStarted = true;
+        // Start up the game stuff
+        //Add an organizer to listen for keyboard input (q for quit);
+        Organizer &org = Organizer::getInstance();
 
-    //Load the stage;
-    Stage *p_s = new UltimateTerminal();
-    startStage(p_s);
+        //Load the stage;
+        Stage *p_s = new UltimateTerminal();
+        startStage(p_s);
 
-    Character *p_c = new CharTest();
+        Character *p_c = new CharTest();
+    }
 }
 
 void Organizer::startStage(Stage *p_s) {

@@ -36,6 +36,8 @@ CharTest::CharTest() {
     this->r_jump = "bull-right-jump-spr";
     this->l_air = "bull-left-air-spr";
     this->r_air = "bull-right-air-spr";
+    this->l_roll = "bull-left-roll-spr";
+    this->r_roll = "bull-right-roll-spr";
 
     this->stand_s = 15;
     this->walk_s = 8;
@@ -44,6 +46,7 @@ CharTest::CharTest() {
     this->crawl_s = 10;
     this->jump_s = 2;
     this->air_s = 0;
+    this->roll_s = 4;
 
     this->setObjectColor(df::RED);
 

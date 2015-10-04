@@ -24,6 +24,7 @@ GAMESRC= \
 		../include/stage/UltimateTerminal.cpp \
 		../include/Platform.cpp \
 		../include/Organizer.cpp \
+		../include/GameStart.cpp \
 
 GAMEFILES= $(GAMESRC:.cpp=.o)
 
