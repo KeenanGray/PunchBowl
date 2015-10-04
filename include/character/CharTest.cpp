@@ -51,6 +51,8 @@ CharTest::CharTest() {
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(this->stand_s);
 
+    setName(PlayerName("Bull"));
+
 }
 
 CharTest::~CharTest() {

@@ -29,6 +29,7 @@ private:
         Organizer(); //Private constructor for singleton
         Organizer(Organizer const&);  //prevents copying
         void operator = (Organizer const&); //prevents 
+        bool gameStarted;
 
 public:
     static Organizer &getInstance();
