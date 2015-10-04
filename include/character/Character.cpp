@@ -28,9 +28,6 @@ Character::Character() {
     setType(char_default_type);
     this->setSolidness(df::SOFT);
 
-    // Setup setup default sprites
-    df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-
     this->setTransparency('#');
 
     this->current_anim = "undefined";
@@ -51,11 +48,13 @@ Character::Character() {
     this->on_ground = true;
     this->on_platform = false;
     this->is_crouched = false;
+    this->is_falling = false;
 
     this->knocked_down = false;
     this->grabbed_ledge = false;
 
     this->roll_frames = 0;
+    this->dodge_frames = 0;
     this->stun_frames = 0;
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
@@ -90,6 +89,7 @@ int Character::eventHandler(const df::Event *p_e) {
         }
         return this->controls(p_je);
     } else if (p_e->getType() == df::STEP_EVENT) {
+    df::LogManager::getInstance().writeLog("Test5");
         return this->step();
     } else if (p_e->getType() == df::OUT_EVENT) {
         return this->out();
@@ -106,11 +106,22 @@ int Character::controls(const df::EventJoystick *p_je) {
         // Insert tech recovery here
         return 0;
     }
-    if (knocked_down) {
+    if (this->knocked_down) {
         // Ground recovery options
         return 0;
     }
-    if (grabbed_ledge) {
+    if (this->grabbed_ledge) {
+        return 0;
+    }
+    if (this->is_falling) {
+        if (p_je->getAction() == df::AXIS) {
+            if (p_je->getAxis() == df::Input::AXIS_X) {
+                if (p_je->getAxisValue() != 0) {
+                    this->x_axis = p_je->getAxisValue();
+                }
+                return this->move(p_je);
+            }
+        }
         return 0;
     }
     if (this->attack_frames > 0) {
@@ -125,6 +136,8 @@ int Character::controls(const df::EventJoystick *p_je) {
                 } else {
                     return this->down(p_je);
                 }
+            } else if (p_je->getAxis() == df::Input::AXIS_Z || p_je->getAxis() == df::Input::AXIS_R) {
+                return this->dodge(p_je);
             }
         }
         if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
@@ -157,6 +170,17 @@ int Character::controls(const df::EventJoystick *p_je) {
             } else {
                 return this->down(p_je);
             }
+        } else if (p_je->getAxis() == df::Input::AXIS_Z || p_je->getAxis() == df::Input::AXIS_R) {
+            StickDirection temp = this->getJoystickDirection();
+            if (this->on_ground) {
+                if (temp == FACING_DOWN) {
+                    return this->dodge(p_je);
+                } else {
+                    return this->roll(p_je);
+                }
+            } else {
+                return this->dodge(p_je);
+            }
         }
     }
     // button events
@@ -183,7 +207,6 @@ int Character::controls(const df::EventJoystick *p_je) {
             }
         } else if (p_je->getButton() == 0) {
             // A Button
-            return this->roll(p_je);
             if (this->on_ground) {
                 switch(this->getJoystickDirection()) {
                     case FACING_NEUTRAL:
@@ -277,6 +300,9 @@ int Character::down(const df::EventJoystick *p_je) {
 }
 
 int Character::move(const df::EventJoystick *p_je) {
+    if (this->dodge_frames > 0) {
+        return 0;
+    }
     float temp_val = p_je->getAxisValue();
     if (std::abs(temp_val) > moveThreshold) {
         if (this->on_ground) {
@@ -323,16 +349,35 @@ int Character::move(const df::EventJoystick *p_je) {
 }
 
 int Character::roll(const df::EventJoystick *p_je) {
-    if (this->on_ground) {
-        this->roll_frames = rollFrames;
-        this->cancel_frames = rollFrames+4;
+    if (this->dodge_frames == 0) {
+        if (this->on_ground && p_je->getAxisValue() > triggerThreshold) {
+            this->roll_frames = rollFrames;
+            this->cancel_frames = rollFrames+4;
 
-        if (this->getFacingDirection() == FACING_RIGHT) {
-            this->setXVelocity(rollSpeed);
-        } else {
-            this->setXVelocity(-rollSpeed);
+            if (this->getFacingDirection() == FACING_RIGHT) {
+                this->setXVelocity(rollSpeed);
+            } else {
+                this->setXVelocity(-rollSpeed);
+            }
+            return 1;
         }
-        return 1;
+    }
+    return 0;
+}
+
+int Character::dodge(const df::EventJoystick *p_je) {
+    if (this->dodge_frames == 0 && this->jump_frames > shorthopFrames) {
+        if (p_je->getAxisValue() > triggerThreshold) {
+            this->dodge_frames = dodgeFrames;
+            this->invincible_frames = dodgeFrames;
+            if (this->on_ground) {
+                this->cancel_frames = dodgeFrames+5;
+            } else {
+                this->setXVelocity(this->x_axis/120.0);
+                this->setYVelocity(this->y_axis/120.0);
+                this->is_falling = true;
+            }
+        }
     }
     return 0;
 }
@@ -373,6 +418,7 @@ int Character::step() {
                             this->setYVelocity(0);
                         }
                         this->on_ground = true;
+                        this->is_falling = false;
                         this->recovery_available = true;
                         this->count_multi_jumps = 0;
                         // TODO: Tech recovery when touching ground
@@ -383,6 +429,7 @@ int Character::step() {
                             this->setYVelocity(0);
                         }
                         this->on_ground = true;
+                        this->is_falling = false;
                         this->recovery_available = true;
                         this->count_multi_jumps = 0;
                         // TODO: Tech recovery when touching ground
@@ -460,6 +507,12 @@ int Character::animationSelector() {
     if (this->roll_frames > 0) {
         this->roll_frames--;
     }
+    if (this->dodge_frames > 0) {
+        this->dodge_frames--;
+    }
+    if (this->invincible_frames > 0) {
+        this->invincible_frames--;
+    }
 
     // Check if in attack animation
     if (this->attack_type != UNDEFINED_ATTACK) {
@@ -489,6 +542,8 @@ int Character::animationSelector() {
         if (this->getFacingDirection() == FACING_LEFT) {
             if (this->roll_frames > 0) {
                 this->switchToSprite(this->l_roll, this->roll_s);
+            } else if (this->dodge_frames > 0) {
+                this->switchToSprite(this->l_dodge, this->dodge_s);
             } else if (this->current_movement == STANDING) {
                 this->switchToSprite(this->l_stand, this->stand_s);
             } else if (this->current_movement == WALKING) {
@@ -503,6 +558,8 @@ int Character::animationSelector() {
         } else {
             if (this->roll_frames > 0) {
                 this->switchToSprite(this->r_roll, this->roll_s);
+            } else if (this->dodge_frames > 0) {
+                this->switchToSprite(this->r_dodge, this->dodge_s);
             }else if (this->current_movement == STANDING) {
                 this->switchToSprite(this->r_stand, this->stand_s);
             } else if (this->current_movement == WALKING) {
@@ -517,36 +574,52 @@ int Character::animationSelector() {
         }
     } else {
         if (this->getFacingDirection() == FACING_LEFT) {
-            this->switchToSprite(this->l_air, this->air_s);
+            if (this->dodge_frames > 0) {
+                this->switchToSprite(this->l_dodge, this->dodge_s);
+            } else if (this->is_falling) {
+                this->switchToSprite(this->l_fall, this->fall_s);
+            } else {
+                this->switchToSprite(this->l_air, this->air_s);
+            }
         } else {
-            this->switchToSprite(this->r_air, this->air_s);
+            if (this->dodge_frames > 0) {
+                this->switchToSprite(this->r_dodge, this->dodge_s);
+            } else if (this->is_falling) {
+                this->switchToSprite(this->r_fall, this->fall_s);
+            } else {
+                this->switchToSprite(this->r_air, this->air_s);
+            }
         }
         return 0;
     }
 }
 
-void Character::switchToSprite(std::string sprite_tag, int new_sprite_slowdown) {
+void Character::switchToSprite(df::Sprite *sprite, int new_sprite_slowdown) {
+    df::LogManager::getInstance().writeLog("Test3");
     // Check if not switching to current sprite
-    if (sprite_tag.compare(this->current_anim) != 0 && this->getType().compare(char_default_type) != 0) {
-        // Store previous sprite height
-        int prev_height = this->getSprite()->getHeight();
-        
-        df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-        df::Sprite *p_temp_sprite = resource_manager.getSprite(sprite_tag);
-        this->setSprite(p_temp_sprite);
-        this->setSpriteSlowdown(new_sprite_slowdown);
-        this->setSpriteIndex(0);
+    if (sprite->getLabel().compare(this->current_anim) != 0 && this->getType().compare(char_default_type) != 0) {
+        if (sprite != NULL) {
+            // Store previous sprite height
+            int prev_height = this->getSprite()->getHeight();
+            
+            this->setSprite(sprite);
+            this->setSpriteSlowdown(new_sprite_slowdown);
+            this->setSpriteIndex(0);
 
-        // Calculate height difference
-        int new_height = p_temp_sprite->getHeight();
-        int position_difference = (prev_height + 1) / 2 - (new_height + 1) / 2;
+            // Calculate height difference
+            int new_height = sprite->getHeight();
+            int position_difference = (prev_height + 1) / 2 - (new_height + 1) / 2;
 
-        this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()+position_difference));
-        this->current_anim = sprite_tag;
+            this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()+position_difference));
+            this->current_anim = sprite->getLabel();
+        }
     }
 }
 
 int Character::hit(int stun, int damage_dealt, float knockback, df::Position direction) {
+    if (this->invincible_frames > 0) {
+        return 0;
+    }
 
     // Instantly stop current attack
     this->roll_frames = 0;
