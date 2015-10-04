@@ -20,7 +20,6 @@ public:
     void setName(std::string new_name);
     std::string getName() const;
 
-}
-;
+};
 
 #endif

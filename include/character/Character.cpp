@@ -34,7 +34,6 @@ Character::Character() {
 
     // Register interest for events
     this->registerInterest(df::JOYSTICK_EVENT);
-    this->registerInterest(df::KEYBOARD_EVENT);
     this->registerInterest(df::STEP_EVENT);
     this->registerInterest(df::OUT_EVENT);
 
@@ -77,10 +76,6 @@ Character::Character() {
     this->damage = 0;
 }
 
-Character::~Character() {
-
-}
-
 int Character::eventHandler(const df::Event *p_e) {
     if (p_e->getType() == df::JOYSTICK_EVENT) {
         const df::EventJoystick *p_je = static_cast<const df::EventJoystick *> (p_e);
@@ -89,7 +84,6 @@ int Character::eventHandler(const df::Event *p_e) {
         }
         return this->controls(p_je);
     } else if (p_e->getType() == df::STEP_EVENT) {
-    df::LogManager::getInstance().writeLog("Test5");
         return this->step();
     } else if (p_e->getType() == df::OUT_EVENT) {
         return this->out();
@@ -395,8 +389,8 @@ int Character::step() {
     df::ObjectList obj_inside = world_manager.objectsInBox(world_box);
 
     //Move name  with character
-    name.setPos(df::Position(getPos().getX(), getPos().getY() - getSprite()->getHeight()/2 - 1));//name.getOffset().getY()));
-    name.draw();
+    name->setPos(df::Position(getPos().getX(), getPos().getY() - getSprite()->getHeight()/2 - 1));//name.getOffset().getY()));
+    name->draw();
     // If a jump was not attempted in the past frame, a new jump can be attempted
     if (this->jump_this_frame == false) {
         this->currently_in_jump = false;
@@ -713,9 +707,9 @@ int Character::ledge_attack() {
 }
 
 //Get and Set Name
-void Character::setName(PlayerName new_playername){
+void Character::setName(PlayerName *new_playername){
     name = new_playername;
 }
-PlayerName Character::getName() const{
+PlayerName *Character::getName() const{
     return name;
 }

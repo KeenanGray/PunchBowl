@@ -37,7 +37,3 @@ UltimateTerminal::UltimateTerminal() {
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 }
-
-UltimateTerminal::~UltimateTerminal() {
-
-}

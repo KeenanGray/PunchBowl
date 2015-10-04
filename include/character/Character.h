@@ -63,7 +63,7 @@ const float jumpThreshold = -48;
 const float moveThreshold = 8;
 const float dashThreshold = 80;
 const float crouchThreshold = 40;
-const float dropDownThreshold = 80;
+const float dropDownThreshold = 96;
 const float triggerThreshold = -80;
 
 // Frames to roll for
@@ -88,7 +88,7 @@ const std::string char_default_type = "char_default";
 
 class Character : public df::Object {
     private:
-        PlayerName name;
+        PlayerName *name;
 
         unsigned int joystick_id;
 
@@ -279,7 +279,6 @@ class Character : public df::Object {
 
     public:
         Character();
-        ~Character();
 
         int eventHandler(const df::Event *p_e);
 
@@ -331,8 +330,8 @@ class Character : public df::Object {
         virtual int hit(int stun, int damage_dealt, float knockback, df::Position direction);
 
         //Get and Set Name
-        void setName(PlayerName new_playername);
-        PlayerName getName() const;
+        void setName(PlayerName *new_playername);
+        PlayerName *getName() const;
 };
 
 #endif // __CHARACTER_H__

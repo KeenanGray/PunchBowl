@@ -14,6 +14,7 @@
 #include "Stage.h"
 
 Stage::Stage() { 
+    setType("Stage");
     this->stage_bounds = df::Box();
 
 }

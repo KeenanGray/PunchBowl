@@ -3,6 +3,7 @@
 Organizer::Organizer(){
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
+    setType("Organizer");
 
     registerInterest(df::JOYSTICK_EVENT);
     registerInterest(df::KEYBOARD_EVENT);

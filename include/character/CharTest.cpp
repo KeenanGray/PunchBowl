@@ -56,17 +56,11 @@ CharTest::CharTest() {
     this->fall_s = 0;
 
     this->setObjectColor(df::RED);
-
-    setName(PlayerName("Bull"));
+    
+    setName(new PlayerName("Bull"));
 
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
-
-    df::LogManager::getInstance().writeLog("Test1");
-}
-
-CharTest::~CharTest() {
-
 }
 
 int CharTest::eventHandler(const df::Event *p_e) {

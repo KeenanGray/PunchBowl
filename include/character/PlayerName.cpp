@@ -3,18 +3,16 @@
 
 PlayerName::PlayerName(){
     name = "Default";
-    setType("PlayerName");
+    this->setType("PlayerName");
     setSolidness(df::SPECTRAL);
     setAltitude(df::MAX_ALTITUDE);
-    
 }
 
 PlayerName::PlayerName(std::string new_name){
     name = new_name;
-    setType("PlayerName");
+    this->setType("PlayerName");
     setSolidness(df::SPECTRAL);
     setAltitude(df::MAX_ALTITUDE);
-
 }
 
 void PlayerName::draw(){

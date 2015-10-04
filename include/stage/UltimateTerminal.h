@@ -16,7 +16,6 @@ private:
     int ut_bound_height = 72;
 public:
     UltimateTerminal();
-    ~UltimateTerminal();
 };
 
 #endif // __ULTIMATE_TERMINAL_H__

@@ -15,7 +15,6 @@ class CharTest : public Character {
         int out();
     public:
         CharTest();
-        ~CharTest();
 
         int eventHandler(const df::Event *p_e);
 };
