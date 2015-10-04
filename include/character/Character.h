@@ -81,6 +81,8 @@ const std::string char_default_type = "char_default";
 
 class Character : public df::Object {
     private:
+        PlayerName name;
+
         unsigned int joystick_id;
 
         // Whether or not the character is grounded (either stage or platform)
@@ -313,6 +315,10 @@ class Character : public df::Object {
         // Damage takes a flat int
         // Knockback is some float
         virtual int hit(int stun, int damage_dealt, float knockback, df::Position direction);
+
+        //Get and Set Name
+        void setName(PlayerName new_playername);
+        PlayerName getName() const;
 };
 
 #endif // __CHARACTER_H__

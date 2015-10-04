@@ -277,7 +277,6 @@ int Character::down(const df::EventJoystick *p_je) {
 }
 
 int Character::move(const df::EventJoystick *p_je) {
-    
     float temp_val = p_je->getAxisValue();
     if (std::abs(temp_val) > moveThreshold) {
         if (this->on_ground) {
@@ -350,6 +349,9 @@ int Character::step() {
     // Get objects inside this character
     df::ObjectList obj_inside = world_manager.objectsInBox(world_box);
 
+    //Move name  with character
+    name.setPos(df::Position(getPos().getX(), getPos().getY() - getSprite()->getHeight()/2 - 1));//name.getOffset().getY()));
+    name.draw();
     // If a jump was not attempted in the past frame, a new jump can be attempted
     if (this->jump_this_frame == false) {
         this->currently_in_jump = false;
@@ -637,4 +639,10 @@ int Character::ledge_attack() {
     return 0;
 }
 
-
+//Get and Set Name
+void Character::setName(PlayerName new_playername){
+    name = new_playername;
+}
+PlayerName Character::getName() const{
+    return name;
+}

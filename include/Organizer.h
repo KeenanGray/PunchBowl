@@ -28,7 +28,7 @@ private:
         Organizer(); //Private constructor for singleton
         Organizer(Organizer const&);  //prevents copying
         void operator = (Organizer const&); //prevents 
-        bool isStarted; // Whether or not a game is currently started
+        bool gameStarted;
 
 public:
     static Organizer &getInstance();

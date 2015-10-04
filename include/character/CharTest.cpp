@@ -14,7 +14,7 @@
 
 CharTest::CharTest() {
     this->setType(char_bull_type);
-    df::Position pos(48, 20);
+    df::Position pos(64, 200);
     this->setPos(pos);
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
@@ -54,6 +54,8 @@ CharTest::CharTest() {
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(this->stand_s);
 
+    setName(PlayerName("Bull"));
+
 }
 
 CharTest::~CharTest() {
@@ -71,7 +73,7 @@ int CharTest::eventHandler(const df::Event *p_e) {
 }
 
 int CharTest::out() {
-    df::Position pos(48, 24);
+    df::Position pos(64, 200);
     this->setPos(pos);
     return 1;
 }
