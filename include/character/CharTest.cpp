@@ -15,8 +15,6 @@
 
 CharTest::CharTest() {
     this->setType(char_bull_type);
-    df::Position pos(64, 200);
-    this->setPos(pos);
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();

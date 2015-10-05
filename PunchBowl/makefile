@@ -21,6 +21,7 @@ GAMESRC= \
 		../include/character/Character.cpp \
 		../include/character/CharTest.cpp \
 		../include/character/PlayerName.cpp \
+		../include/character/ScytheGirl.cpp \
 		../include/stage/Stage.cpp \
 		../include/stage/UltimateTerminal.cpp \
 		../include/Platform.cpp \

@@ -21,6 +21,7 @@
 #include "stage/UltimateTerminal.h"
 #include "character/Character.h"
 #include "character/CharTest.h"
+#include "character/ScytheGirl.h"
 #include "Platform.h"
 
 class Organizer : public df::Object{

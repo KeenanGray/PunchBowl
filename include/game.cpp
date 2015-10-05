@@ -69,6 +69,29 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-fall-spr.txt", "bull-left-fall-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-fall-spr.txt", "bull-right-fall-spr");
     
+    // Scythe Girl
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-spr.txt", "sg-left-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-spr.txt", "sg-right-spr");
+    /*
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-walk-spr.txt", "sg-left-walk-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-walk-spr.txt", "sg-right-walk-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-dash-spr.txt", "sg-left-dash-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-dash-spr.txt", "sg-right-dash-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-crouch-spr.txt", "sg-left-crouch-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-crouch-spr.txt", "sg-right-crouch-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-crawl-spr.txt", "sg-left-crawl-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-crawl-spr.txt", "sg-right-crawl-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-jump-spr.txt", "sg-left-jump-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-jump-spr.txt", "sg-right-jump-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-air-spr.txt", "sg-left-air-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-air-spr.txt", "sg-right-air-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-roll-spr.txt", "sg-left-roll-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-roll-spr.txt", "sg-right-roll-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-dodge-spr.txt", "sg-left-dodge-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-dodge-spr.txt", "sg-right-dodge-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-fall-spr.txt", "sg-left-fall-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-fall-spr.txt", "sg-right-fall-spr");
+    */
     //Alien
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-spr.txt", "alien-right-spr");
     resource_manager.loadSprite("Sprites//alien-spr/alien-right-walk-spr.txt", "alien-right-wspr");

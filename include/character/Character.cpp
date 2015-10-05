@@ -187,18 +187,8 @@ int Character::controls(const df::EventJoystick *p_je) {
             return this->jump(p_je);
         } else if (p_je->getButton() == 1) {
             // B Button
-            switch(this->getJoystickDirection()) {
-                case FACING_NEUTRAL:
-                    return this->neutral_special();
-                case FACING_UP:
-                    return this->up_special();
-                case FACING_RIGHT:
-                    return this->side_special();
-                case FACING_DOWN:
-                    return this->down_special();
-                case FACING_LEFT:
-                    return this->side_special();
-            }
+            
+            return this->recovery_special();
         } else if (p_je->getButton() == 0) {
             // A Button
             if (this->on_ground) {
@@ -216,24 +206,12 @@ int Character::controls(const df::EventJoystick *p_je) {
                 }
             } else {
                 switch(this->getJoystickDirection()) {
-                    case FACING_NEUTRAL:
-                        return this->neutral_air();
                     case FACING_UP:
                         return this->up_air();
-                    case FACING_RIGHT:
-                        if (this->getFacingDirection() == FACING_RIGHT) {
-                            return this->forward_air();
-                        } else {
-                            return this->back_air();
-                        }
                     case FACING_DOWN:
                         return this->down_air();
-                    case FACING_LEFT:
-                        if (this->getFacingDirection() == FACING_LEFT) {
-                            return this->forward_air();
-                        } else {
-                            return this->back_air();
-                        }
+                    default:
+                        return this->neutral_air();
                 }
             }
             return this->jump(p_je);
@@ -589,10 +567,9 @@ int Character::animationSelector() {
 }
 
 void Character::switchToSprite(df::Sprite *sprite, int new_sprite_slowdown) {
-    df::LogManager::getInstance().writeLog("Test3");
     // Check if not switching to current sprite
-    if (sprite->getLabel().compare(this->current_anim) != 0 && this->getType().compare(char_default_type) != 0) {
-        if (sprite != NULL) {
+    if (sprite) {
+        if (sprite->getLabel().compare(this->current_anim) != 0 && this->getType().compare(char_default_type) != 0) {
             // Store previous sprite height
             int prev_height = this->getSprite()->getHeight();
             
@@ -658,19 +635,7 @@ int Character::up_strike() {
     return 0;
 }
 
-int Character::dash_attack() {
-    return 0;
-}
-
 int Character::neutral_air() {
-    return 0;
-}
-
-int Character::forward_air() {
-    return 0;
-}
-
-int Character::back_air() {
     return 0;
 }
 
@@ -682,27 +647,7 @@ int Character::up_air() {
     return 0;
 }
 
-int Character::neutral_special() {
-    return 0;
-}
-
-int Character::side_special() {
-    return 0;
-}
-
-int Character::up_special() {
-    return 0;
-}
-
-int Character::down_special() {
-    return 0;
-}
-
-int Character::getup_attack() {
-    return 0;
-}
-
-int Character::ledge_attack() {
+int Character::recovery_special() {
     return 0;
 }
 

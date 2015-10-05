@@ -57,6 +57,36 @@ int Organizer::eventHandler(const df::Event *p_e){
             else
                 return 1;
         }
+    } 
+    if (p_e->getType() == df::JOYSTICK_EVENT) {
+        const df::EventJoystick *p_je = static_cast<const df::EventJoystick *> (p_e);
+        if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
+            if (p_je->getButton() == 7) {
+                // Start Button
+                if (!gameStarted){
+                    world_manager.removeObject(this); //Remove the object from WM so it isn't drawn
+                    startUpGame();
+                    gameStarted = true;
+                    return 1;
+                }
+                else
+                    return 1;
+            }
+            if (p_je->getButton() == 6) {
+                // Back Button
+                if (!gameStarted){
+                    df::GameManager &game_manager = df::GameManager::getInstance();
+                    game_manager.setGameOver();
+                    return 1;
+                }
+                else{ //Add object back to WM for deletion
+                    world_manager.insertObject(this);
+                    df::GameManager &game_manager = df::GameManager::getInstance();
+                    game_manager.setGameOver();
+                    return 1;
+                }
+            }
+        }
     }
     return 0;
 }
@@ -70,7 +100,11 @@ void Organizer::startUpGame() {
     Stage *p_s = new UltimateTerminal();
     startStage(p_s);
 
-    Character *p_c = new CharTest();
+    // Character *p_c = new CharTest();
+    Character *p_c = new ScytheGirl();
+
+    df::Position starting_pos(64, 200);
+    p_c->setPos(starting_pos);
 }
 
 void Organizer::startStage(Stage *p_s) {
