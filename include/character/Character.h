@@ -30,18 +30,10 @@ enum Attack {
     SIDE_STRIKE,
     DOWN_STRIKE,
     UP_STRIKE,
-    DASH_ATTACK,
     NEUTRAL_AIR,
-    FORWARD_AIR,
-    BACK_AIR,
     DOWN_AIR,
     UP_AIR,
-    NEUTRAL_SPECIAL,
-    SIDE_SPECIAL,
-    UP_SPECIAL,
-    DOWN_SPECIAL,
-    GETUP_ATTACK,
-    LEDGE_ATTACK,
+    RECOVERY_SPECIAL,
 };
 
 enum Movement {
@@ -54,8 +46,6 @@ enum Movement {
     IN_AIR,
     DODGING,
     FALLING,
-    ON_GROUND,
-    ON_LEDGE,
 };
 
 // Various axis thresholds
@@ -202,14 +192,10 @@ class Character : public df::Object {
         df::Sprite *l_fall;
         df::Sprite *r_fall;
         int fall_s;
-        // Fallen on ground
-        df::Sprite *l_ground;
-        df::Sprite *r_ground;
-        int ground_s;
-        // Grabbed ledge
-        df::Sprite *l_ledge;
-        df::Sprite *r_ledge;
-        int ledge_s;
+        // Hit
+        df::Sprite *l_hit;
+        df::Sprite *r_hit;
+        int hit_s;
 
         // All the attacks. Oh my god
         // NEUTRAL_JAB,
@@ -228,22 +214,10 @@ class Character : public df::Object {
         df::Sprite *l_atk_us;
         df::Sprite *r_atk_us;
         int atk_us_s;
-        // DASH_ATTACK,
-        df::Sprite *l_atk_dash;
-        df::Sprite *r_atk_dash;
-        int atk_dash_s;
         // NEUTRAL_AIR,
         df::Sprite *l_atk_nair;
         df::Sprite *r_atk_nair;
         int atk_nair_s;
-        // FORWARD_AIR,
-        df::Sprite *l_atk_fair;
-        df::Sprite *r_atk_fair;
-        int atk_fair_s;
-        // BACK_AIR,
-        df::Sprite *l_atk_bair;
-        df::Sprite *r_atk_bair;
-        int atk_bair_s;
         // DOWN_AIR,
         df::Sprite *l_atk_dair;
         df::Sprite *r_atk_dair;
@@ -252,30 +226,10 @@ class Character : public df::Object {
         df::Sprite *l_atk_uair;
         df::Sprite *r_atk_uair;
         int atk_uair_s;
-        // NEUTRAL_SPECIAL,
-        df::Sprite *l_atk_nspec;
-        df::Sprite *r_atk_nspec;
-        int atk_nspec_s;
-        // SIDE_SPECIAL,
-        df::Sprite *l_atk_sspec;
-        df::Sprite *r_atk_sspec;
-        int atk_sspec_s;
-        // UP_SPECIAL,
-        df::Sprite *l_atk_uspec;
-        df::Sprite *r_atk_uspec;
+        // RECOVERY_SPECIAL,
+        df::Sprite *l_atk_recovery;
+        df::Sprite *r_atk_recovery;
         int atk_uspec_s;
-        // DOWN_SPECIAL,
-        df::Sprite *l_atk_dspec;
-        df::Sprite *r_atk_dspec;
-        int atk_dspec_s;
-        // GETUP_ATTACK,
-        df::Sprite *l_atk_getup;
-        df::Sprite *r_atk_getup;
-        int atk_getup_s;
-        // LEDGE_ATTACK,
-        df::Sprite *l_atk_ledge;
-        df::Sprite *r_atk_ledge;
-        int atk_ledge_s;
 
     public:
         Character();
@@ -301,18 +255,10 @@ class Character : public df::Object {
         virtual int side_strike();
         virtual int down_strike();
         virtual int up_strike();
-        virtual int dash_attack();
         virtual int neutral_air();
-        virtual int forward_air();
-        virtual int back_air();
         virtual int down_air();
         virtual int up_air();
-        virtual int neutral_special();
-        virtual int side_special();
-        virtual int up_special();
-        virtual int down_special();
-        virtual int getup_attack();
-        virtual int ledge_attack();
+        virtual int recovery_special();
 
         // Returns a joystick direction in one of 4 directions and neutal
         StickDirection getJoystickDirection() const;

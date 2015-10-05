@@ -51,25 +51,26 @@ In this game, two players face off in an arena.  The objective is for one player
 # Schedule:
 * Art assets
   * Character Sprites (Each character needs 25 sprites, or 50 if counting left and right)
-    * Standing
-    * Walking
-    * Dashing
-    * Jumping
-    * In air
-    * Grabbed ledge/recovery
-      * Roll
-      * Get-up
-      * Attack
-    * Roll
-    * Attacks
-      * Directional Attacks
-      * Jabs
-      * Air attacks
-    * Hit
-    * On ground/recovery
-      * Roll
-      * Get-up
-      * Attack
+    * Movement/Idle sprites
+      * Standing
+      * Walking
+      * Dashing
+      * Crouching
+      * Crawling
+      * Jumping
+      * In air
+      * Rolling
+      * Dodging
+      * Falling
+    * Combat sprites
+      * Jab
+      * Forward Strike
+      * Up Strike
+      * Down Strike
+      * Neutral air
+      * Up air
+      * Down air
+      * Stunned
   * Stages
     * Sprite
     * Background
