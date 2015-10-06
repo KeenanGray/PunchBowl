@@ -100,11 +100,18 @@ void Organizer::startUpGame() {
     Stage *p_s = new UltimateTerminal();
     startStage(p_s);
 
-    // Character *p_c = new CharTest();
-    Character *p_c = new ScytheGirl();
+    Character *punching_bag = new CharTest();
 
-    df::Position starting_pos(64, 200);
-    p_c->setPos(starting_pos);
+    df::Position starting_pos_1(168, 200);
+    punching_bag->setPos(starting_pos_1);
+    punching_bag->setJoystickId(1);
+    punching_bag->setObjectColor(df::GREEN);
+
+    Character *p_c = new CharTest();
+    // Character *p_c = new ScytheGirl();
+
+    df::Position starting_pos_2(64, 200);
+    p_c->setPos(starting_pos_2);
 }
 
 void Organizer::startStage(Stage *p_s) {

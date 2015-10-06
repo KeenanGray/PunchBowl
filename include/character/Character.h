@@ -15,6 +15,9 @@
 
 //Game Includes
 #include "PlayerName.h"
+#include "../Hitbox.h"
+
+class Hitbox;
 
 enum StickDirection {
     FACING_NEUTRAL = 0,
@@ -51,6 +54,7 @@ enum Movement {
 // Various axis thresholds
 const float jumpThreshold = -48;
 const float moveThreshold = 8;
+const float joystickThreshold = 16;
 const float dashThreshold = 80;
 const float crouchThreshold = 40;
 const float dropDownThreshold = 96;
@@ -68,11 +72,11 @@ const int shorthopFrames = 2;
 const int longhopFrames = 9;
 
 // Speed when rolling
-const float rollSpeed = 1.2;
+const float rollSpeed = 1.6;
 // Default jump speed for ground and air jumps
-const float jumpSpeedDefault = -0.44;
+const float jumpSpeedDefault = -0.80;
 // Amount of gravity
-const float gravityDefault = 0.03;
+const float gravityDefault = 0.05;
 
 const std::string char_default_type = "char_default";
 
@@ -88,8 +92,6 @@ class Character : public df::Object {
         bool on_platform;
         // Whether or not the character is crouched
         bool is_crouched;
-        // Whether or not the character is in free fall
-        bool is_falling;
 
         // If the character has been knocked down from an attack
         bool knocked_down;
@@ -104,14 +106,6 @@ class Character : public df::Object {
         int stun_frames;
         // Frames that this character is invincible for
         int invincible_frames;
-        // Frames that this character is attacking for
-        int attack_frames;
-        // The kind of attack the character is doing
-        Attack attack_type;
-        // Frames until the current animation can be canceled
-        int cancel_frames;
-        // Whether or not the recovery move is available (up_special)
-        bool recovery_available;
 
         // Used to determine whether or not to dash
         int frame_last_stood;
@@ -148,6 +142,20 @@ class Character : public df::Object {
         int out();
         
     protected:
+        // Frames that this character is attacking for
+        int attack_frames;
+        // The kind of attack the character is doing
+        Attack attack_type;
+        // Frames until the current animation can be canceled
+        int cancel_frames;
+        // Whether or not the recovery move is available (up_special)
+        bool recovery_available;
+        // Whether or not the character is in free fall
+        bool is_falling;
+
+        // List of hitboxes generated from attacks
+        df::ObjectList hitboxes;
+
         // The tags of the sprites
         // And their slowdowns
         // Standing/idle sprites
@@ -199,40 +207,43 @@ class Character : public df::Object {
 
         // All the attacks. Oh my god
         // NEUTRAL_JAB,
-        df::Sprite *l_atk_jab;
-        df::Sprite *r_atk_jab;
-        int atk_jab_s;
+        df::Sprite *l_atk_neutral;
+        df::Sprite *r_atk_neutral;
+        int atk_neutral_s;
         // SIDE_STRIKE,
-        df::Sprite *l_atk_ss;
-        df::Sprite *r_atk_ss;
-        int atk_ss_s;
+        df::Sprite *l_atk_side;
+        df::Sprite *r_atk_side;
+        int atk_side_s;
         // DOWN_STRIKE,
-        df::Sprite *l_atk_ds;
-        df::Sprite *r_atk_ds;
-        int atk_ds_s;
+        df::Sprite *l_atk_down;
+        df::Sprite *r_atk_down;
+        int atk_down_s;
         // UP_STRIKE,
-        df::Sprite *l_atk_us;
-        df::Sprite *r_atk_us;
-        int atk_us_s;
+        df::Sprite *l_atk_up;
+        df::Sprite *r_atk_up;
+        int atk_up_s;
         // NEUTRAL_AIR,
-        df::Sprite *l_atk_nair;
-        df::Sprite *r_atk_nair;
-        int atk_nair_s;
+        df::Sprite *l_air_neutral;
+        df::Sprite *r_air_neutral;
+        int air_neutral_s;
         // DOWN_AIR,
-        df::Sprite *l_atk_dair;
-        df::Sprite *r_atk_dair;
-        int atk_dair_s;
+        df::Sprite *l_air_down;
+        df::Sprite *r_air_down;
+        int air_down_s;
         // UP_AIR,
-        df::Sprite *l_atk_uair;
-        df::Sprite *r_atk_uair;
-        int atk_uair_s;
+        df::Sprite *l_air_up;
+        df::Sprite *r_air_up;
+        int air_up_s;
         // RECOVERY_SPECIAL,
-        df::Sprite *l_atk_recovery;
-        df::Sprite *r_atk_recovery;
-        int atk_uspec_s;
+        df::Sprite *l_recovery;
+        df::Sprite *r_recovery;
+        int recovery_s;
 
     public:
         Character();
+
+        // Sets the joystick id of the character
+        void setJoystickId(unsigned int new_joystick);
 
         int eventHandler(const df::Event *p_e);
 
@@ -251,14 +262,16 @@ class Character : public df::Object {
         virtual int step();
 
         // Attacks
-        virtual int neutral_jab();
-        virtual int side_strike();
-        virtual int down_strike();
-        virtual int up_strike();
-        virtual int neutral_air();
-        virtual int down_air();
-        virtual int up_air();
-        virtual int recovery_special();
+        // The frame passed in corresponds to this->attack_frames
+        // 0 is passed on the first call
+        virtual int neutral_jab(int frame);
+        virtual int side_strike(int frame);
+        virtual int down_strike(int frame);
+        virtual int up_strike(int frame);
+        virtual int neutral_air(int frame);
+        virtual int down_air(int frame);
+        virtual int up_air(int frame);
+        virtual int recovery_special(int frame);
 
         // Returns a joystick direction in one of 4 directions and neutal
         StickDirection getJoystickDirection() const;
@@ -273,7 +286,10 @@ class Character : public df::Object {
         // Called when this character is hit by an attack
         // Damage takes a flat int
         // Knockback is some float
-        virtual int hit(int stun, int damage_dealt, float knockback, df::Position direction);
+        virtual int hit(Hitbox *p_h);
+
+        // Removes all associated hitboxes
+        void clearHitboxes();
 
         //Get and Set Name
         void setName(PlayerName *new_playername);

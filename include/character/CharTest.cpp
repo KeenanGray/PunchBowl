@@ -42,6 +42,9 @@ CharTest::CharTest() {
     this->l_fall = resource_manager.getSprite("bull-left-fall-spr");
     this->r_fall = resource_manager.getSprite("bull-right-fall-spr");
 
+    this->l_atk_neutral = resource_manager.getSprite("bull-left-atk-neutral-spr");
+    this->r_atk_neutral = resource_manager.getSprite("bull-right-atk-neutral-spr");
+
     this->stand_s = 15;
     this->walk_s = 8;
     this->dash_s = 6;
@@ -52,6 +55,8 @@ CharTest::CharTest() {
     this->roll_s = 4;
     this->dodge_s = 8;
     this->fall_s = 0;
+
+    this->atk_neutral_s = 4;
 
     this->setObjectColor(df::RED);
     
@@ -75,4 +80,34 @@ int CharTest::out() {
     df::Position pos(64, 200);
     this->setPos(pos);
     return 1;
+}
+
+int CharTest::neutral_jab(int frame) {
+    if (frame == 0) {
+        this->setXVelocity(0);
+        this->attack_type = NEUTRAL_JAB;
+        this->attack_frames = 16;
+        this->cancel_frames = 12;
+    } else if (frame == 12) {
+        df::Position temp_relative_pos(0, -1);
+        df::Position temp_direction(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(8);
+            temp_direction.setX(2);
+        } else {
+            temp_relative_pos.setX(-8);
+            temp_direction.setX(-2);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this, 
+            temp_relative_pos, 
+            bull_stun_atk_neutral, 
+            bull_damage_atk_neutral, 
+            bull_knockback_atk_neutral, 
+            temp_direction
+            ));
+    } else if (frame == 4) {
+        this->clearHitboxes();
+    }
+    return 0;
 }

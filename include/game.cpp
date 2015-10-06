@@ -24,8 +24,7 @@ int main(int argc, char *argv[]) {
     game_manager.startUp();
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
-    df::LogManager::getInstance().setFlush(true);
-    df::LogManager::getInstance().setLogLevel(-2);
+
     loadResources();
 
     Organizer &org = Organizer::getInstance();
@@ -68,6 +67,9 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-dodge-spr.txt", "bull-right-dodge-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-fall-spr.txt", "bull-left-fall-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-fall-spr.txt", "bull-right-fall-spr");
+
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-neutral-spr.txt", "bull-left-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-neutral-spr.txt", "bull-right-atk-neutral-spr");
     
     // Scythe Girl
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-spr.txt", "sg-left-spr");

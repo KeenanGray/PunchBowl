@@ -27,6 +27,7 @@ GAMESRC= \
 		../include/Platform.cpp \
 		../include/Organizer.cpp \
 		../include/GameStart.cpp \
+		../include/Hitbox.cpp \
 
 GAMEFILES= $(GAMESRC:.cpp=.o)
 

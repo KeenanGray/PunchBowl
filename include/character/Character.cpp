@@ -74,6 +74,11 @@ Character::Character() {
     this->facing_direction = FACING_LEFT;
 
     this->damage = 0;
+    this->hitboxes = df::ObjectList();
+}
+
+void Character::setJoystickId(unsigned int new_joystick) {
+    this->joystick_id = new_joystick;
 }
 
 int Character::eventHandler(const df::Event *p_e) {
@@ -110,9 +115,7 @@ int Character::controls(const df::EventJoystick *p_je) {
     if (this->is_falling) {
         if (p_je->getAction() == df::AXIS) {
             if (p_je->getAxis() == df::Input::AXIS_X) {
-                if (p_je->getAxisValue() != 0) {
-                    this->x_axis = p_je->getAxisValue();
-                }
+                this->x_axis = p_je->getAxisValue();
                 return this->move(p_je);
             }
         }
@@ -122,19 +125,28 @@ int Character::controls(const df::EventJoystick *p_je) {
         // Inputs capable of cancelling attacks (jumps, down, dodge)
         if (p_je->getAction() == df::AXIS) {
             if (p_je->getAxis() == df::Input::AXIS_Y) {
-                if (p_je->getAxisValue() != 0) {
-                    this->y_axis = p_je->getAxisValue();
-                }
+                this->y_axis = p_je->getAxisValue();
                 if (p_je->getAxisValue() < 0) {
                     return this->jump(p_je);
                 } else {
                     return this->down(p_je);
                 }
+            } else if (p_je->getAxis() == df::Input::AXIS_X) {
+                this->x_axis = p_je->getAxisValue();
             } else if (p_je->getAxis() == df::Input::AXIS_Z || p_je->getAxis() == df::Input::AXIS_R) {
-                return this->dodge(p_je);
+                StickDirection temp = this->getJoystickDirection();
+                if (this->on_ground) {
+                    if (temp == FACING_DOWN) {
+                        return this->dodge(p_je);
+                    } else if (temp == FACING_LEFT || temp == FACING_RIGHT) {
+                        return this->roll(p_je);
+                    }
+                } else {
+                    return this->dodge(p_je);
+                }
             }
         }
-        if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
+        if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN || p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED) {
             if (p_je->getButton() == 2) {
                 // X Button
                 return this->jump(p_je);
@@ -150,15 +162,11 @@ int Character::controls(const df::EventJoystick *p_je) {
     // Axis events
     if (p_je->getAction() == df::AXIS) {
         if (p_je->getAxis() == df::Input::AXIS_X) {
-            if (p_je->getAxisValue() != 0) {
-                this->x_axis = p_je->getAxisValue();
-            }
+            this->x_axis = p_je->getAxisValue();
             return this->move(p_je);
         }
         else if (p_je->getAxis() == df::Input::AXIS_Y) {
-            if (p_je->getAxisValue() != 0) {
-                this->y_axis = p_je->getAxisValue();
-            }
+            this->y_axis = p_je->getAxisValue();
             if (p_je->getAxisValue() < 0) {
                 return this->jump(p_je);
             } else {
@@ -169,7 +177,7 @@ int Character::controls(const df::EventJoystick *p_je) {
             if (this->on_ground) {
                 if (temp == FACING_DOWN) {
                     return this->dodge(p_je);
-                } else {
+                } else if (temp == FACING_LEFT || temp == FACING_RIGHT) {
                     return this->roll(p_je);
                 }
             } else {
@@ -178,42 +186,49 @@ int Character::controls(const df::EventJoystick *p_je) {
         }
     }
     // button events
-    if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
+    if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED) {
         if (p_je->getButton() == 2) {
             // X Button
             return this->jump(p_je);
         } else if (p_je->getButton() == 3) {
             // Y Button
             return this->jump(p_je);
-        } else if (p_je->getButton() == 1) {
-            // B Button
-            
-            return this->recovery_special();
         } else if (p_je->getButton() == 0) {
+            // B Button
+            return this->recovery_special(0);
+        } else if (p_je->getButton() == 1) {
             // A Button
             if (this->on_ground) {
                 switch(this->getJoystickDirection()) {
                     case FACING_NEUTRAL:
-                        return this->neutral_jab();
+                        return this->neutral_jab(0);
                     case FACING_UP:
-                        return this->up_strike();
+                        return this->up_strike(0);
                     case FACING_RIGHT:
-                        return this->side_strike();
+                        return this->side_strike(0);
                     case FACING_DOWN:
-                        return this->down_strike();
+                        return this->down_strike(0);
                     case FACING_LEFT:
-                        return this->side_strike();
+                        return this->side_strike(0);
                 }
             } else {
                 switch(this->getJoystickDirection()) {
                     case FACING_UP:
-                        return this->up_air();
+                        return this->up_air(0);
                     case FACING_DOWN:
-                        return this->down_air();
+                        return this->down_air(0);
                     default:
-                        return this->neutral_air();
+                        return this->neutral_air(0);
                 }
             }
+        }
+    }
+    if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
+        if (p_je->getButton() == 2) {
+            // X Button
+            return this->jump(p_je);
+        } else if (p_je->getButton() == 3) {
+            // Y Button
             return this->jump(p_je);
         }
     }
@@ -222,17 +237,24 @@ int Character::controls(const df::EventJoystick *p_je) {
 
 int Character::jump(const df::EventJoystick *p_je) {
     if (!jump_this_frame) {
-
         // Whether or not the input registers for a jump
         bool temp_jumped = false;
         if (p_je->getAction() == df::AXIS) {
             temp_jumped = p_je->getAxisValue() < jumpThreshold;
-        }
-        else {
+        } else if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED) {
             // Button down
             temp_jumped = true;
+        } else if (this->jump_frames > shorthopFrames && this->jump_frames < longhopFrames) {
+            // The strength of a jump can be increased by how long 
+            // the user holds the button
+            // Full hop
+            this->setYVelocity(-0.08, true);
+            return 1;
         }
         if (temp_jumped) {
+            this->attack_type = UNDEFINED_ATTACK;
+            this->attack_frames = 0;
+
             // If the controlled are pressed, a jump is currently being attempted
             // Only one call of this function can be made per frame
             this->jump_this_frame = true;
@@ -245,12 +267,14 @@ int Character::jump(const df::EventJoystick *p_je) {
                     this->count_multi_jumps++;
                     this->currently_in_jump = true;
                     this->jump_frames = 0;
+                    return 1;
                 }
             } else if (this->jump_frames > shorthopFrames && this->jump_frames < longhopFrames) {
                 // The strength of a jump can be increased by how long 
                 // the user holds the button
                 // Full hop
                 this->setYVelocity(-0.08, true);
+                return 1;
             }
         }
     }
@@ -259,6 +283,9 @@ int Character::jump(const df::EventJoystick *p_je) {
 
 int Character::down(const df::EventJoystick *p_je) {
     if (this->on_ground && p_je->getAxisValue() > crouchThreshold) {
+        this->attack_type = UNDEFINED_ATTACK;
+            this->attack_frames = 0;
+
         if (this->on_platform && p_je->getAxisValue() > dropDownThreshold) {
             this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()+1));
         } else {
@@ -300,12 +327,12 @@ int Character::move(const df::EventJoystick *p_je) {
                 }
             }
         } else if (temp_val < 0) {
-            if (this->getXVelocity() > -.5) {
-                this->setXVelocity(temp_val/4000.0, true);
+            if (this->getXVelocity() > -.8) {
+                this->setXVelocity(temp_val/2000.0, true);
             }
         } else if (temp_val > 0) {
-            if (this->getXVelocity() < .5) {
-                this->setXVelocity(temp_val/4000.0, true);
+            if (this->getXVelocity() < .8) {
+                this->setXVelocity(temp_val/2000.0, true);
             }
         }
     } else if (this->on_ground) {
@@ -323,13 +350,17 @@ int Character::move(const df::EventJoystick *p_je) {
 int Character::roll(const df::EventJoystick *p_je) {
     if (this->dodge_frames == 0) {
         if (this->on_ground && p_je->getAxisValue() > triggerThreshold) {
+            this->attack_type = UNDEFINED_ATTACK;
+            this->attack_frames = 0;
+
             this->roll_frames = rollFrames;
             this->cancel_frames = rollFrames+4;
 
-            if (this->getFacingDirection() == FACING_RIGHT) {
-                this->setXVelocity(rollSpeed);
-            } else {
+            StickDirection temp_dir = this->getJoystickDirection();
+            if (temp_dir == FACING_RIGHT) {
                 this->setXVelocity(-rollSpeed);
+            } else if (temp_dir == FACING_LEFT) {
+                this->setXVelocity(rollSpeed);
             }
             return 1;
         }
@@ -340,6 +371,9 @@ int Character::roll(const df::EventJoystick *p_je) {
 int Character::dodge(const df::EventJoystick *p_je) {
     if (this->dodge_frames == 0 && this->jump_frames > shorthopFrames) {
         if (p_je->getAxisValue() > triggerThreshold) {
+            this->attack_type = UNDEFINED_ATTACK;
+            this->attack_frames = 0;
+
             this->dodge_frames = dodgeFrames;
             this->invincible_frames = dodgeFrames;
             if (this->on_ground) {
@@ -418,8 +452,14 @@ int Character::step() {
         }
         // Gravity
         float y_vel = this->getYVelocity();
-        if (y_vel < .32) {
+        if (y_vel < .5) {
             this->setYVelocity(gravityDefault, true);
+        }
+        float x_vel = this->getXVelocity();
+        if (x_vel < 0) {
+            this->setXVelocity(+0.004, true);
+        } else if (x_vel > 0) {
+            this->setXVelocity(-0.004, true);
         }
         this->jump_frames++;
     }
@@ -439,7 +479,7 @@ StickDirection Character::getJoystickDirection() const {
     else {
         temp_x = 0;
     }
-    if (std::abs(temp_x) > moveThreshold) {
+    if (std::abs(temp_x) > joystickThreshold) {
         if (temp_x < 0) {
             return FACING_RIGHT;
         }
@@ -447,7 +487,7 @@ StickDirection Character::getJoystickDirection() const {
             return FACING_LEFT;
         }
     }
-    else if (std::abs(temp_y) > moveThreshold) {
+    else if (std::abs(temp_y) > joystickThreshold) {
         if (temp_y < 0) {
             return FACING_UP;
         }
@@ -489,11 +529,84 @@ int Character::animationSelector() {
     // Check if in attack animation
     if (this->attack_type != UNDEFINED_ATTACK) {
         if (this->attack_frames > 0) {
-            // Select some attack animation
+            if (this->getFacingDirection() == FACING_LEFT) {
+                switch (this->attack_type) {
+                    case NEUTRAL_JAB:
+                        this->neutral_jab(this->attack_frames);
+                        this->switchToSprite(this->l_atk_neutral, this->atk_neutral_s);
+                        break;
+                    case SIDE_STRIKE:
+                        this->side_strike(this->attack_frames);
+                        this->switchToSprite(this->l_atk_side, this->atk_side_s);
+                        break;
+                    case DOWN_STRIKE:
+                        this->down_strike(this->attack_frames);
+                        this->switchToSprite(this->l_atk_down, this->atk_down_s);
+                        break;
+                    case UP_STRIKE:
+                        this->up_strike(this->attack_frames);
+                        this->switchToSprite(this->l_atk_up, this->atk_up_s);
+                        break;
+                    case NEUTRAL_AIR:
+                        this->neutral_air(this->attack_frames);
+                        this->switchToSprite(this->l_air_neutral, this->air_neutral_s);
+                        break;
+                    case DOWN_AIR:
+                        this->down_air(this->attack_frames);
+                        this->switchToSprite(this->l_air_down, this->air_down_s);
+                        break;
+                    case UP_AIR:
+                        this->up_air(this->attack_frames);
+                        this->switchToSprite(this->l_air_up, this->air_up_s);
+                        break;
+                    case RECOVERY_SPECIAL:
+                        this->recovery_special(this->attack_frames);
+                        this->switchToSprite(this->l_recovery, this->recovery_s);
+                        break;
+                }
+            } else {
+                switch (this->attack_type) {
+                    case NEUTRAL_JAB:
+                        this->neutral_jab(this->attack_frames);
+                        this->switchToSprite(this->r_atk_neutral, this->atk_neutral_s);
+                        break;
+                    case SIDE_STRIKE:
+                        this->side_strike(this->attack_frames);
+                        this->switchToSprite(this->r_atk_side, this->atk_side_s);
+                        break;
+                    case DOWN_STRIKE:
+                        this->down_strike(this->attack_frames);
+                        this->switchToSprite(this->r_atk_down, this->atk_down_s);
+                        break;
+                    case UP_STRIKE:
+                        this->up_strike(this->attack_frames);
+                        this->switchToSprite(this->r_atk_up, this->atk_up_s);
+                        break;
+                    case NEUTRAL_AIR:
+                        this->neutral_air(this->attack_frames);
+                        this->switchToSprite(this->r_air_neutral, this->air_neutral_s);
+                        break;
+                    case DOWN_AIR:
+                        this->down_air(this->attack_frames);
+                        this->switchToSprite(this->r_air_down, this->air_down_s);
+                        break;
+                    case UP_AIR:
+                        this->up_air(this->attack_frames);
+                        this->switchToSprite(this->r_air_up, this->air_up_s);
+                        break;
+                    case RECOVERY_SPECIAL:
+                        this->recovery_special(this->attack_frames);
+                        this->switchToSprite(this->r_recovery, this->recovery_s);
+                        break;
+                }
+            }
+            return 0;
         } else {
             this->attack_type = UNDEFINED_ATTACK;
         }
         return 0;
+    } else {
+        // this->clearHitboxes();
     }
     if (this->stun_frames > 0) {
         // Select stun animation
@@ -587,7 +700,7 @@ void Character::switchToSprite(df::Sprite *sprite, int new_sprite_slowdown) {
     }
 }
 
-int Character::hit(int stun, int damage_dealt, float knockback, df::Position direction) {
+int Character::hit(Hitbox *p_h) {
     if (this->invincible_frames > 0) {
         return 0;
     }
@@ -602,52 +715,64 @@ int Character::hit(int stun, int damage_dealt, float knockback, df::Position dir
     this->recovery_available = true;
 
     // Add stun and damage
-    this->stun_frames = stun;
-    this->damage += damage_dealt;
+    this->stun_frames = p_h->getStun();
+    this->damage += p_h->getDamage();
+    
     // Use manhattan distance rather than euclidean distance for direction vectors
-    int direction_normalization = direction.getX() + direction.getY();
+    df::Position direction = p_h->getDirection();
+    int direction_normalization = std::abs(direction.getX()) + std::abs(direction.getY());
     float x_component = float(direction.getX())/float(direction_normalization);
     float y_component = float(direction.getY())/float(direction_normalization);
 
-    this->setXVelocity(knockback*x_component*(1.0+float(this->damage)/100));
-    this->setXVelocity(knockback*y_component*(1.0+float(this->damage)/100));
+    this->setXVelocity(p_h->getKnockback()*x_component*(1.0+float(this->damage)/100.0));
+    this->setYVelocity(p_h->getKnockback()*y_component*(1.0+float(this->damage)/100.0));
 
     return 1;
+}
+
+void Character::clearHitboxes() {
+    df::ObjectListIterator li(&this->hitboxes);
+    while (!li.isDone()) {
+        df::Object *p_o = li.currentObject();
+        this->hitboxes.remove(p_o);
+        delete p_o;
+        // li.first();
+    }
 }
 
 int Character::out() {
     return 0;
 }
 
-int Character::neutral_jab() {
+int Character::neutral_jab(int frame) {
     return 0;
 }
 
-int Character::side_strike() {
+int Character::side_strike(int frame) {
     return 0;
 }
 
-int Character::down_strike() {
+int Character::down_strike(int frame) {
     return 0;
 }
 
-int Character::up_strike() {
+int Character::up_strike(int frame) {
     return 0;
 }
 
-int Character::neutral_air() {
+int Character::neutral_air(int frame) {
     return 0;
 }
 
-int Character::down_air() {
+int Character::down_air(int frame) {
     return 0;
 }
 
-int Character::up_air() {
+int Character::up_air(int frame) {
     return 0;
 }
 
-int Character::recovery_special() {
+int Character::recovery_special(int frame) {
     return 0;
 }
 
