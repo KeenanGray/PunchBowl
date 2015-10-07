@@ -44,7 +44,13 @@ void loadResources() {
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     // Load sprite
-    // resource_manager.loadSprite("Sprites/Title.txt", "Title");
+
+    //Title screen sprite
+    resource_manager.loadSprite("Sprites/Title.txt", "Title");
+
+    //Character selector sprite
+    resource_manager.loadSprite("Sprites/Select-spr.txt", "selector");
+
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
     resource_manager.loadSprite("Sprites/platform.txt", "platform");
@@ -103,11 +109,7 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-fall-spr.txt", "sg-left-fall-spr");
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-fall-spr.txt", "sg-right-fall-spr");
     */
-    //Alien
-    resource_manager.loadSprite("Sprites//alien-spr/alien-right-spr.txt", "alien-right-spr");
-    resource_manager.loadSprite("Sprites//alien-spr/alien-right-walk-spr.txt", "alien-right-wspr");
-    resource_manager.loadSprite("Sprites//alien-spr/alien-left-spr.txt", "alien-left-spr");
-    resource_manager.loadSprite("Sprites//alien-spr/alien-left-walk-spr.txt", "alien-left-wspr");
+    
 }
 
 

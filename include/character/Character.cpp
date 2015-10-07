@@ -253,9 +253,9 @@ int Character::controls(const df::EventJoystick *p_je) {
 int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
     bool recognized_input = false;
     df::EventJoystick *temp_je;
+    temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, 0);
 
     if (p_ke->getAction() == df::KEY_PRESSED) {
-
 
     } else if (p_ke->getAction() == df::KEY_DOWN) {
         if (p_ke->getKey() == df::Input::LEFT) {
@@ -306,6 +306,7 @@ int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
     if (recognized_input) {
         return this->controls(temp_je);
     }
+    return 0;
 }
 
 int Character::jump(const df::EventJoystick *p_je) {
@@ -464,7 +465,7 @@ int Character::step() {
 
     //Move name  with character
     name->setPos(df::Position(getPos().getX(), getPos().getY() - getSprite()->getHeight()/2 - 1));//name.getOffset().getY()));
-    name->draw();
+
     // If a jump was not attempted in the past frame, a new jump can be attempted
     if (this->jump_this_frame == false) {
         this->currently_in_jump = false;

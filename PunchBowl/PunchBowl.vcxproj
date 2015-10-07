@@ -70,11 +70,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\CharacterSelect.cpp" />
     <ClCompile Include="..\include\character\Character.cpp" />
     <ClCompile Include="..\include\character\CharTest.cpp" />
     <ClCompile Include="..\include\character\PlayerName.cpp" />
     <ClCompile Include="..\include\character\RobotCharacter.cpp" />
     <ClCompile Include="..\include\game.cpp" />
+    <ClCompile Include="..\include\Hitbox.cpp" />
     <ClCompile Include="..\include\Organizer.cpp" />
     <ClCompile Include="..\include\Platform.cpp" />
     <ClCompile Include="..\include\stage\Stage.cpp" />
@@ -90,15 +92,18 @@
     <Text Include="Sprites\bull-spr\bull-right-spr.txt" />
     <Text Include="Sprites\bull-spr\bull-right-walk-spr.txt" />
     <Text Include="Sprites\platform.txt" />
+    <Text Include="Sprites\Select-spr.txt" />
     <Text Include="Sprites\stages\ultimate_terminal.txt" />
     <Text Include="Sprites\testsprite.txt" />
     <Text Include="Sprites\Title.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\CharacterSelect.h" />
     <ClInclude Include="..\include\character\Character.h" />
     <ClInclude Include="..\include\character\CharTest.h" />
     <ClInclude Include="..\include\character\PlayerName.h" />
     <ClInclude Include="..\include\character\RobotCharacter.h" />
+    <ClInclude Include="..\include\Hitbox.h" />
     <ClInclude Include="..\include\Organizer.h" />
     <ClInclude Include="..\include\Platform.h" />
     <ClInclude Include="..\include\stage\Stage.h" />

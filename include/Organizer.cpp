@@ -11,7 +11,7 @@ Organizer::Organizer(){
 
 
     // df::Sprite *tmp_spr = resource_manager.getSprite("Title");
-    df::Sprite *tmp_spr = resource_manager.getSprite("test");
+    df::Sprite *tmp_spr = resource_manager.getSprite("Title");
     setSprite(tmp_spr);
     setSpriteSlowdown(25);
 
@@ -49,8 +49,17 @@ int Organizer::eventHandler(const df::Event *p_e){
 
         if (keyboard_event->getKey() == df::Input::P) {
             if (!gameStarted){
-                world_manager.removeObject(this); //Remove the object from WM so it isn't drawn
-                startUpGame();
+                //Set sprite to blank
+                setSpriteIndex(2);
+                setSpriteSlowdown(0);
+                setAltitude(0);
+
+                //Create 2 character selectors
+                CharacterSelect *p1 = new CharacterSelect();
+                p1->setId(1);
+                p1->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+                CharacterSelect *p2 = new CharacterSelect();
+                p2->setId(2);
                 gameStarted = true;
                 return 1;
             }
@@ -65,7 +74,7 @@ int Organizer::eventHandler(const df::Event *p_e){
                 // Start Button
                 if (!gameStarted){
                     world_manager.removeObject(this); //Remove the object from WM so it isn't drawn
-                    startUpGame();
+                    new CharacterSelect();
                     gameStarted = true;
                     return 1;
                 }
@@ -91,32 +100,31 @@ int Organizer::eventHandler(const df::Event *p_e){
     return 0;
 }
 
-void Organizer::startUpGame() {
-    // Start up the game stuff
+void Organizer::startMatch(Stage *stage, Character *char1, Character *char2) {
+    // Start up the match, at stage, with character 1 and character 2
     //Add an organizer to listen for keyboard input (q for quit);
     Organizer &org = Organizer::getInstance();
 
     //Load the stage;
-    Stage *p_s = new UltimateTerminal();
-    startStage(p_s);
+    startStage(stage);
 
-    Character *punching_bag = new CharTest();
+    Character *player1 = char1;
 
     df::Position starting_pos_1(168, 200);
-    punching_bag->setPos(starting_pos_1);
-    punching_bag->setJoystickId(1);
+    player1->setPos(starting_pos_1);
+    player1->setJoystickId(0);
     // // punching_bag->unregisterInterest(df::JOYSTICK_EVENT);
     // punching_bag->registerInterest(df::KEYBOARD_EVENT);
-    punching_bag->setObjectColor(df::GREEN);
+    player1->setObjectColor(df::GREEN);
 
-    Character *p_c = new CharTest();
-    p_c->setJoystickId(0);
+    Character *player2 = char2;
+    player2->setJoystickId(1);
     //p_c->unregisterInterest(df::JOYSTICK_EVENT);
     //p_c->registerInterest(df::KEYBOARD_EVENT);
     // Character *p_c = new ScytheGirl();
 
     df::Position starting_pos_2(64, 200);
-    p_c->setPos(starting_pos_2);
+    player2->setPos(starting_pos_2);
 }
 
 void Organizer::startStage(Stage *p_s) {

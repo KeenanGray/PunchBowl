@@ -51,6 +51,12 @@
     <ClCompile Include="..\include\character\PlayerName.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\include\Hitbox.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\CharacterSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Sprites\testsprite.txt">
@@ -89,6 +95,9 @@
     <Text Include="Sprites\Title.txt">
       <Filter>Resource Files\Sprites</Filter>
     </Text>
+    <Text Include="Sprites\Select-spr.txt">
+      <Filter>Resource Files\Sprites</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Platform.h">
@@ -113,6 +122,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\character\PlayerName.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Hitbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CharacterSelect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
