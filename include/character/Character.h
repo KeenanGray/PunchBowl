@@ -18,6 +18,7 @@
 #include "PlayerName.h"
 #include "../Hitbox.h"
 
+// Prototype the hitbox class
 class Hitbox;
 
 enum StickDirection {
@@ -55,7 +56,7 @@ enum Movement {
 // Various axis thresholds
 // These are consistent between characters
 const float jumpThreshold = -48;
-const float moveThreshold = 50;
+const float moveThreshold = 16;
 const float joystickThreshold = 16;
 const float dashThreshold = 96;
 const float crouchThreshold = 40;
@@ -98,21 +99,16 @@ const std::string char_default_type = "char_default";
 
 class Character : public df::Object {
     private:
+        // The name object for the player
         PlayerName *name;
 
+        // The ID of the joystick this character listens to
         unsigned int joystick_id;
 
         // Whether or not the character is grounded (either stage or platform)
         bool on_ground;
         // Whether or not the character is on a platform
         bool on_platform;
-        // Whether or not the character is crouched
-        bool is_crouched;
-
-        // If the character has been knocked down from an attack
-        bool knocked_down;
-        // The character is currently grabbed onto the ledge
-        bool grabbed_ledge;
 
         // Frames remaining in this character's roll
         int roll_frames;
@@ -125,6 +121,8 @@ class Character : public df::Object {
 
         // Used to determine whether or not to dash
         int frame_last_stood;
+        // Whether or not the character is crouched
+        bool is_crouched;
         // Current state of movement
         Movement current_movement;
         // The direction the character is currently facing
@@ -159,22 +157,27 @@ class Character : public df::Object {
         bool received_y_axis;
         bool received_x_axis;
 
+        // Called when an object leaves the screen
         int out();
         
     protected:
 
+        // Various movement speed variables
         float roll_speed;
         float jump_speed;
         float jump_increment;
         float gravity;
 
+        // Used when translating a joystick position to a movement speed
         float walk_div;
         float dash_div;
         float crawl_div;
         float dodge_div;
         float di_div;
 
+        // The maximum fall speed
         float terminal_velocity;
+        // The change in horizontal velocity when in the air
         float air_resistance;
 
         // Frames that this character is attacking for
@@ -191,10 +194,10 @@ class Character : public df::Object {
         // List of hitboxes generated from attacks
         df::ObjectList hitboxes;
 
-        // The tags of the sprites
+        // Stores the label of the current sprites
         // And their slowdowns
-        // Standing/idle sprites
         std::string current_anim;
+        // Standing/idle sprites
         // Standing
         df::Sprite *l_stand;
         df::Sprite *r_stand;
@@ -275,22 +278,25 @@ class Character : public df::Object {
         int recovery_s;
 
     public:
+        // Default constructor
         Character();
 
         // Sets the joystick id of the character
         void setJoystickId(unsigned int new_joystick);
 
+        // Determines which function to pass the event to
         int eventHandler(const df::Event *p_e);
 
+        // Decides which function to call based on the joystick event
         virtual int controls(const df::EventJoystick *p_je);
+        // Creates a joystick event and passes it to controls
         virtual int controlsKeyboard(const df::EventKeyboard *p_ke);
 
-        // 
         virtual int jump(const df::EventJoystick *p_je);
-
-        // Controls behavior of crouching and dropping through platforms
         virtual int down(const df::EventJoystick *p_je);
-
+        // Handles all horizontal movement 
+        // On the ground: walking, dashing, crawling
+        // In the air: DI (Directional influence while in the air)
         virtual int move(const df::EventJoystick *p_je);
         virtual int roll(const df::EventJoystick *p_je);
         virtual int dodge(const df::EventJoystick *p_je);
@@ -300,6 +306,7 @@ class Character : public df::Object {
         // Attacks
         // The frame passed in corresponds to this->attack_frames
         // 0 is passed on the first call
+        // These should be implemented by individual characters
         virtual int neutral_jab(int frame);
         virtual int side_strike(int frame);
         virtual int down_strike(int frame);

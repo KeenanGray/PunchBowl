@@ -95,25 +95,6 @@ void Organizer::startMatch() {
 
     //Load the stage;
     startStage(p_stage);
-
-
-    /*
-    df::Position starting_pos_1(168, 200);
-    player1->setPos(starting_pos_1);
-    player1->setJoystickId(0);
-    // // punching_bag->unregisterInterest(df::JOYSTICK_EVENT);
-    // punching_bag->registerInterest(df::KEYBOARD_EVENT);
-    player1->setObjectColor(df::GREEN);
-
-    Character *player2 = char2;
-    player2->setJoystickId(1);
-    //p_c->unregisterInterest(df::JOYSTICK_EVENT);
-    //p_c->registerInterest(df::KEYBOARD_EVENT);
-    // Character *p_c = new ScytheGirl();
-
-    df::Position starting_pos_2(64, 200);
-    player2->setPos(starting_pos_2);
-    */
 }
 
 void Organizer::startStage(Stage *p_s) {

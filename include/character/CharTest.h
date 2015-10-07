@@ -20,8 +20,8 @@ const int bull_damage_atk_down = 1;
 const int bull_stun_atk_down = 1;
 const float bull_knockback_atk_down = .3;
 
-const int bull_damage_atk_up = 10;
-const int bull_stun_atk_up = 10;
+const int bull_damage_atk_up = 20;
+const int bull_stun_atk_up = 15;
 const float bull_knockback_atk_up = 1.0;
 
 const int bull_damage_air_neutral = 1;
