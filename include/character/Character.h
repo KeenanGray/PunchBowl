@@ -55,9 +55,9 @@ enum Movement {
 // Various axis thresholds
 // These are consistent between characters
 const float jumpThreshold = -48;
-const float moveThreshold = 8;
+const float moveThreshold = 50;
 const float joystickThreshold = 16;
-const float dashThreshold = 80;
+const float dashThreshold = 96;
 const float crouchThreshold = 40;
 const float dropDownThreshold = 96;
 const float triggerThreshold = -80;

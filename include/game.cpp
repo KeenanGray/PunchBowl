@@ -22,6 +22,9 @@ void loadResources();
 int main(int argc, char *argv[]) {
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
+    df::LogManager &log_manager = df::LogManager::getInstance();
+    log_manager.setLogLevel(-2);
+    log_manager.setFlush(true);
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
@@ -67,9 +70,13 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-dodge-spr.txt", "bull-right-dodge-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-fall-spr.txt", "bull-left-fall-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-fall-spr.txt", "bull-right-fall-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-stunned-spr.txt", "bull-left-stunned-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-stunned-spr.txt", "bull-right-stunned-spr");
 
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-neutral-spr.txt", "bull-left-atk-neutral-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-neutral-spr.txt", "bull-right-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-side-spr.txt", "bull-left-atk-side-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-side-spr.txt", "bull-right-atk-side-spr");
     
     // Scythe Girl
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-spr.txt", "sg-left-spr");

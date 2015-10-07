@@ -109,8 +109,8 @@ void Organizer::startUpGame() {
     punching_bag->setObjectColor(df::GREEN);
 
     Character *p_c = new CharTest();
-    p_c->unregisterInterest(df::JOYSTICK_EVENT);
-    p_c->registerInterest(df::KEYBOARD_EVENT);
+    //p_c->unregisterInterest(df::JOYSTICK_EVENT);
+    //p_c->registerInterest(df::KEYBOARD_EVENT);
     // Character *p_c = new ScytheGirl();
 
     df::Position starting_pos_2(64, 200);

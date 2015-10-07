@@ -5,6 +5,7 @@
 // Dragonfly Engine headers
 // Managers
 #include "GraphicsManager.h"
+#include "LogManager.h"
 #include "WorldManager.h"
 
 // Punchbowl headers
@@ -56,6 +57,8 @@ int Hitbox::eventHandler(const df::Event *p_e) {
 }
 
 int Hitbox::step() {
+    this->updateWorldPos();
+
     df::Box detection_box = df::Box(this->getPos());
 
     df::ObjectList obj_hit = df::WorldManager::getInstance().objectsInBox(detection_box);
@@ -73,6 +76,7 @@ int Hitbox::step() {
                     }
                 }
                 if (not_hit_yet) {
+                    df::LogManager::getInstance().writeLog("Hitbox::step(): Hit object id %d for %d damage.", p_char->getId(), this->damage);
                     p_char->hit(this);
                     this->already_hit[this->hit_count] = p_o->getId();
                     this->hit_count++;

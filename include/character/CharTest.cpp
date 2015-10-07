@@ -41,9 +41,13 @@ CharTest::CharTest() {
     this->r_dodge = resource_manager.getSprite("bull-right-dodge-spr");
     this->l_fall = resource_manager.getSprite("bull-left-fall-spr");
     this->r_fall = resource_manager.getSprite("bull-right-fall-spr");
+    this->l_stun = resource_manager.getSprite("bull-left-stunned-spr");
+    this->r_stun = resource_manager.getSprite("bull-right-stunned-spr");
 
     this->l_atk_neutral = resource_manager.getSprite("bull-left-atk-neutral-spr");
     this->r_atk_neutral = resource_manager.getSprite("bull-right-atk-neutral-spr");
+    this->l_atk_side = resource_manager.getSprite("bull-left-atk-side-spr");
+    this->r_atk_side = resource_manager.getSprite("bull-right-atk-side-spr");
 
     this->stand_s = 15;
     this->walk_s = 8;
@@ -54,9 +58,11 @@ CharTest::CharTest() {
     this->air_s = 0;
     this->roll_s = 4;
     this->dodge_s = 8;
-    this->fall_s = 0;
+    this->stun_s = 0;
+    this->stun_s = 0;
 
     this->atk_neutral_s = 4;
+    this->atk_side_s = 5;
 
     this->setObjectColor(df::RED);
     
@@ -92,10 +98,10 @@ int CharTest::neutral_jab(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(8);
+            temp_relative_pos.setX(7);
             temp_direction.setX(2);
         } else {
-            temp_relative_pos.setX(-8);
+            temp_relative_pos.setX(-7);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -107,6 +113,41 @@ int CharTest::neutral_jab(int frame) {
             temp_direction
             ));
     } else if (frame == 4) {
+        this->clearHitboxes();
+    }
+    return 0;
+}
+
+int CharTest::side_strike(int frame) {
+    if (frame == 0) {
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            this->setXVelocity(.7);
+        } else {
+            this->setXVelocity(-.7);
+        }
+        this->attack_type = SIDE_STRIKE;
+        this->attack_frames = 30;
+        this->cancel_frames = 25;
+    } else if (frame == 20) {
+        printf("adding hitbox for side attack\n");
+        df::Position temp_relative_pos(0, -1);
+        df::Position temp_direction(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(7);
+            temp_direction.setX(2);
+        } else {
+            temp_relative_pos.setX(-7);
+            temp_direction.setX(-2);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this, 
+            temp_relative_pos, 
+            bull_stun_atk_side, 
+            bull_damage_atk_side, 
+            bull_knockback_atk_side, 
+            temp_direction
+            ));
+    } else if (frame == 5) {
         this->clearHitboxes();
     }
     return 0;

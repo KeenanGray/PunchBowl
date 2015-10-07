@@ -698,7 +698,7 @@ int Character::animationSelector() {
         }
         return 0;
     } else {
-        // this->clearHitboxes();
+        this->clearHitboxes();
     }
     if (this->stun_frames > 0) {
         // Select stun animation
