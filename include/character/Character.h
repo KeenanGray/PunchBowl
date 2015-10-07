@@ -10,6 +10,7 @@
 // Dragonfly Engine headers
 // Events
 #include "EventJoystick.h"
+#include "EventKeyboard.h"
 // Object
 #include "Object.h"
 
@@ -52,6 +53,7 @@ enum Movement {
 };
 
 // Various axis thresholds
+// These are consistent between characters
 const float jumpThreshold = -48;
 const float moveThreshold = 8;
 const float joystickThreshold = 16;
@@ -60,23 +62,37 @@ const float crouchThreshold = 40;
 const float dropDownThreshold = 96;
 const float triggerThreshold = -80;
 
+// Default frame and speed data.
 // Frames to roll for
-const int rollFrames = 16;
+const int DEFAULT_ROLL_FRAMES = 16;
 // Number of frames to dodge for
-const int dodgeFrames = 32;
+const int DEFAULT_DODGE_FRAMES = 32;
 // Used to determine how fast you need to move the stick to start dashing
-const int dashingFrames = 3;
+const int DEFAULT_DASH_FRAMES = 3;
 // Max number of frames you can hold jump for before a jump becomes a longhop
-const int shorthopFrames = 2;
+const int DEFAULT_SHORTHOP_FRAMES = 2;
 // Max number of frames you can hold a jump for until you reach max jump speed
-const int longhopFrames = 9;
+const int DEFAULT_LONGHOP_FRAMES = 9;
 
+// Some characters use their own values for these variables
 // Speed when rolling
-const float rollSpeed = 1.6;
+const float DEFAULT_ROLL_SPEED = 1.6;
 // Default jump speed for ground and air jumps
-const float jumpSpeedDefault = -0.80;
+const float DEFAULT_JUMP_SPEED = -0.80;
+// Amount to increase y velocity by per jump frame while button is held down
+const float DEFAULT_JUMP_INCREMENT = -0.08;
 // Amount of gravity
-const float gravityDefault = 0.05;
+const float DEFAULT_GRAVITY = 0.05;
+const float DEFAULT_MAX_DI_SPEED = 0.8;
+const float DEFAULT_TERMINAL_VELOCITY = 0.5;
+const float DEFAULT_AIR_RESISTANCE = 0.01;
+
+// Used to convert axis values to velocity by division
+const float DEFAULT_WALK_DIV = 200.0;
+const float DEFAULT_DASH_DIV = 100.0;
+const float DEFAULT_CRAWL_DIV = 400.0;
+const float DEFAULT_DODGE_DIV = 120.0;
+const float DEFAULT_DI_DIV = 2000.0;
 
 const std::string char_default_type = "char_default";
 
@@ -139,9 +155,28 @@ class Character : public df::Object {
         // The damage percentage of this character
         int damage;
 
+        // Whether or not the axis events for this frame were received.
+        bool received_y_axis;
+        bool received_x_axis;
+
         int out();
         
     protected:
+
+        float roll_speed;
+        float jump_speed;
+        float jump_increment;
+        float gravity;
+
+        float walk_div;
+        float dash_div;
+        float crawl_div;
+        float dodge_div;
+        float di_div;
+
+        float terminal_velocity;
+        float air_resistance;
+
         // Frames that this character is attacking for
         int attack_frames;
         // The kind of attack the character is doing
@@ -200,10 +235,10 @@ class Character : public df::Object {
         df::Sprite *l_fall;
         df::Sprite *r_fall;
         int fall_s;
-        // Hit
-        df::Sprite *l_hit;
-        df::Sprite *r_hit;
-        int hit_s;
+        // stunned
+        df::Sprite *l_stun;
+        df::Sprite *r_stun;
+        int stun_s;
 
         // All the attacks. Oh my god
         // NEUTRAL_JAB,
@@ -248,6 +283,7 @@ class Character : public df::Object {
         int eventHandler(const df::Event *p_e);
 
         virtual int controls(const df::EventJoystick *p_je);
+        virtual int controlsKeyboard(const df::EventKeyboard *p_ke);
 
         // 
         virtual int jump(const df::EventJoystick *p_je);

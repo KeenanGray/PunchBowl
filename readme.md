@@ -11,6 +11,20 @@ Genre: 2D Fighting Platformer (similar to Smash Bros.)
 # Game Description: 
 In this game, two players face off in an arena.  The objective is for one player to knock the other out of the arena.  As the players fight, they build up a damage counter.  The higher a character’s damage, the farther they are thrown when they get hit.  As the game continues, helpful and harmful items will spawn which players can use to gain an advantage.  There are timed fights and last man standing fights.  In a timed fight, the player with more kills at the end of the match wins. In last man standing fights, each player has a certain number of lives.  
 
+# Controls
+* Controller (Xbox 360)
+  * B: Attack
+  * A: Recovery Special
+  * X/Y: Jump
+  * Trigger: Dodge/roll
+  * Left stick: Movement
+* Keyboard
+  * A: Attack
+  * S: Recovery Special
+  * D: Dodge/roll
+  * C: Crouch
+  * Arrow Keys: Movement
+
 # Implementation Plan (Ordered by priority):
 * Engine Changes (Already completed as of Sept. 30)
   * Resizing world view

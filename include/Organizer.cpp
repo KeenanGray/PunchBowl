@@ -104,10 +104,13 @@ void Organizer::startUpGame() {
 
     df::Position starting_pos_1(168, 200);
     punching_bag->setPos(starting_pos_1);
-    punching_bag->setJoystickId(1);
+    punching_bag->unregisterInterest(df::JOYSTICK_EVENT);
+    // punching_bag->registerInterest(df::KEYBOARD_EVENT);
     punching_bag->setObjectColor(df::GREEN);
 
     Character *p_c = new CharTest();
+    p_c->unregisterInterest(df::JOYSTICK_EVENT);
+    p_c->registerInterest(df::KEYBOARD_EVENT);
     // Character *p_c = new ScytheGirl();
 
     df::Position starting_pos_2(64, 200);
