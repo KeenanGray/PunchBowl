@@ -111,8 +111,10 @@ void Organizer::startUpGame() {
 
     Character *p_c = new CharTest();
     p_c->setJoystickId(0);
-    //p_c->unregisterInterest(df::JOYSTICK_EVENT);
-    //p_c->registerInterest(df::KEYBOARD_EVENT);
+    p_c->registerInterest(df::JOYSTICK_EVENT);
+
+    // p_c->unregisterInterest(df::JOYSTICK_EVENT);
+    // p_c->registerInterest(df::KEYBOARD_EVENT);
     // Character *p_c = new ScytheGirl();
 
     df::Position starting_pos_2(64, 200);

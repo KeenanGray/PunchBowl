@@ -102,10 +102,10 @@ int CharTest::neutral_jab(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(6);
+            temp_relative_pos.setX(8);
             temp_direction.setX(2);
         } else {
-            temp_relative_pos.setX(-6);
+            temp_relative_pos.setX(-8);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(

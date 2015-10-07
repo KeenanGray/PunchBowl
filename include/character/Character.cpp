@@ -23,33 +23,21 @@
 #include "../Platform.h"
 
 Character::Character() {
-    // Set type attribute
+    // Set some default attributes
     setType(char_default_type);
     this->setSolidness(df::SOFT);
-
     this->setTransparency('#');
-
-    this->current_anim = "undefined";
+    this->current_anim = "undefined_sprite";
 
     // Register interest for events
-    this->registerInterest(df::JOYSTICK_EVENT);
     this->registerInterest(df::STEP_EVENT);
     this->registerInterest(df::OUT_EVENT);
-
-    // Assign character to a joystick
-    df::InputManager &input_manager = df::InputManager::getInstance();
-    if (input_manager.getJoystickCount() > 0) {
-        this->joystick_id = input_manager.getJoysticks()[0];
-    }
 
     // Initialize character state values
     this->on_ground = true;
     this->on_platform = false;
     this->is_crouched = false;
     this->is_falling = false;
-
-    this->knocked_down = false;
-    this->grabbed_ledge = false;
 
     this->roll_frames = 0;
     this->dodge_frames = 0;
@@ -59,7 +47,7 @@ Character::Character() {
     this->cancel_frames = 0;
     this->recovery_available = true;
 
-    this->jump_frames = 1024;
+    this->jump_frames = 0;
     this->jump_this_frame = false;
 
     this->num_multi_jumps = 2;
@@ -120,17 +108,12 @@ int Character::controls(const df::EventJoystick *p_je) {
     // Cannot do input while locked in an animation or stunned
     if (this->cancel_frames > 0) {
         return 0;
-    } else if (this->stun_frames > 0) {
-        // Insert tech recovery here
+    }
+    if (this->stun_frames > 0) {
         return 0;
     }
-    if (this->knocked_down) {
-        // Ground recovery options
-        return 0;
-    }
-    if (this->grabbed_ledge) {
-        return 0;
-    }
+
+    // If the character is falling, only DI inputs are allowed
     if (this->is_falling) {
         if (p_je->getAction() == df::AXIS) {
             if (p_je->getAxis() == df::Input::AXIS_X) {
@@ -138,21 +121,28 @@ int Character::controls(const df::EventJoystick *p_je) {
                 return this->move(p_je);
             }
         }
+        // No other inputs recognized
         return 0;
     }
+    // If attack frames > 0, this character is in an attack
+    // And also cancel frames == 0 so the attack can be cancelled
     if (this->attack_frames > 0) {
         // Inputs capable of cancelling attacks (jumps, down, dodge)
         if (p_je->getAction() == df::AXIS) {
             if (p_je->getAxis() == df::Input::AXIS_Y) {
+                // Down
                 this->received_y_axis = true;
                 this->y_axis = p_je->getAxisValue();
                 return this->down(p_je);
             } else if (p_je->getAxis() == df::Input::AXIS_X) {
+                // No x axis movement is recognized
                 this->received_x_axis = true;
                 this->x_axis = p_je->getAxisValue();
+                return 0;
             } else if (p_je->getAxis() == df::Input::AXIS_Z || p_je->getAxis() == df::Input::AXIS_R) {
-                StickDirection temp = this->getJoystickDirection();
+                // Trigger actions
                 if (this->on_ground) {
+                    StickDirection temp = this->getJoystickDirection();
                     if (temp == FACING_DOWN) {
                         return this->dodge(p_je);
                     } else if (temp == FACING_LEFT || temp == FACING_RIGHT) {
@@ -163,6 +153,7 @@ int Character::controls(const df::EventJoystick *p_je) {
                 }
             }
         }
+        // Jump actions
         if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN || p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED) {
             if (p_je->getButton() == 2) {
                 // X Button
@@ -175,6 +166,7 @@ int Character::controls(const df::EventJoystick *p_je) {
         }
         return 0;
     }
+
     // Standard inputs
     // Axis events
     if (p_je->getAction() == df::AXIS) {
@@ -199,6 +191,7 @@ int Character::controls(const df::EventJoystick *p_je) {
                 return this->dodge(p_je);
             }
         }
+        return 0;
     }
     // button events
     if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED) {
@@ -213,6 +206,8 @@ int Character::controls(const df::EventJoystick *p_je) {
             return this->recovery_special(0);
         } else if (p_je->getButton() == 1) {
             // A Button
+            // Attack selector
+            // Attack initialization is passed a 0 for frame number
             if (this->on_ground) {
                 switch(this->getJoystickDirection()) {
                     case FACING_NEUTRAL:
@@ -237,7 +232,10 @@ int Character::controls(const df::EventJoystick *p_je) {
                 }
             }
         }
+        return 0;
     }
+    // Joystick buttons held down
+    // Currently only used for long jumping from the ground
     if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
         if (p_je->getButton() == 2) {
             // X Button
@@ -251,72 +249,55 @@ int Character::controls(const df::EventJoystick *p_je) {
 }
 
 int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
-    bool recognized_input = false;
-    df::EventJoystick *temp_je;
+    // This button should never be used
+    // In fact, it literally isn't a recognized button fom SFML (SFML has button ids 0-31 inclusive)
+    df::EventJoystick *temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 64);
 
     if (p_ke->getAction() == df::KEY_PRESSED) {
-
-
-    } else if (p_ke->getAction() == df::KEY_DOWN) {
-        if (p_ke->getKey() == df::Input::LEFT) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, -100);
-        } else if (p_ke->getKey() == df::Input::RIGHT) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, 100);
-        } else if (p_ke->getKey() == df::Input::UP) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, -100);
-        } else if (p_ke->getKey() == df::Input::DOWN) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, 100);
-        } else if (p_ke->getKey() == df::Input::C) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, crouchThreshold + 1);
-        } else if (p_ke->getKey() == df::Input::A) {
-            recognized_input = true;
+        if (p_ke->getKey() == df::Input::A) {
             temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 1);
         } else if (p_ke->getKey() == df::Input::S) {
-            recognized_input = true;
             temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 0);
-        } else if (p_ke->getKey() == df::Input::D) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Z, 100);
         } else if (p_ke->getKey() == df::Input::F) {
-            recognized_input = true;
             temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 3);
+        } else {
+            return 0;
         }
-    } else if (p_ke->getAction() == df::KEY_RELEASED) {
+    } else if (p_ke->getAction() == df::KEY_DOWN) {
         if (p_ke->getKey() == df::Input::LEFT) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, 0);
+            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, -100);
         } else if (p_ke->getKey() == df::Input::RIGHT) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, 0);
+            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, 100);
         } else if (p_ke->getKey() == df::Input::UP) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, 0);
+            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, -100);
         } else if (p_ke->getKey() == df::Input::DOWN) {
-            recognized_input = true;
-            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, 0);
+            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, 100);
+        } else if (p_ke->getKey() == df::Input::C) {
+            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, crouchThreshold + 1);
+        } else if (p_ke->getKey() == df::Input::D) {
+            temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Z, 100);
+        } else {
+            return 0;
         }
+    } else {
+        return 0;
     }
-    
 
-    if (recognized_input) {
-        return this->controls(temp_je);
-    }
+    return this->controls(temp_je);
 }
 
 int Character::jump(const df::EventJoystick *p_je) {
+    // Stops x and y being pressed at the same time from 
+    // calling this function twice
     if (!jump_this_frame) {
-
-        this->attack_type = UNDEFINED_ATTACK;
+        // Cancel the current attack
         this->attack_frames = 0;
-        // If the controlled are pressed, a jump is currently being attempted
+
         // Only one call of this function can be made per frame
         this->jump_this_frame = true;
 
+        // Checks the number of frames the jump button was hld down for.
+        // Decides the strength of a jump
         if (this->jump_frames > DEFAULT_SHORTHOP_FRAMES && this->jump_frames < DEFAULT_LONGHOP_FRAMES) {
             // The strength of a jump can be increased by how long 
             // the user holds the button
@@ -329,8 +310,12 @@ int Character::jump(const df::EventJoystick *p_je) {
         if (!this->currently_in_jump) {
             // Ground jump or air jump
             if (this->on_ground || this->count_multi_jumps < this->num_multi_jumps) {
-                this->setYVelocity(this->jump_speed);
+                // Set the velocities
+                if (this->jump_speed < this->getYVelocity()) {
+                    this->setYVelocity(this->jump_speed);
+                }
                 this->setXVelocity(this->x_axis/this->walk_div);
+                // Set appropriate character state variables
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
                 this->jump_frames = 0;
@@ -342,16 +327,19 @@ int Character::jump(const df::EventJoystick *p_je) {
 }
 
 int Character::down(const df::EventJoystick *p_je) {
-    if (this->on_ground && p_je->getAxisValue() > crouchThreshold) {
-        this->attack_type = UNDEFINED_ATTACK;
+    // If the character is grounded and the joystick is pushed far enough
+    if (this->on_ground && this->y_axis > crouchThreshold) {
+        // Cancel the current attack
         this->attack_frames = 0;
 
+        // Check whether to crouch or dropdown through platform
         if (this->on_platform && p_je->getAxisValue() > dropDownThreshold) {
             this->setPos(df::Position(this->getPos().getX(), this->getPos().getY()+1));
         } else {
             this->is_crouched = true;
         }
     } else {
+        // Uncrouch if in air or joystick isn't down
         this->is_crouched = false;
     }
 
@@ -359,42 +347,53 @@ int Character::down(const df::EventJoystick *p_je) {
 }
 
 int Character::move(const df::EventJoystick *p_je) {
+    // Cannot change horizontal velocity while dodging
     if (this->dodge_frames > 0) {
         return 0;
     }
-    float temp_val = p_je->getAxisValue();
-    if (std::abs(temp_val) > moveThreshold) {
+    // Check if the joystick is pushed far enough
+    if (std::abs(this->x_axis) > moveThreshold) {
+        // Dd ground movement
         if (this->on_ground) {
-            if (temp_val > 0) {
+            // Calculate facing direction
+            // That means you cannot change direction in mid-air
+            if (this->x_axis > 0) {
                 this->facing_direction = FACING_RIGHT;
-            } else {
+            } else if (this->x_axis < 0) {
                 this->facing_direction = FACING_LEFT;
             }
+            // Do crawl
             if (this->is_crouched) {
-                this->setXVelocity(temp_val/this->crawl_div);
+                this->setXVelocity(this->x_axis/this->crawl_div);
                 this->current_movement = CRAWLING;
             } else {
-                this->setXVelocity(temp_val/this->walk_div);
-                this->current_movement = WALKING;
                 int step_count = df::GameManager::getInstance().getStepCount();
                 // If joystick was moved fast enough, then begin dashing
-                if (std::abs(temp_val) > dashThreshold) {
+                if (std::abs(this->x_axis) > dashThreshold) {
+                    // Check if the joystick was moved fast enough
                     if (step_count - this->frame_last_stood <= DEFAULT_DASH_FRAMES) {
-                        this->setXVelocity(temp_val/this->dash_div);
+                        // Do dash
+                        this->setXVelocity(this->x_axis/this->dash_div);
                         this->frame_last_stood = step_count;
                         this->current_movement = DASHING;
                     }
+                } else {
+                    // Do walk
+                    this->setXVelocity(this->x_axis/this->walk_div);
+                    this->current_movement = WALKING;
                 }
             }
-        } else if (temp_val < 0) {
+        } 
+        // Do DI calculations in the air
+        else if (this->x_axis < 0) {
             if (this->getXVelocity() > -DEFAULT_MAX_DI_SPEED) {
                 //this->setXVelocity(temp_val/this->di_div, true);
-                this->setXVelocity(temp_val/2000.0, true);
+                this->setXVelocity(this->x_axis/2000.0, true);
             }
-        } else if (temp_val > 0) {
+        } else if (this->x_axis > 0) {
             if (this->getXVelocity() < DEFAULT_MAX_DI_SPEED) {
                 //this->setXVelocity(temp_val/this->di_div, true);
-                this->setXVelocity(temp_val/2000.0, true);
+                this->setXVelocity(this->x_axis/2000.0, true);
             }
         }
     } else if (this->on_ground) {
@@ -412,7 +411,7 @@ int Character::move(const df::EventJoystick *p_je) {
 int Character::roll(const df::EventJoystick *p_je) {
     if (this->dodge_frames == 0) {
         if (this->on_ground && p_je->getAxisValue() > triggerThreshold) {
-            this->attack_type = UNDEFINED_ATTACK;
+            // Cancel the current attack
             this->attack_frames = 0;
 
             this->roll_frames = DEFAULT_ROLL_FRAMES;
@@ -433,7 +432,7 @@ int Character::roll(const df::EventJoystick *p_je) {
 int Character::dodge(const df::EventJoystick *p_je) {
     if (this->dodge_frames == 0 && this->jump_frames > DEFAULT_SHORTHOP_FRAMES) {
         if (p_je->getAxisValue() > triggerThreshold) {
-            this->attack_type = UNDEFINED_ATTACK;
+            // Cancel the current attack
             this->attack_frames = 0;
 
             this->dodge_frames = DEFAULT_DODGE_FRAMES;
@@ -605,6 +604,7 @@ int Character::animationSelector() {
     // Check if in attack animation
     if (this->attack_type != UNDEFINED_ATTACK) {
         if (this->attack_frames > 0) {
+            // Select the proper attack animation
             if (this->getFacingDirection() == FACING_LEFT) {
                 switch (this->attack_type) {
                     case NEUTRAL_JAB:
@@ -678,11 +678,12 @@ int Character::animationSelector() {
             }
             return 0;
         } else {
+            // When the attack is over, reset the animation
+            // And clear the hitboxes
+            this->clearHitboxes();
             this->attack_type = UNDEFINED_ATTACK;
         }
         return 0;
-    } else {
-        this->clearHitboxes();
     }
     if (this->stun_frames > 0) {
         // Select stun animation
@@ -694,6 +695,7 @@ int Character::animationSelector() {
         return 0;
     }
     if (this->currently_in_jump) {
+        // Select jumping animation
         if (this->jump_frames < DEFAULT_LONGHOP_FRAMES) {
             if (this->getFacingDirection() == FACING_LEFT) {
                 this->switchToSprite(this->l_jump, this->jump_s);
@@ -768,6 +770,7 @@ void Character::switchToSprite(df::Sprite *sprite, int new_sprite_slowdown) {
             // Store previous sprite height
             int prev_height = this->getSprite()->getHeight();
             
+            // Change the sprite settings
             this->setSprite(sprite);
             this->setSpriteSlowdown(new_sprite_slowdown);
             this->setSpriteIndex(0);
@@ -788,31 +791,36 @@ int Character::hit(Hitbox *p_h) {
     }
 
     // Instantly stop current attack
+    // And cancel any movements currently
     this->roll_frames = 0;
+    this->dodge_frames = 0;
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
     this->cancel_frames = 0;
 
-    // Reset recovery moce
+    // Reset recovery move
     this->recovery_available = true;
 
     // Add stun and damage
     this->stun_frames = p_h->getStun();
     this->damage += p_h->getDamage();
 
-    // Use manhattan distance rather than euclidean distance for direction vectors
+    // Calculate the horizontal and vertial ratio for the knockback
     df::Position direction = p_h->getDirection();
     int direction_normalization = std::abs(direction.getX()) + std::abs(direction.getY());
     float x_component = float(direction.getX())/float(direction_normalization);
     float y_component = float(direction.getY())/float(direction_normalization);
+    // Knockback after the damage multiplier is applied
+    float adjusted_knockback = p_h->getKnockback()*(1.0+float(this->damage)/100.0);
 
-    this->setXVelocity(p_h->getKnockback()*x_component*(1.0+float(this->damage)/100.0));
-    this->setYVelocity(p_h->getKnockback()*y_component*(1.0+float(this->damage)/100.0));
+    this->setXVelocity(adjusted_knockback*x_component);
+    this->setYVelocity(adjusted_knockback*y_component);
 
     return 1;
 }
 
 void Character::clearHitboxes() {
+    // Removes all hitboxes
     if (!this->hitboxes.isEmpty()) {
         df::ObjectList to_delete = this->hitboxes;
         df::ObjectListIterator li(&to_delete);
