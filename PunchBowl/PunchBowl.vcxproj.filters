@@ -54,7 +54,10 @@
     <ClCompile Include="..\include\Hitbox.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\CharacterSelect.cpp">
+    <ClCompile Include="..\include\Selector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\Icon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -127,7 +130,10 @@
     <ClInclude Include="..\include\Hitbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CharacterSelect.h">
+    <ClInclude Include="..\include\Selector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Icon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

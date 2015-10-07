@@ -23,7 +23,7 @@
 #include "character/CharTest.h"
 #include "character/ScytheGirl.h"
 #include "Platform.h"
-#include "CharacterSelect.h"
+#include "Selector.h"
 
 class Organizer : public df::Object{
 private:
@@ -32,12 +32,19 @@ private:
         void operator = (Organizer const&); //prevents 
         bool gameStarted;
 
+        Character *charArray[4];
+        Stage *p_stage;
+        int characterCount;
+
 public:
     static Organizer &getInstance();
     int eventHandler(const df::Event *p_e);
 
-    void startMatch(Stage *stage, Character *char1, Character *char2);
+    void startMatch();
     void startStage(Stage *p_s);
+
+    void Organizer::selectCharacters();
+
 };
 
 

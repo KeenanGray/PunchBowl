@@ -59,26 +59,27 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dragonfly-lwang5\lwang-engine\include;..\..\SFML-2.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\dragonfly-lwang5\include;..\..\SFML-2.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\..\lwang-engine\lwang-engine\Debug;..\..\SFML-2.3\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\dragonfly-lwang5\lwang-engine\Release;..\..\SFML-2.3\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;lwang-engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\include\CharacterSelect.cpp" />
     <ClCompile Include="..\include\character\Character.cpp" />
     <ClCompile Include="..\include\character\CharTest.cpp" />
     <ClCompile Include="..\include\character\PlayerName.cpp" />
     <ClCompile Include="..\include\character\RobotCharacter.cpp" />
     <ClCompile Include="..\include\game.cpp" />
     <ClCompile Include="..\include\Hitbox.cpp" />
+    <ClCompile Include="..\include\Icon.cpp" />
     <ClCompile Include="..\include\Organizer.cpp" />
     <ClCompile Include="..\include\Platform.cpp" />
+    <ClCompile Include="..\include\Selector.cpp" />
     <ClCompile Include="..\include\stage\Stage.cpp" />
     <ClCompile Include="..\include\stage\UltimateTerminal.cpp" />
   </ItemGroup>
@@ -98,14 +99,15 @@
     <Text Include="Sprites\Title.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\CharacterSelect.h" />
     <ClInclude Include="..\include\character\Character.h" />
     <ClInclude Include="..\include\character\CharTest.h" />
     <ClInclude Include="..\include\character\PlayerName.h" />
     <ClInclude Include="..\include\character\RobotCharacter.h" />
     <ClInclude Include="..\include\Hitbox.h" />
+    <ClInclude Include="..\include\Icon.h" />
     <ClInclude Include="..\include\Organizer.h" />
     <ClInclude Include="..\include\Platform.h" />
+    <ClInclude Include="..\include\Selector.h" />
     <ClInclude Include="..\include\stage\Stage.h" />
     <ClInclude Include="..\include\stage\UltimateTerminal.h" />
   </ItemGroup>

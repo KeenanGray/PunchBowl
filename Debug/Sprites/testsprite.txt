@@ -1,0 +1,17 @@
+frames 3
+width 4
+height 3
+color red
+aaaa
+bbbb
+cccc
+end
+dddd
+eeee
+ffff
+end
+gggg
+hhhh
+iiii
+end
+eof
