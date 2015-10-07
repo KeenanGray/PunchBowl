@@ -48,6 +48,9 @@ CharTest::CharTest() {
     this->r_atk_neutral = resource_manager.getSprite("bull-right-atk-neutral-spr");
     this->l_atk_side = resource_manager.getSprite("bull-left-atk-side-spr");
     this->r_atk_side = resource_manager.getSprite("bull-right-atk-side-spr");
+    this->l_atk_up = resource_manager.getSprite("bull-left-atk-up-spr");
+    this->r_atk_up = resource_manager.getSprite("bull-right-atk-up-spr");
+
 
     this->stand_s = 15;
     this->walk_s = 8;
@@ -63,6 +66,7 @@ CharTest::CharTest() {
 
     this->atk_neutral_s = 4;
     this->atk_side_s = 5;
+    this->atk_up_s = 5;
 
     this->setObjectColor(df::RED);
     
@@ -98,10 +102,10 @@ int CharTest::neutral_jab(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(7);
+            temp_relative_pos.setX(6);
             temp_direction.setX(2);
         } else {
-            temp_relative_pos.setX(-7);
+            temp_relative_pos.setX(-6);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -121,15 +125,14 @@ int CharTest::neutral_jab(int frame) {
 int CharTest::side_strike(int frame) {
     if (frame == 0) {
         if (this->getFacingDirection() == FACING_RIGHT) {
-            this->setXVelocity(.7);
+            this->setXVelocity(.2);
         } else {
-            this->setXVelocity(-.7);
+            this->setXVelocity(-.2);
         }
         this->attack_type = SIDE_STRIKE;
         this->attack_frames = 30;
         this->cancel_frames = 25;
-    } else if (frame == 20) {
-        printf("adding hitbox for side attack\n");
+    } else if (frame == 15) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -147,7 +150,37 @@ int CharTest::side_strike(int frame) {
             bull_knockback_atk_side, 
             temp_direction
             ));
-    } else if (frame == 5) {
+    } else if (frame == 10) {
+        this->clearHitboxes();
+    }
+    return 0;
+}
+
+int CharTest::up_strike(int frame) {
+    if (frame == 0) {
+        this->setXVelocity(0);
+        this->attack_type = UP_STRIKE;
+        this->attack_frames = 20;
+        this->cancel_frames = 15;
+    } else if (frame == 10) {
+        df::Position temp_relative_pos(0, -3);
+        df::Position temp_direction(0, -3);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(1);
+            temp_direction.setX(1);
+        } else {
+            temp_relative_pos.setX(-1);
+            temp_direction.setX(-1);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this, 
+            temp_relative_pos, 
+            bull_stun_atk_up, 
+            bull_damage_atk_up, 
+            bull_knockback_atk_up, 
+            temp_direction
+            ));
+    } else if (frame == 15) {
         this->clearHitboxes();
     }
     return 0;

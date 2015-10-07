@@ -77,6 +77,8 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-neutral-spr.txt", "bull-right-atk-neutral-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-side-spr.txt", "bull-left-atk-side-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-side-spr.txt", "bull-right-atk-side-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-up-spr.txt", "bull-left-atk-up-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-up-spr.txt", "bull-right-atk-up-spr");
     
     // Scythe Girl
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-spr.txt", "sg-left-spr");

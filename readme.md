@@ -17,12 +17,13 @@ In this game, two players face off in an arena.  The objective is for one player
   * A: Recovery Special
   * X/Y: Jump
   * Trigger: Dodge/roll
-  * Left stick: Movement
+  * Left stick: Movement/crouch
 * Keyboard
   * A: Attack
   * S: Recovery Special
   * D: Dodge/roll
   * C: Crouch
+  * F: Jump
   * Arrow Keys: Movement
 
 # Implementation Plan (Ordered by priority):

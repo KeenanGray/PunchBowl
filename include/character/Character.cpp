@@ -146,11 +146,7 @@ int Character::controls(const df::EventJoystick *p_je) {
             if (p_je->getAxis() == df::Input::AXIS_Y) {
                 this->received_y_axis = true;
                 this->y_axis = p_je->getAxisValue();
-                if (p_je->getAxisValue() < 0) {
-                    return this->jump(p_je);
-                } else {
-                    return this->down(p_je);
-                }
+                return this->down(p_je);
             } else if (p_je->getAxis() == df::Input::AXIS_X) {
                 this->received_x_axis = true;
                 this->x_axis = p_je->getAxisValue();
@@ -190,11 +186,7 @@ int Character::controls(const df::EventJoystick *p_je) {
         else if (p_je->getAxis() == df::Input::AXIS_Y) {
             this->received_y_axis = true;
             this->y_axis = p_je->getAxisValue();
-            if (p_je->getAxisValue() < 0) {
-                return this->jump(p_je);
-            } else {
-                return this->down(p_je);
-            }
+            return this->down(p_je);
         } else if (p_je->getAxis() == df::Input::AXIS_Z || p_je->getAxis() == df::Input::AXIS_R) {
             StickDirection temp = this->getJoystickDirection();
             if (this->on_ground) {
@@ -290,6 +282,9 @@ int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
         } else if (p_ke->getKey() == df::Input::D) {
             recognized_input = true;
             temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Z, 100);
+        } else if (p_ke->getKey() == df::Input::F) {
+            recognized_input = true;
+            temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 3);
         }
     } else if (p_ke->getAction() == df::KEY_RELEASED) {
         if (p_ke->getKey() == df::Input::LEFT) {
@@ -315,43 +310,30 @@ int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
 
 int Character::jump(const df::EventJoystick *p_je) {
     if (!jump_this_frame) {
-        // Whether or not the input registers for a jump
-        bool temp_jumped = false;
-        if (p_je->getAction() == df::AXIS) {
-            temp_jumped = p_je->getAxisValue() < jumpThreshold;
-        } else if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED) {
-            // Button down
-            temp_jumped = true;
-        } else if (this->jump_frames > DEFAULT_SHORTHOP_FRAMES && this->jump_frames < DEFAULT_LONGHOP_FRAMES) {
+
+        this->attack_type = UNDEFINED_ATTACK;
+        this->attack_frames = 0;
+        // If the controlled are pressed, a jump is currently being attempted
+        // Only one call of this function can be made per frame
+        this->jump_this_frame = true;
+
+        if (this->jump_frames > DEFAULT_SHORTHOP_FRAMES && this->jump_frames < DEFAULT_LONGHOP_FRAMES) {
             // The strength of a jump can be increased by how long 
             // the user holds the button
             // Full hop
             this->setYVelocity(this->jump_increment, true);
             return 1;
         }
-        if (temp_jumped) {
-            this->attack_type = UNDEFINED_ATTACK;
-            this->attack_frames = 0;
 
-            // If the controlled are pressed, a jump is currently being attempted
-            // Only one call of this function can be made per frame
-            this->jump_this_frame = true;
-            // Initiate a new jump if not currently in a jump
-            if (!this->currently_in_jump) {
-                // Ground jump or air jump
-                if (this->on_ground || this->count_multi_jumps < this->num_multi_jumps) {
-                    this->setYVelocity(this->jump_speed);
-                    this->setXVelocity(this->x_axis/this->walk_div);
-                    this->count_multi_jumps++;
-                    this->currently_in_jump = true;
-                    this->jump_frames = 0;
-                    return 1;
-                }
-            } else if (this->jump_frames > DEFAULT_SHORTHOP_FRAMES && this->jump_frames < DEFAULT_LONGHOP_FRAMES) {
-                // The strength of a jump can be increased by how long 
-                // the user holds the button
-                // Full hop
-                this->setYVelocity(this->jump_increment, true);
+        // Initiate a new jump if not currently in a jump
+        if (!this->currently_in_jump) {
+            // Ground jump or air jump
+            if (this->on_ground || this->count_multi_jumps < this->num_multi_jumps) {
+                this->setYVelocity(this->jump_speed);
+                this->setXVelocity(this->x_axis/this->walk_div);
+                this->count_multi_jumps++;
+                this->currently_in_jump = true;
+                this->jump_frames = 0;
                 return 1;
             }
         }
@@ -511,14 +493,16 @@ int Character::step() {
                     } else if (dynamic_cast <const Platform *> (p_temp_o)) {
                         this->on_platform = true;
                         // Find some way to reduce this duplicate code
-                        if (this->getYVelocity() > 0) {
-                            this->setYVelocity(0);
+                        if (this->getYVelocity() > -.1) {
+                            if (this->getYVelocity() > 0) {
+                                this->setYVelocity(0);
+                            } 
+                            this->on_ground = true;
+                            this->is_falling = false;
+                            this->recovery_available = true;
+                            this->count_multi_jumps = 0;
+                            // TODO: Tech recovery when touching ground
                         }
-                        this->on_ground = true;
-                        this->is_falling = false;
-                        this->recovery_available = true;
-                        this->count_multi_jumps = 0;
-                        // TODO: Tech recovery when touching ground
                     }
                 }
             }
