@@ -11,7 +11,7 @@ Organizer::Organizer(){
     registerInterest(df::KEYBOARD_EVENT);
     registerInterest(df::STEP_EVENT);
     registerInterest(EVENT_SELECTED);
-
+    registerInterest(EVENT_DEATH);
 
     df::Sprite *tmp_spr = resource_manager.getSprite("Title");
     setSprite(tmp_spr);
@@ -30,6 +30,10 @@ Organizer::Organizer(){
     characterCount = 0;
     this->player_count = 0;
     //No characters selected
+
+    for (int i = 0; i < 4; i++){
+        char_obj_array[i] = NULL;
+    }
 }
 
 Organizer &Organizer::getInstance(){
@@ -59,13 +63,16 @@ int Organizer::eventHandler(const df::Event *p_e){
             if (!gameStarted) {
                 selectCharacters();
                 gameStarted = true;
-            } else if (charactersSelected) { //Characters are selected - so start the match
+            }
+            else if (charactersSelected) { //Characters are selected - so start the match
                 if (!matchStarted) {
                     startMatch();
-                } else {
+                }
+                else {
                     return 1; //Game started, characters selected, and match all started, ignore start button; 
                 }
-            } else { //Characters not selected - ignore start button
+            }
+            else { //Characters not selected - ignore start button
                 return 1;
             }
             return 1;
@@ -90,8 +97,8 @@ int Organizer::eventHandler(const df::Event *p_e){
                         else
                             return 1; //Game started, characters selected, and match all started, ignore start button; 
 
-                        else //Characters not selected - ignore start button
-                            return 1;
+                    else //Characters not selected - ignore start button
+                        return 1;
                 }
             }
 
@@ -118,21 +125,23 @@ int Organizer::eventHandler(const df::Event *p_e){
             int max_vert = -32766;
             int min_horiz = 32766;
             int max_horiz = -32766;
-            for (int i = 0; i < this->characterCount; i++) {
-                Character *temp_c = this->char_obj_array[i];
-                int temp_x = temp_c->getPos().getX();
-                int temp_y = temp_c->getPos().getY();
-                if (temp_x > max_horiz) {
-                    max_horiz = temp_x;
-                }
-                if (temp_x < min_horiz) {
-                    min_horiz = temp_x;
-                }
-                if (temp_y > max_vert) {
-                    max_vert = temp_y;
-                }
-                if (temp_y < min_vert) {
-                    min_vert = temp_y;
+            for (int i = 0; i < 5; i++) {
+                if (char_obj_array[i] != NULL){
+                    Character *temp_c = this->char_obj_array[i];
+                    int temp_x = temp_c->getPos().getX();
+                    int temp_y = temp_c->getPos().getY();
+                    if (temp_x > max_horiz) {
+                        max_horiz = temp_x;
+                    }
+                    if (temp_x < min_horiz) {
+                        min_horiz = temp_x;
+                    }
+                    if (temp_y > max_vert) {
+                        max_vert = temp_y;
+                    }
+                    if (temp_y < min_vert) {
+                        min_vert = temp_y;
+                    }
                 }
             }
 
@@ -140,12 +149,12 @@ int Organizer::eventHandler(const df::Event *p_e){
             max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 24);
             min_horiz = std::max(0, min_horiz - 48);
             max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
-            int temp_width = (max_horiz-min_horiz)/3;
+            int temp_width = (max_horiz - min_horiz) / 3;
             world_manager.setView(df::Box(
-                df::Position(min_horiz, (max_vert+min_vert-temp_width)/2), 
-                max_horiz-min_horiz, 
+                df::Position(min_horiz, (max_vert + min_vert - temp_width) / 2),
+                max_horiz - min_horiz,
                 temp_width)
-            );
+                );
         }
     }
 
@@ -173,7 +182,22 @@ int Organizer::eventHandler(const df::Event *p_e){
                 break;
         }
 
+        return 1;
+    }
 
+    if (p_e->getType() == EVENT_DEATH) {
+        df::InputManager &input_manager = df::InputManager::getInstance();
+        df::LogManager &l_m = df::LogManager::getInstance();
+        const EventDeath *p_de = static_cast<const EventDeath *> (p_e);
+        //Move player back to start
+        //set pos back to start
+        Character *p_tempChar = char_obj_array[p_de->getPlayerId()];
+        df::Position pos(64, 200);
+        p_tempChar->setPos(pos);
+        //Lose a life
+        l_m.writeLog("Player lives = %d", p_tempChar->getLives());
+        p_tempChar->setLives(p_tempChar->getLives() - 1);
+        l_m.writeLog("Player %d has died has %d lives left", p_de->getPlayerId(), p_tempChar->getLives());
         return 1;
     }
     return 0;
@@ -195,15 +219,19 @@ void Organizer::startMatch() {
     df::Position starting_pos_1(168, 200);
     df::Position starting_pos_2(64, 200);
 
-    int playersNum = i_m.getJoystickCount();
-    for (int i = 0; i < playersNum; i++){
+    int controllerNum = i_m.getJoystickCount();
+    //Characters are located at index in array that matches their number. (0-4) 
+    for (int i = 0; i < controllerNum; i++){
         //For each character, set the appropriate character class and controller
         Character *p_tempChar;
 
+        //Set to correct character
         p_tempChar = getCharacter(charArray[i]);
+        p_tempChar->setLives(3);
 
         p_tempChar->registerInterest(df::JOYSTICK_EVENT);
-        p_tempChar->setJoystickId(i);
+
+        p_tempChar->setJoystickId(i); //Actual joystick ids are 0-4 
 
         //    df::Position starting_pos_3(168, 200);
         //    df::Position starting_pos_4(168, 200);
@@ -229,22 +257,23 @@ void Organizer::startMatch() {
         }
         this->char_obj_array[i] = p_tempChar;
     }
-    
-    // Start a keyboard player
-    if (playersNum < 2) {
-        //For each character, set the appropriate character class and controller
+
+    // Start a keyboard player (Keyboard player only possible in 1v1 games.
+    if (controllerNum < 2) {
+        //Keyboard player's character is stored in 4th element of array.
         Character *p_tempChar;
 
-        p_tempChar = getCharacter(charArray[playersNum]);
+        p_tempChar = getCharacter(charArray[4]);
 
-        p_tempChar->setJoystickId(1024);
-    
+        //Not a joystick so ID is 4
+        p_tempChar->setJoystickId(4);
+
         p_tempChar->unregisterInterest(df::JOYSTICK_EVENT);
         p_tempChar->registerInterest(df::KEYBOARD_EVENT);
 
         p_tempChar->setObjectColor(df::MAGENTA);
         p_tempChar->setPos(starting_pos_2);
-        this->char_obj_array[playersNum] = p_tempChar;
+        this->char_obj_array[4] = p_tempChar;
     }
 
     matchStarted = true;
@@ -276,9 +305,9 @@ void Organizer::selectCharacters(){
     setSpriteSlowdown(0);
     setAltitude(0);
 
-    int playersNum = input_manager.getJoystickCount();
+    int controllersNum = input_manager.getJoystickCount();
     //Create character selectors for each player
-    for (int i = 0; i < playersNum; i++){
+    for (int i = 0; i < controllersNum; i++){
         Selector *tmp_sel = new Selector;
         tmp_sel->setPlayerId(i);
         tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
@@ -300,17 +329,18 @@ void Organizer::selectCharacters(){
         }
         this->player_count++;
     }
-    // Start a keyboard player
-    if (playersNum < 2) {
+    // Start a keyboard player; id is 5
+    if (controllersNum < 2) {
         Selector *tmp_sel = new Selector;
-        tmp_sel->setPlayerId(playersNum);
-        tmp_sel->setJoystickId(1024);
+        tmp_sel->setPlayerId(4);
+        tmp_sel->setJoystickId(4);
         tmp_sel->unregisterInterest(df::JOYSTICK_EVENT);
         tmp_sel->registerInterest(df::KEYBOARD_EVENT);
         tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
 
         tmp_sel->setObjectColor(df::MAGENTA);
         this->player_count++;
+
     }
 
     //Create an icon for each of the characters

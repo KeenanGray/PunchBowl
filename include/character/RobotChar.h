@@ -44,11 +44,8 @@ const std::string char_robot_type = "char_robot";
 
 class RobotChar : public Character {
 private:
-    int out();
 public:
     RobotChar();
-
-    int eventHandler(const df::Event *p_e);
 
     virtual int neutral_jab(int frame);
     virtual int side_strike(int frame);

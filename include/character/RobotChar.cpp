@@ -74,23 +74,6 @@ RobotChar::RobotChar() {
     this->setSpriteSlowdown(this->stand_s);
 }
 
-int RobotChar::eventHandler(const df::Event *p_e) {
-    if (p_e->getType() == df::OUT_EVENT) {
-        return this->out();
-    }
-    else {
-        return Character::eventHandler(p_e);
-    }
-    return 0;
-
-}
-
-int RobotChar::out() {
-    df::Position pos(64, 200);
-    this->setPos(pos);
-    return 1;
-}
-
 int RobotChar::neutral_jab(int frame) {
     if (frame == 0) {
         this->setXVelocity(0);

@@ -18,6 +18,7 @@
 #include "Platform.h"
 #include "Selector.h"
 #include "Icon.h"
+#include "EventDeath.h"
 
 //Stages
 #include "stage/Stage.h"
@@ -38,10 +39,12 @@ private:
         bool charactersSelected;
         bool matchStarted;
 
-        Characters charArray[4];
-        Character *char_obj_array[4];
+        Characters charArray[5];
+        Character *char_obj_array[5];
         Stage *p_stage;
+        //Number of characters selected
         int characterCount;
+        //Number of players in the game
         int player_count;
         
 

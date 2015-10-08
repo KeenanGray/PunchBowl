@@ -1,7 +1,7 @@
 #include "EventDeath.h"
 
 EventDeath::EventDeath(int new_playerNum){
-    setType(EVENT_DEATH);
+   setType(EVENT_DEATH);
    PlayerNum = new_playerNum;
 }
 

@@ -44,11 +44,9 @@ const std::string char_bull_type = "char_bull";
 
 class BullChar : public Character {
 private:
-    int out();
+    
 public:
     BullChar();
-
-    int eventHandler(const df::Event *p_e);
 
     virtual int neutral_jab(int frame);
     virtual int side_strike(int frame);

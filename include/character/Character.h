@@ -160,6 +160,10 @@ class Character : public df::Object {
         // Called when an object leaves the screen
         int out();
         
+
+        //# of lives
+        int lives;
+
     protected:
 
         // Various movement speed variables
@@ -337,6 +341,10 @@ class Character : public df::Object {
         //Get and Set Name
         void setName(PlayerName *new_playername);
         PlayerName *getName() const;
+
+        //Get set lives
+        void setLives(int new_lives);
+        int getLives() const;
 };
 
 #endif // __CHARACTER_H__

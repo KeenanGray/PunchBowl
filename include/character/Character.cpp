@@ -21,6 +21,7 @@
 #include "Character.h"
 #include "../stage/UltimateTerminal.h"
 #include "../Platform.h"
+#include "../EventDeath.h"
 
 Character::Character() {
     // Set some default attributes
@@ -845,8 +846,12 @@ void Character::clearHitboxes() {
     }
 }
 
+//This is being sent to eventhandler so return 1 if success, 0 else
 int Character::out() {
-    return 0;
+    df::WorldManager &w_m = df::WorldManager::getInstance();
+    //Send a death event for the player controlling this character
+    w_m.onEvent(new EventDeath(joystick_id));
+    return 1;
 }
 
 int Character::neutral_jab(int frame) {
@@ -887,4 +892,12 @@ void Character::setName(PlayerName *new_playername){
 }
 PlayerName *Character::getName() const{
     return name;
+}
+
+//Get set lives
+void Character::setLives(int new_lives){
+    lives = new_lives;
+}
+int Character::getLives() const{
+    return lives;
 }
