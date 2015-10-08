@@ -1,11 +1,17 @@
 #include "SelectedEvent.h"
 
-SelectedEvent::SelectedEvent(std::string new_selectedName){
+SelectedEvent::SelectedEvent(int new_playerNum, Characters new_selectedChar){
     setType(EVENT_SELECTED);
-    selectedName = new_selectedName;
+    selectedChar = new_selectedChar;
+    selectedPlayerNum = new_playerNum;
 }
 
-//get the name of the selected event
-std::string SelectedEvent::getSelectedName() const{
-    return selectedName;
+//get the character of the selected event
+Characters SelectedEvent::getSelectedChar() const{
+    return selectedChar;
+}
+
+//get the playerID of the selected event
+int SelectedEvent::getSelectedPlayerId() const{
+    return selectedPlayerNum;
 }

@@ -24,21 +24,27 @@
 #include "character/ScytheGirl.h"
 #include "Platform.h"
 
+enum Characters
+{
+    BULL,
+    SGIRL
+};
+
 class Icon : public df::Object {
 private:
     Icon(); //icon must be created with name
 
+    Characters iconChar;
+    //Name used to load sprite
     std::string name;
 
 public:
     //Constructor for icon with characterName string give
-    Icon::Icon(std::string characterName);
+    Icon::Icon(Characters new_iconChar, std::string new_name);
 
-    //get and set name
-    void setName(int new_name);
-    std::string getName() const;
-
-    int eventHandler(const df::Event *p_e);
+    //get and set iconChar
+    void setIconChar(Characters new_iconChar);
+    Characters getIconChar() const;
 
 };
 

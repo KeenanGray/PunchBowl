@@ -65,58 +65,108 @@ int Organizer::eventHandler(const df::Event *p_e){
             if (p_je->getButton() == 7) {
                 // Start Button
                 if (!gameStarted){
-                    if (!gameStarted){
-                        if (charactersSelected){
-                            startMatch();
-                        }
-                        else
-                            selectCharacters();
-                    }
-                    return 1;
-                }
-                else
-                    return 1;
-            }
-            if (p_je->getButton() == 6) {
-                // Back Button
-                if (!gameStarted){
-                    df::GameManager &game_manager = df::GameManager::getInstance();
-                    game_manager.setGameOver();
-                    return 1;
+                    selectCharacters();
                 }
                 else{
-                    df::GameManager &game_manager = df::GameManager::getInstance();
-                    game_manager.setGameOver();
-                    return 1;
+                    if (charactersSelected){
+                        startMatch();
+                    }
                 }
+                return 1;
+            }
+        }
+        if (p_je->getButton() == 6) {
+            // Back Button
+            if (!gameStarted){
+                df::GameManager &game_manager = df::GameManager::getInstance();
+                game_manager.setGameOver();
+                return 1;
+            }
+            else{
+                df::GameManager &game_manager = df::GameManager::getInstance();
+                game_manager.setGameOver();
+                return 1;
             }
         }
     }
+
     //When a character is selected
     if (p_e->getType() == EVENT_SELECTED) {
         df::InputManager &input_manager = df::InputManager::getInstance();
         df::LogManager &l_m = df::LogManager::getInstance();
+        int playerNum = input_manager.getJoystickCount();
         const SelectedEvent *p_se = static_cast<const SelectedEvent *> (p_e);
-        l_m.writeLog(0, "Event_Selected Event recieved with string = %s", p_se->getSelectedName().c_str());
+        l_m.writeLog(3, "Event_Selected Event recieved with char = %d", p_se->getSelectedChar());
         characterCount += 1;
-        if (characterCount == input_manager.getJoystickCount()){
-            charactersSelected == true;
+        if (characterCount == playerNum){
+            charactersSelected = true;
         }
 
+        //Assign characters to array
+        switch (p_se->getSelectedChar())
+        {
+
+            case BULL:
+                charArray[p_se->getSelectedPlayerId()] = new CharTest();
+                break;
+            case SGIRL:
+                
+                break;
+            default:
+                break;
+        }
+
+
+        return 1;
     }
     return 0;
 }
 
 void Organizer::startMatch() {
+    //Get inputmanager to get number of joysticks connected
+    df::InputManager &i_m = df::InputManager::getInstance();
+    df::LogManager &l_m = df::LogManager::getInstance();
+    l_m.writeLog("match starting");
     // Start up the match, at stage, with character 1 and character 2
     //Add an organizer to listen for keyboard input (q for quit);
     Organizer &org = Organizer::getInstance();
 
     //Load the stage;
+    p_stage = new UltimateTerminal;
     startStage(p_stage);
 
-}
+    df::Position starting_pos_1(168, 200);
+    df::Position starting_pos_2(64, 200);
 
+    for (int i = 0; i < i_m.getJoystickCount(); i++){
+        //For each character, set the appropriate controller
+        charArray[i]->setJoystickId(i);
+
+
+        //    df::Position starting_pos_3(168, 200);
+        //    df::Position starting_pos_4(168, 200);
+
+        //Set starting positions and colors
+        switch (i){
+            case 0:
+                charArray[i]->setObjectColor(df::RED);
+                charArray[i]->setPos(starting_pos_1);
+                break;
+            case 1:
+                charArray[i]->setObjectColor(df::GREEN);
+                charArray[i]->setPos(starting_pos_2);
+                break;
+            case 2:
+                charArray[i]->setObjectColor(df::YELLOW);
+                charArray[i]->setPos(starting_pos_1);
+                break;
+            case 3:
+                charArray[i]->setObjectColor(df::BLUE);
+                charArray[i]->setPos(starting_pos_2);
+                break;
+        }
+    }
+}
 void Organizer::startStage(Stage *p_s) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 
@@ -147,6 +197,7 @@ void Organizer::selectCharacters(){
     //Create character selectors for each player
     for (int i = 0; i < playersNum; i++){
         Selector *tmp_sel = new Selector;
+        tmp_sel->setPlayerId(i);
         tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
         tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
 
@@ -167,7 +218,7 @@ void Organizer::selectCharacters(){
     }
 
     //Create an icon for each of the characters
-    Icon *char1 = new Icon("Bull");
+    Icon *char1 = new Icon(BULL, "Bull");
     char1->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
 
     gameStarted = true;

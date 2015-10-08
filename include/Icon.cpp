@@ -1,6 +1,6 @@
 #include "Icon.h"
 
-Icon::Icon(std::string new_name){
+Icon::Icon(Characters new_iconChar, std::string new_name){
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     setType("Icon");
 
@@ -10,8 +10,8 @@ Icon::Icon(std::string new_name){
 
     setSolidness(df::SOFT);
 
+    iconChar = new_iconChar;
     name = new_name;
-
     //Set icon spr based on characters name
     df::Sprite *tmp_spr = resource_manager.getSprite(new_name + "-icon");
     setTransparency('#');
@@ -19,15 +19,10 @@ Icon::Icon(std::string new_name){
     setSprite(tmp_spr);
 }
 
-//get and set name
-void Icon::setName(int new_name){
-    name = new_name;
+//get and set iconChar
+void Icon::setIconChar(Characters new_iconChar){
+    iconChar = new_iconChar;
 }
-std::string Icon::getName() const{
-    return name;
-}
-
-int Icon::eventHandler(const df::Event *p_e){
-
-    return 0;
+Characters Icon::getIconChar() const{
+    return iconChar;
 }

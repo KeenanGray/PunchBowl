@@ -29,13 +29,17 @@
 class Selector : public df::Object {
 private:
     unsigned int joystickID;
-
+    int playerID; //Between 1 and 4
 public:
     Selector();
 
-    //get and set id
+    //get and set joyStick
     void setJoystickId(int new_id);
     int getJoystickId() const;
+
+    //get and set playerId
+    void setPlayerId(int new_id);
+    int getPlayerId() const;
 
     int eventHandler(const df::Event *p_e);
 

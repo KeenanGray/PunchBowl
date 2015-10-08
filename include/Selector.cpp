@@ -44,7 +44,7 @@ int Selector::eventHandler(const df::Event *p_e){
                     for (li.first(); !li.isDone(); li.next()) {
                         df::Object *p_o = li.currentObject();
                         if (p_icon = dynamic_cast<Icon *> (p_o)) {
-                            world_manager.onEvent(new SelectedEvent(p_icon->getName()));
+                            world_manager.onEvent(new SelectedEvent(playerID, p_icon->getIconChar()));
 
                             //disable joystick
                             setXVelocity(0);
@@ -61,11 +61,20 @@ int Selector::eventHandler(const df::Event *p_e){
     }
 }
 
-//get and set id
+//get and set joystick
 void Selector::setJoystickId(int new_id){
     joystickID = new_id;
 }
 
 int Selector::getJoystickId() const{
     return joystickID;
+}
+
+//get and set id
+void Selector::setPlayerId(int new_id){
+    playerID = new_id;
+}
+
+int Selector::getPlayerId() const{
+    return playerID;
 }
