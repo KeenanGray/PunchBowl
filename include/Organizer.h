@@ -15,16 +15,18 @@
 #include "utility.h"
 
 // Punchbowl headers
-#include "stage/UltimateTerminal.h"
-#include "Platform.h"
-#include "stage/Stage.h"
-#include "stage/UltimateTerminal.h"
-#include "character/Character.h"
-#include "character/CharTest.h"
-#include "character/ScytheGirl.h"
 #include "Platform.h"
 #include "Selector.h"
 #include "Icon.h"
+
+//Stages
+#include "stage/Stage.h"
+#include "stage/UltimateTerminal.h"
+//Characters
+#include "character/Character.h"
+#include "character/CharTest.h"
+#include "character/BullChar.h"
+#include "character/ScytheGirl.h"
 
 class Organizer : public df::Object{
 private:

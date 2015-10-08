@@ -14,42 +14,42 @@
 #include "CharTest.h"
 
 CharTest::CharTest() {
-    this->setType(char_bull_type);
+    this->setType(char_charTest_type);
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
     world_manager.setViewFollowing(this);
 
-    this->l_stand = resource_manager.getSprite("bull-left-spr");
-    this->r_stand = resource_manager.getSprite("bull-right-spr");
-    this->l_walk = resource_manager.getSprite("bull-left-walk-spr");
-    this->r_walk = resource_manager.getSprite("bull-right-walk-spr");
-    this->l_dash = resource_manager.getSprite("bull-left-dash-spr");
-    this->r_dash = resource_manager.getSprite("bull-right-dash-spr");
-    this->l_crouch = resource_manager.getSprite("bull-left-crouch-spr");
-    this->r_crouch = resource_manager.getSprite("bull-right-crouch-spr");
-    this->l_crawl = resource_manager.getSprite("bull-left-crawl-spr");
-    this->r_crawl = resource_manager.getSprite("bull-right-crawl-spr");
-    this->l_jump = resource_manager.getSprite("bull-left-jump-spr");
-    this->r_jump = resource_manager.getSprite("bull-right-jump-spr");
-    this->l_air = resource_manager.getSprite("bull-left-air-spr");
-    this->r_air = resource_manager.getSprite("bull-right-air-spr");
-    this->l_roll = resource_manager.getSprite("bull-left-roll-spr");
-    this->r_roll = resource_manager.getSprite("bull-right-roll-spr");
-    this->l_dodge = resource_manager.getSprite("bull-left-dodge-spr");
-    this->r_dodge = resource_manager.getSprite("bull-right-dodge-spr");
-    this->l_fall = resource_manager.getSprite("bull-left-fall-spr");
-    this->r_fall = resource_manager.getSprite("bull-right-fall-spr");
-    this->l_stun = resource_manager.getSprite("bull-left-stunned-spr");
-    this->r_stun = resource_manager.getSprite("bull-right-stunned-spr");
+    this->l_stand = resource_manager.getSprite("charTest-left-spr");
+    this->r_stand = resource_manager.getSprite("charTest-right-spr");
+    this->l_walk = resource_manager.getSprite("charTest-left-walk-spr");
+    this->r_walk = resource_manager.getSprite("charTest-right-walk-spr");
+    this->l_dash = resource_manager.getSprite("charTest-left-dash-spr");
+    this->r_dash = resource_manager.getSprite("charTest-right-dash-spr");
+    this->l_crouch = resource_manager.getSprite("charTest-left-crouch-spr");
+    this->r_crouch = resource_manager.getSprite("charTest-right-crouch-spr");
+    this->l_crawl = resource_manager.getSprite("charTest-left-crawl-spr");
+    this->r_crawl = resource_manager.getSprite("charTest-right-crawl-spr");
+    this->l_jump = resource_manager.getSprite("charTest-left-jump-spr");
+    this->r_jump = resource_manager.getSprite("charTest-right-jump-spr");
+    this->l_air = resource_manager.getSprite("charTest-left-air-spr");
+    this->r_air = resource_manager.getSprite("charTest-right-air-spr");
+    this->l_roll = resource_manager.getSprite("charTest-left-roll-spr");
+    this->r_roll = resource_manager.getSprite("charTest-right-roll-spr");
+    this->l_dodge = resource_manager.getSprite("charTest-left-dodge-spr");
+    this->r_dodge = resource_manager.getSprite("charTest-right-dodge-spr");
+    this->l_fall = resource_manager.getSprite("charTest-left-fall-spr");
+    this->r_fall = resource_manager.getSprite("charTest-right-fall-spr");
+    this->l_stun = resource_manager.getSprite("charTest-left-stunned-spr");
+    this->r_stun = resource_manager.getSprite("charTest-right-stunned-spr");
 
-    this->l_atk_neutral = resource_manager.getSprite("bull-left-atk-neutral-spr");
-    this->r_atk_neutral = resource_manager.getSprite("bull-right-atk-neutral-spr");
-    this->l_atk_side = resource_manager.getSprite("bull-left-atk-side-spr");
-    this->r_atk_side = resource_manager.getSprite("bull-right-atk-side-spr");
-    this->l_atk_up = resource_manager.getSprite("bull-left-atk-up-spr");
-    this->r_atk_up = resource_manager.getSprite("bull-right-atk-up-spr");
+    this->l_atk_neutral = resource_manager.getSprite("charTest-left-atk-neutral-spr");
+    this->r_atk_neutral = resource_manager.getSprite("charTest-right-atk-neutral-spr");
+    this->l_atk_side = resource_manager.getSprite("charTest-left-atk-side-spr");
+    this->r_atk_side = resource_manager.getSprite("charTest-right-atk-side-spr");
+    this->l_atk_up = resource_manager.getSprite("charTest-left-atk-up-spr");
+    this->r_atk_up = resource_manager.getSprite("charTest-right-atk-up-spr");
 
 
     this->stand_s = 15;
@@ -70,7 +70,7 @@ CharTest::CharTest() {
 
     this->setObjectColor(df::RED);
     
-    setName(new PlayerName("Bull"));
+    setName(new PlayerName("charTest"));
 
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
@@ -111,9 +111,9 @@ int CharTest::neutral_jab(int frame) {
         this->hitboxes.insert(new Hitbox(
             this, 
             temp_relative_pos, 
-            bull_stun_atk_neutral, 
-            bull_damage_atk_neutral, 
-            bull_knockback_atk_neutral, 
+            charTest_stun_atk_neutral, 
+            charTest_damage_atk_neutral, 
+            charTest_knockback_atk_neutral, 
             temp_direction
             ));
     } else if (frame == 4) {
@@ -145,9 +145,9 @@ int CharTest::side_strike(int frame) {
         this->hitboxes.insert(new Hitbox(
             this, 
             temp_relative_pos, 
-            bull_stun_atk_side, 
-            bull_damage_atk_side, 
-            bull_knockback_atk_side, 
+            charTest_stun_atk_side, 
+            charTest_damage_atk_side, 
+            charTest_knockback_atk_side, 
             temp_direction
             ));
     } else if (frame == 10) {
@@ -175,9 +175,9 @@ int CharTest::up_strike(int frame) {
         this->hitboxes.insert(new Hitbox(
             this, 
             temp_relative_pos, 
-            bull_stun_atk_up, 
-            bull_damage_atk_up, 
-            bull_knockback_atk_up, 
+            charTest_stun_atk_up, 
+            charTest_damage_atk_up, 
+            charTest_knockback_atk_up, 
             temp_direction
             ));
     } else if (frame == 15) {

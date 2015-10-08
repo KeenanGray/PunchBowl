@@ -107,7 +107,7 @@ int Organizer::eventHandler(const df::Event *p_e){
         {
 
             case BULL:
-                charArray[p_se->getSelectedPlayerId()] = new CharTest();
+                charArray[p_se->getSelectedPlayerId()] = new BullChar();
                 break;
             case SGIRL:
                 
