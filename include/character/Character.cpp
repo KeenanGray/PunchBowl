@@ -415,7 +415,7 @@ int Character::roll(const df::EventJoystick *p_je) {
             this->attack_frames = 0;
 
             this->roll_frames = DEFAULT_ROLL_FRAMES;
-            this->cancel_frames = DEFAULT_ROLL_FRAMES+4;
+            this->cancel_frames = DEFAULT_ROLL_FRAMES+6;
 
             StickDirection temp_dir = this->getJoystickDirection();
             if (temp_dir == FACING_RIGHT) {
@@ -440,6 +440,7 @@ int Character::dodge(const df::EventJoystick *p_je) {
             if (this->on_ground) {
                 this->cancel_frames = DEFAULT_DODGE_FRAMES+5;
             } else {
+                // Directional air-dodge
                 this->setXVelocity(this->x_axis/this->dodge_div);
                 this->setYVelocity(this->y_axis/this->dodge_div);
                 this->is_falling = true;
@@ -478,8 +479,11 @@ int Character::step() {
         df::ObjectListIterator li(&obj_below);
         for (li.first(); !li.isDone(); li.next()) {
             df::Object *p_temp_o = li.currentObject();
+            // Ignore self
             if (!(p_temp_o == this)) {
+                // The ground cannot be inside the character
                 if (!obj_inside.contains(p_temp_o)) {
+                    // Do actions for a stage
                     if (dynamic_cast <const Stage *> (p_temp_o)) {
                         if (this->getYVelocity() > 0) {
                             this->setYVelocity(0);
@@ -488,10 +492,10 @@ int Character::step() {
                         this->is_falling = false;
                         this->recovery_available = true;
                         this->count_multi_jumps = 0;
-                        // TODO: Tech recovery when touching ground
-                    } else if (dynamic_cast <const Platform *> (p_temp_o)) {
+                    } 
+                    // Do actions for a platform
+                    else if (dynamic_cast <const Platform *> (p_temp_o)) {
                         this->on_platform = true;
-                        // Find some way to reduce this duplicate code
                         if (this->getYVelocity() > -.1) {
                             if (this->getYVelocity() > 0) {
                                 this->setYVelocity(0);
@@ -518,15 +522,18 @@ int Character::step() {
         if (y_vel < this->terminal_velocity) {
             this->setYVelocity(this->gravity, true);
         }
+        // Air resistance
         float x_vel = this->getXVelocity();
         if (x_vel < -0.1) {
             this->setXVelocity(this->air_resistance, true);
         } else if (x_vel > 0.1) {
             this->setXVelocity(-this->air_resistance, true);
         }
+        // Increment jump_frames
         this->jump_frames++;
     }
     
+    // Send neutral joystick actions
     if (!this->received_y_axis) {
         df::EventJoystick *temp = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, 0);
         this->controls(temp);
@@ -535,7 +542,6 @@ int Character::step() {
         df::EventJoystick *temp = new df::EventJoystick(this->joystick_id, df::Input::AXIS_X, 0);
         this->controls(temp);
     }
-
     this->received_y_axis = false;
     this->received_x_axis = false;
 
