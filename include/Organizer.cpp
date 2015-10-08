@@ -153,6 +153,7 @@ void Organizer::startMatch() {
 
         p_tempChar = getCharacter(charArray[i]);
 
+        p_tempChar->registerInterest(df::JOYSTICK_EVENT);
         p_tempChar->setJoystickId(i);
 
         //    df::Position starting_pos_3(168, 200);
