@@ -27,6 +27,7 @@
 #include "character/CharTest.h"
 #include "character/BullChar.h"
 #include "character/ScytheGirl.h"
+#include "character/RobotChar.h"
 
 class Organizer : public df::Object{
 private:
@@ -35,8 +36,9 @@ private:
         void operator = (Organizer const&); //prevents 
         bool gameStarted;
         bool charactersSelected;
+        bool matchStarted;
 
-        Character *charArray[4];
+        Characters charArray[4];
         Stage *p_stage;
         int characterCount;
         
@@ -50,6 +52,7 @@ public:
 
     void Organizer::selectCharacters();
 
+    Character *getCharacter(int i);
 };
 
 

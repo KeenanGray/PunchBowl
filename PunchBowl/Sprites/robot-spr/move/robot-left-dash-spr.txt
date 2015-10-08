@@ -1,6 +1,6 @@
 frames 6
-width 12
-height 10
+width 11
+height 12
 color white
 ###((0))###
 ###_/_#####

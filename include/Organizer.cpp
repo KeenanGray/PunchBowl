@@ -23,11 +23,12 @@ Organizer::Organizer(){
     setPos(df::Position(world_manager.getView().getHorizontal() / 2, world_manager.getView().getVertical() / 2));
 
     gameStarted = false;
+    charactersSelected = false;
+    matchStarted = false;
 
     //character count = 0;
     characterCount = 0;
     //No characters selected
-    charactersSelected = false;
 }
 
 Organizer &Organizer::getInstance(){
@@ -64,28 +65,37 @@ int Organizer::eventHandler(const df::Event *p_e){
         if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
             if (p_je->getButton() == 7) {
                 // Start Button
-                if (!gameStarted){
+                if (!gameStarted)  //Go from title screen to character select screen
+                {
                     selectCharacters();
+                    gameStarted = true;
+                }
+                else //Game is started 
+                {
+                    if (charactersSelected) //Characters are selected - so start the match
+
+                        if (!matchStarted)
+                            startMatch();
+                        else
+                            return 1; //Game started, characters selected, and match all started, ignore start button; 
+
+                        else //Characters not selected - ignore start button
+                            return 1;
+                }
+            }
+
+            if (p_je->getButton() == 6) {
+                // Back Button
+                if (!gameStarted){
+                    df::GameManager &game_manager = df::GameManager::getInstance();
+                    game_manager.setGameOver();
+                    return 1;
                 }
                 else{
-                    if (charactersSelected){
-                        startMatch();
-                    }
+                    df::GameManager &game_manager = df::GameManager::getInstance();
+                    game_manager.setGameOver();
+                    return 1;
                 }
-                return 1;
-            }
-        }
-        if (p_je->getButton() == 6) {
-            // Back Button
-            if (!gameStarted){
-                df::GameManager &game_manager = df::GameManager::getInstance();
-                game_manager.setGameOver();
-                return 1;
-            }
-            else{
-                df::GameManager &game_manager = df::GameManager::getInstance();
-                game_manager.setGameOver();
-                return 1;
             }
         }
     }
@@ -105,12 +115,11 @@ int Organizer::eventHandler(const df::Event *p_e){
         //Assign characters to array
         switch (p_se->getSelectedChar())
         {
-
             case BULL:
-                charArray[p_se->getSelectedPlayerId()] = new BullChar();
+                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
                 break;
-            case SGIRL:
-                
+            case ROBOT:
+                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
                 break;
             default:
                 break;
@@ -139,9 +148,12 @@ void Organizer::startMatch() {
     df::Position starting_pos_2(64, 200);
 
     for (int i = 0; i < i_m.getJoystickCount(); i++){
-        //For each character, set the appropriate controller
-        charArray[i]->setJoystickId(i);
+        //For each character, set the appropriate character class and controller
+        Character *p_tempChar;
 
+        p_tempChar = getCharacter(charArray[i]);
+
+        p_tempChar->setJoystickId(i);
 
         //    df::Position starting_pos_3(168, 200);
         //    df::Position starting_pos_4(168, 200);
@@ -149,24 +161,26 @@ void Organizer::startMatch() {
         //Set starting positions and colors
         switch (i){
             case 0:
-                charArray[i]->setObjectColor(df::RED);
-                charArray[i]->setPos(starting_pos_1);
+                p_tempChar->setObjectColor(df::RED);
+                p_tempChar->setPos(starting_pos_1);
                 break;
             case 1:
-                charArray[i]->setObjectColor(df::GREEN);
-                charArray[i]->setPos(starting_pos_2);
+                p_tempChar->setObjectColor(df::GREEN);
+                p_tempChar->setPos(starting_pos_2);
                 break;
             case 2:
-                charArray[i]->setObjectColor(df::YELLOW);
-                charArray[i]->setPos(starting_pos_1);
+                p_tempChar->setObjectColor(df::YELLOW);
+                p_tempChar->setPos(starting_pos_1);
                 break;
             case 3:
-                charArray[i]->setObjectColor(df::BLUE);
-                charArray[i]->setPos(starting_pos_2);
+                p_tempChar->setObjectColor(df::BLUE);
+                p_tempChar->setPos(starting_pos_2);
                 break;
         }
     }
+    matchStarted = true;
 }
+
 void Organizer::startStage(Stage *p_s) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 
@@ -219,7 +233,21 @@ void Organizer::selectCharacters(){
 
     //Create an icon for each of the characters
     Icon *char1 = new Icon(BULL, "Bull");
+    Icon *char2 = new Icon(ROBOT, "Robot");
     char1->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+    char2->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
 
-    gameStarted = true;
+}
+
+Character *Organizer::getCharacter(int i){
+    switch (i){
+        case BULL:
+            return new BullChar();
+            break;
+        case ROBOT:
+            return new RobotChar();
+            break;
+        default:
+            break;
+    }
 }

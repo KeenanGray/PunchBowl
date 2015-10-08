@@ -49,6 +49,7 @@ void loadResources() {
     
 #pragma region CharacterIcons
     resource_manager.loadSprite("Sprites/icons/Bull-icon.txt", "Bull-icon");
+    resource_manager.loadSprite("Sprites/icons/Robot-icon.txt", "Robot-icon");
 #pragma endregion
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
