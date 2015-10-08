@@ -21,35 +21,35 @@ RobotChar::RobotChar() {
 
     world_manager.setViewFollowing(this);
 
-    this->l_stand = resource_manager.getSprite("RobotChar-left-spr");
-    this->r_stand = resource_manager.getSprite("RobotChar-right-spr");
-    this->l_walk = resource_manager.getSprite("RobotChar-left-walk-spr");
-    this->r_walk = resource_manager.getSprite("RobotChar-right-walk-spr");
-    this->l_dash = resource_manager.getSprite("RobotChar-left-dash-spr");
-    this->r_dash = resource_manager.getSprite("RobotChar-right-dash-spr");
-    this->l_crouch = resource_manager.getSprite("RobotChar-left-crouch-spr");
-    this->r_crouch = resource_manager.getSprite("RobotChar-right-crouch-spr");
-    this->l_crawl = resource_manager.getSprite("RobotChar-left-crawl-spr");
-    this->r_crawl = resource_manager.getSprite("RobotChar-right-crawl-spr");
-    this->l_jump = resource_manager.getSprite("RobotChar-left-jump-spr");
-    this->r_jump = resource_manager.getSprite("RobotChar-right-jump-spr");
-    this->l_air = resource_manager.getSprite("RobotChar-left-air-spr");
-    this->r_air = resource_manager.getSprite("RobotChar-right-air-spr");
-    this->l_roll = resource_manager.getSprite("RobotChar-left-roll-spr");
-    this->r_roll = resource_manager.getSprite("RobotChar-right-roll-spr");
-    this->l_dodge = resource_manager.getSprite("RobotChar-left-dodge-spr");
-    this->r_dodge = resource_manager.getSprite("RobotChar-right-dodge-spr");
-    this->l_fall = resource_manager.getSprite("RobotChar-left-fall-spr");
-    this->r_fall = resource_manager.getSprite("RobotChar-right-fall-spr");
-    this->l_stun = resource_manager.getSprite("RobotChar-left-stunned-spr");
-    this->r_stun = resource_manager.getSprite("RobotChar-right-stunned-spr");
+    this->l_stand = resource_manager.getSprite("robot-left-spr");
+    this->r_stand = resource_manager.getSprite("robot-right-spr");
+    this->l_walk = resource_manager.getSprite("robot-left-walk-spr");
+    this->r_walk = resource_manager.getSprite("robot-right-walk-spr");
+    this->l_dash = resource_manager.getSprite("robot-left-dash-spr");
+    this->r_dash = resource_manager.getSprite("robot-right-dash-spr");
+    this->l_crouch = resource_manager.getSprite("robot-left-crouch-spr");
+    this->r_crouch = resource_manager.getSprite("robot-right-crouch-spr");
+    this->l_crawl = resource_manager.getSprite("robot-left-crawl-spr");
+    this->r_crawl = resource_manager.getSprite("robot-right-crawl-spr");
+    this->l_jump = resource_manager.getSprite("robot-left-jump-spr");
+    this->r_jump = resource_manager.getSprite("robot-right-jump-spr");
+    this->l_air = resource_manager.getSprite("robot-left-air-spr");
+    this->r_air = resource_manager.getSprite("robot-right-air-spr");
+    this->l_roll = resource_manager.getSprite("robot-left-roll-spr");
+    this->r_roll = resource_manager.getSprite("robot-right-roll-spr");
+    this->l_dodge = resource_manager.getSprite("robot-left-dodge-spr");
+    this->r_dodge = resource_manager.getSprite("robot-right-dodge-spr");
+    this->l_fall = resource_manager.getSprite("robot-left-fall-spr");
+    this->r_fall = resource_manager.getSprite("robot-right-fall-spr");
+    this->l_stun = resource_manager.getSprite("robot-left-stunned-spr");
+    this->r_stun = resource_manager.getSprite("robot-right-stunned-spr");
 
-    this->l_atk_neutral = resource_manager.getSprite("RobotChar-left-atk-neutral-spr");
-    this->r_atk_neutral = resource_manager.getSprite("RobotChar-right-atk-neutral-spr");
-    this->l_atk_side = resource_manager.getSprite("RobotChar-left-atk-side-spr");
-    this->r_atk_side = resource_manager.getSprite("RobotChar-right-atk-side-spr");
-    this->l_atk_up = resource_manager.getSprite("RobotChar-left-atk-up-spr");
-    this->r_atk_up = resource_manager.getSprite("RobotChar-right-atk-up-spr");
+    this->l_atk_neutral = resource_manager.getSprite("robot-left-atk-neutral-spr");
+    this->r_atk_neutral = resource_manager.getSprite("robot-right-atk-neutral-spr");
+    this->l_atk_side = resource_manager.getSprite("robot-left-atk-side-spr");
+    this->r_atk_side = resource_manager.getSprite("robot-right-atk-side-spr");
+    this->l_atk_up = resource_manager.getSprite("robot-left-atk-up-spr");
+    this->r_atk_up = resource_manager.getSprite("robot-right-atk-up-spr");
 
 
     this->stand_s = 15;
