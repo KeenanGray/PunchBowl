@@ -26,6 +26,7 @@ GAMESRC= \
 		../include/character/ScytheGirl.cpp \
 		../include/stage/Stage.cpp \
 		../include/stage/UltimateTerminal.cpp \
+		../include/EventDeath.cpp \
 		../include/GameStart.cpp \
 		../include/Hitbox.cpp \
 		../include/Icon.cpp \

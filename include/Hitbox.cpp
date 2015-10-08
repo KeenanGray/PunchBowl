@@ -121,5 +121,5 @@ df::Position Hitbox::getDirection() const {
 }
 
 void Hitbox::draw() {
-    df::GraphicsManager::getInstance().drawCh(this->getPos(), '*', df::YELLOW);
+    // df::GraphicsManager::getInstance().drawCh(this->getPos(), '*', df::YELLOW);
 }

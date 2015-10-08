@@ -1,6 +1,6 @@
 #include "Organizer.h"
 
-Organizer::Organizer(){
+Organizer::Organizer() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     setType("Organizer");
@@ -9,7 +9,6 @@ Organizer::Organizer(){
 
     registerInterest(df::JOYSTICK_EVENT);
     registerInterest(df::KEYBOARD_EVENT);
-    registerInterest(df::STEP_EVENT);
     registerInterest(EVENT_SELECTED);
     registerInterest(EVENT_DEATH);
 
@@ -41,7 +40,7 @@ Organizer &Organizer::getInstance(){
     return *org;
 }
 
-int Organizer::eventHandler(const df::Event *p_e){
+int Organizer::eventHandler(const df::Event *p_e) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 
     if (p_e->getType() == df::KEYBOARD_EVENT) {
@@ -62,20 +61,14 @@ int Organizer::eventHandler(const df::Event *p_e){
         if (keyboard_event->getKey() == df::Input::P) {
             if (!gameStarted) {
                 selectCharacters();
-                gameStarted = true;
-            }
-            else if (charactersSelected) { //Characters are selected - so start the match
+            } else if (charactersSelected) { //Characters are selected - so start the match
                 if (!matchStarted) {
                     startMatch();
                 }
-                else {
-                    return 1; //Game started, characters selected, and match all started, ignore start button; 
-                }
-            }
-            else { //Characters not selected - ignore start button
+                //Game started, characters selected, and match all started, ignore start button; 
+                //Characters not selected - ignore start button
                 return 1;
             }
-            return 1;
         }
     }
     if (p_e->getType() == df::JOYSTICK_EVENT) {
@@ -86,19 +79,17 @@ int Organizer::eventHandler(const df::Event *p_e){
                 if (!gameStarted)  //Go from title screen to character select screen
                 {
                     selectCharacters();
-                    gameStarted = true;
                 }
                 else //Game is started 
                 {
-                    if (charactersSelected) //Characters are selected - so start the match
-
-                        if (!matchStarted)
+                    if (charactersSelected) { //Characters are selected - so start the match
+                        if (!matchStarted) {
                             startMatch();
-                        else
-                            return 1; //Game started, characters selected, and match all started, ignore start button; 
-
-                    else //Characters not selected - ignore start button
+                        }
+                        //Game started, characters selected, and match all started, ignore start button; 
+                        //Characters not selected - ignore start button
                         return 1;
+                    }
                 }
             }
 
@@ -115,46 +106,6 @@ int Organizer::eventHandler(const df::Event *p_e){
                     return 1;
                 }
             }
-        }
-    }
-
-    if (p_e->getType() == df::STEP_EVENT) {
-        if (matchStarted) {
-            df::WorldManager &world_manager = df::WorldManager::getInstance();
-            int min_vert = 32766;
-            int max_vert = -32766;
-            int min_horiz = 32766;
-            int max_horiz = -32766;
-            for (int i = 0; i < 5; i++) {
-                if (char_obj_array[i] != NULL){
-                    Character *temp_c = this->char_obj_array[i];
-                    int temp_x = temp_c->getPos().getX();
-                    int temp_y = temp_c->getPos().getY();
-                    if (temp_x > max_horiz) {
-                        max_horiz = temp_x;
-                    }
-                    if (temp_x < min_horiz) {
-                        min_horiz = temp_x;
-                    }
-                    if (temp_y > max_vert) {
-                        max_vert = temp_y;
-                    }
-                    if (temp_y < min_vert) {
-                        min_vert = temp_y;
-                    }
-                }
-            }
-
-            min_vert = std::max(0, min_vert - 24);
-            max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 24);
-            min_horiz = std::max(0, min_horiz - 48);
-            max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
-            int temp_width = (max_horiz - min_horiz) / 3;
-            world_manager.setView(df::Box(
-                df::Position(min_horiz, (max_vert + min_vert - temp_width) / 2),
-                max_horiz - min_horiz,
-                temp_width)
-                );
         }
     }
 
@@ -209,9 +160,7 @@ void Organizer::startMatch() {
     df::LogManager &l_m = df::LogManager::getInstance();
     l_m.writeLog("match starting");
     // Start up the match, at stage, with character 1 and character 2
-    //Add an organizer to listen for keyboard input (q for quit);
-    Organizer &org = Organizer::getInstance();
-
+    
     //Load the stage;
     p_stage = new UltimateTerminal;
     startStage(p_stage);
@@ -282,14 +231,19 @@ void Organizer::startMatch() {
 void Organizer::startStage(Stage *p_s) {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 
+    this->setSpriteIndex(2);
+    this->setSpriteSlowdown(0);
+    this->setAltitude(0);
+    this->setPos(world_manager.getView().getPos());
+
     Platform *p1 = new Platform();
     Platform *p2 = new Platform();
 
-    world_manager.setView(df::Box(df::Position(0, 0), 35, 35));
+    // world_manager.setView(df::Box(df::Position(0, 0), 35, 35));
     world_manager.setBoundary(df::Box(df::Position(0, 0), p_s->getPos().getX() + 10, p_s->getPos().getY()));
 
     world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 90, p_s->getStageBounds().getVertical()));
-    world_manager.setView(df::Box(df::Position(), 96, 32));
+    // world_manager.setView(df::Box(df::Position(), 96, 32));
 
     p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 30));
 
@@ -300,10 +254,6 @@ void Organizer::startStage(Stage *p_s) {
 void Organizer::selectCharacters(){
     df::InputManager &input_manager = df::InputManager::getInstance();
     df::WorldManager &world_manager = df::WorldManager::getInstance();
-    //Set sprite to blank
-    setSpriteIndex(2);
-    setSpriteSlowdown(0);
-    setAltitude(0);
 
     int controllersNum = input_manager.getJoystickCount();
     //Create character selectors for each player
@@ -348,7 +298,8 @@ void Organizer::selectCharacters(){
     Icon *char2 = new Icon(ROBOT, "Robot");
     char1->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
     char2->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
-
+    
+    gameStarted = true;
 }
 
 Character *Organizer::getCharacter(Characters character){
@@ -361,5 +312,47 @@ Character *Organizer::getCharacter(Characters character){
             break;
         default:
             break;
+    }
+}
+
+void Organizer::draw() {
+    if (matchStarted) {
+        df::WorldManager &world_manager = df::WorldManager::getInstance();
+        int min_vert = 32766;
+        int max_vert = -32766;
+        int min_horiz = 32766;
+        int max_horiz = -32766;
+        for (int i = 0; i < this->characterCount; i++) {
+            Character *temp_c = this->char_obj_array[i];
+            int temp_x = temp_c->getPos().getX();
+            int temp_y = temp_c->getPos().getY();
+            if (temp_x > max_horiz) {
+                max_horiz = temp_x;
+            }
+            if (temp_x < min_horiz) {
+                min_horiz = temp_x;
+            }
+            if (temp_y > max_vert) {
+                max_vert = temp_y;
+            }
+            if (temp_y < min_vert) {
+                min_vert = temp_y;
+            }
+        }
+
+        min_vert = std::max(0, min_vert - 24);
+        max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 24);
+        min_horiz = std::max(0, min_horiz - 48);
+        max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
+        int temp_width = (max_horiz-min_horiz)/3;
+        world_manager.setView(df::Box(
+            df::Position(min_horiz, (max_vert+min_vert-temp_width)/2), 
+            max_horiz-min_horiz, 
+            temp_width)
+            );
+        this->setPos(world_manager.getView().getPos());
+    }
+    if (!gameStarted) {
+        Object::draw();
     }
 }

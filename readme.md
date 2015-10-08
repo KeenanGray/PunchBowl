@@ -2,7 +2,7 @@
 *PunchBowl
 ==========
 Version:  
-0.0.0 (Game code not started)  
+0.1.0 (Alpha)  
 Team Members: The Cargo Cult  
 Keenan Gray (krgray@wpi.edu)  
 Lambert Wang (lwang5@wpi.edu)  

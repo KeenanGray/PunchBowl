@@ -35,6 +35,7 @@ private:
         Organizer(); //Private constructor for singleton
         Organizer(Organizer const&);  //prevents copying
         void operator = (Organizer const&); //prevents 
+
         bool gameStarted;
         bool charactersSelected;
         bool matchStarted;
@@ -58,6 +59,8 @@ public:
     void selectCharacters();
 
     Character *getCharacter(Characters character);
+
+    virtual void draw();
 };
 
 
