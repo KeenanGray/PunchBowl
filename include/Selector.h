@@ -23,6 +23,8 @@
 #include "character/CharTest.h"
 #include "character/ScytheGirl.h"
 #include "Platform.h"
+#include "Icon.h"
+#include "SelectedEvent.h"
 
 class Selector : public df::Object {
 private:

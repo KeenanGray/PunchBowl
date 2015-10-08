@@ -10,6 +10,8 @@ Organizer::Organizer(){
     registerInterest(df::JOYSTICK_EVENT);
     registerInterest(df::KEYBOARD_EVENT);
     registerInterest(df::STEP_EVENT);
+    registerInterest(EVENT_SELECTED);
+
 
     df::Sprite *tmp_spr = resource_manager.getSprite("Title");
     setSprite(tmp_spr);
@@ -24,6 +26,8 @@ Organizer::Organizer(){
 
     //character count = 0;
     characterCount = 0;
+    //No characters selected
+    charactersSelected = false;
 }
 
 Organizer &Organizer::getInstance(){
@@ -42,8 +46,7 @@ int Organizer::eventHandler(const df::Event *p_e){
                 game_manager.setGameOver();
                 return 1;
             }
-            else{ //Add object back to WM for deletion
-                world_manager.insertObject(this);
+            else{
                 df::GameManager &game_manager = df::GameManager::getInstance();
                 game_manager.setGameOver();
                 return 1;
@@ -62,8 +65,13 @@ int Organizer::eventHandler(const df::Event *p_e){
             if (p_je->getButton() == 7) {
                 // Start Button
                 if (!gameStarted){
-                    world_manager.removeObject(this); //Remove the object from WM so it isn't drawn
-                    gameStarted = true;
+                    if (!gameStarted){
+                        if (charactersSelected){
+                            startMatch();
+                        }
+                        else
+                            selectCharacters();
+                    }
                     return 1;
                 }
                 else
@@ -76,14 +84,25 @@ int Organizer::eventHandler(const df::Event *p_e){
                     game_manager.setGameOver();
                     return 1;
                 }
-                else{ //Add object back to WM for deletion
-                    world_manager.insertObject(this);
+                else{
                     df::GameManager &game_manager = df::GameManager::getInstance();
                     game_manager.setGameOver();
                     return 1;
                 }
             }
         }
+    }
+    //When a character is selected
+    if (p_e->getType() == EVENT_SELECTED) {
+        df::InputManager &input_manager = df::InputManager::getInstance();
+        df::LogManager &l_m = df::LogManager::getInstance();
+        const SelectedEvent *p_se = static_cast<const SelectedEvent *> (p_e);
+        l_m.writeLog(0, "Event_Selected Event recieved with string = %s", p_se->getSelectedName().c_str());
+        characterCount += 1;
+        if (characterCount == input_manager.getJoystickCount()){
+            charactersSelected == true;
+        }
+
     }
     return 0;
 }
@@ -95,6 +114,7 @@ void Organizer::startMatch() {
 
     //Load the stage;
     startStage(p_stage);
+
 }
 
 void Organizer::startStage(Stage *p_s) {
@@ -126,24 +146,29 @@ void Organizer::selectCharacters(){
     int playersNum = input_manager.getJoystickCount();
     //Create character selectors for each player
     for (int i = 0; i < playersNum; i++){
-            Selector *tmp_sel = new Selector;
-            tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
-            tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
-            
-            switch (i){
-                case 0:
-                    tmp_sel->setObjectColor(df::RED);
-                    break;
-                case 1:
-                    tmp_sel->setObjectColor(df::GREEN);
-                    break;
-                case 2:
-                    tmp_sel->setObjectColor(df::YELLOW);
-                    break;
-                case 3:
-                    tmp_sel->setObjectColor(df::BLUE);
-                    break;
-            }
+        Selector *tmp_sel = new Selector;
+        tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+
+        switch (i){
+            case 0:
+                tmp_sel->setObjectColor(df::RED);
+                break;
+            case 1:
+                tmp_sel->setObjectColor(df::GREEN);
+                break;
+            case 2:
+                tmp_sel->setObjectColor(df::YELLOW);
+                break;
+            case 3:
+                tmp_sel->setObjectColor(df::BLUE);
+                break;
         }
+    }
+
+    //Create an icon for each of the characters
+    Icon *char1 = new Icon("Bull");
+    char1->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+
     gameStarted = true;
 }

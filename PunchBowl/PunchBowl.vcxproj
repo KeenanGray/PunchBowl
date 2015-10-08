@@ -79,24 +79,10 @@
     <ClCompile Include="..\include\Icon.cpp" />
     <ClCompile Include="..\include\Organizer.cpp" />
     <ClCompile Include="..\include\Platform.cpp" />
+    <ClCompile Include="..\include\SelectedEvent.cpp" />
     <ClCompile Include="..\include\Selector.cpp" />
     <ClCompile Include="..\include\stage\Stage.cpp" />
     <ClCompile Include="..\include\stage\UltimateTerminal.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Sprites\alien-spr\alien-left-spr.txt" />
-    <Text Include="Sprites\alien-spr\alien-left-walk-spr.txt" />
-    <Text Include="Sprites\alien-spr\alien-right-spr.txt" />
-    <Text Include="Sprites\alien-spr\alien-right-walk-spr.txt" />
-    <Text Include="Sprites\bull-spr\bull-left-spr.txt" />
-    <Text Include="Sprites\bull-spr\bull-left-walk-spr.txt" />
-    <Text Include="Sprites\bull-spr\bull-right-spr.txt" />
-    <Text Include="Sprites\bull-spr\bull-right-walk-spr.txt" />
-    <Text Include="Sprites\platform.txt" />
-    <Text Include="Sprites\Select-spr.txt" />
-    <Text Include="Sprites\stages\ultimate_terminal.txt" />
-    <Text Include="Sprites\testsprite.txt" />
-    <Text Include="Sprites\Title.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\character\Character.h" />
@@ -107,6 +93,7 @@
     <ClInclude Include="..\include\Icon.h" />
     <ClInclude Include="..\include\Organizer.h" />
     <ClInclude Include="..\include\Platform.h" />
+    <ClInclude Include="..\include\SelectedEvent.h" />
     <ClInclude Include="..\include\Selector.h" />
     <ClInclude Include="..\include\stage\Stage.h" />
     <ClInclude Include="..\include\stage\UltimateTerminal.h" />

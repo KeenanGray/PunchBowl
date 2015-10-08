@@ -24,6 +24,7 @@
 #include "character/ScytheGirl.h"
 #include "Platform.h"
 #include "Selector.h"
+#include "Icon.h"
 
 class Organizer : public df::Object{
 private:
@@ -31,10 +32,12 @@ private:
         Organizer(Organizer const&);  //prevents copying
         void operator = (Organizer const&); //prevents 
         bool gameStarted;
+        bool charactersSelected;
 
         Character *charArray[4];
         Stage *p_stage;
         int characterCount;
+        
 
 public:
     static Organizer &getInstance();
