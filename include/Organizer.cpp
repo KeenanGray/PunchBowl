@@ -196,7 +196,7 @@ void Organizer::startMatch() {
         //For each character, set the appropriate character class and controller
         Character *p_tempChar;
 
-        p_tempChar = getCharacter(playersNum);
+        p_tempChar = getCharacter(charArray[playersNum]);
 
         p_tempChar->setJoystickId(1024);
     
@@ -281,8 +281,8 @@ void Organizer::selectCharacters(){
 
 }
 
-Character *Organizer::getCharacter(int i){
-    switch (i){
+Character *Organizer::getCharacter(Characters character){
+    switch (character){
         case BULL:
             return new BullChar();
             break;

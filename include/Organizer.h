@@ -53,7 +53,7 @@ public:
 
     void selectCharacters();
 
-    Character *getCharacter(int i);
+    Character *getCharacter(Characters character);
 };
 
 
