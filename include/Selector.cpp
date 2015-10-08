@@ -52,11 +52,9 @@ int Selector::eventHandler(const df::Event *p_e){
                         df::Object *p_o = li.currentObject();
                         if (p_icon = dynamic_cast<Icon *> (p_o)) {
                             world_manager.onEvent(new SelectedEvent(playerID, p_icon->getIconChar()));
-
-                            //disable joystick
-                            setXVelocity(0);
-                            setYVelocity(0);
-                            setJoystickId(-1);
+                            // Disable cursor when character is selected
+                            df::WorldManager &world_manager = df::WorldManager::getInstance();
+                            world_manager.markForDelete(this);
                             return 1;
                         }
                     }

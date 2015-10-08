@@ -39,6 +39,7 @@ private:
         bool matchStarted;
 
         Characters charArray[4];
+        Character *char_obj_array[4];
         Stage *p_stage;
         int characterCount;
         int player_count;
@@ -53,7 +54,7 @@ public:
 
     void selectCharacters();
 
-    Character *getCharacter(int i);
+    Character *getCharacter(Characters character);
 };
 
 

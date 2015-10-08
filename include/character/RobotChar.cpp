@@ -19,8 +19,6 @@ RobotChar::RobotChar() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
-    world_manager.setViewFollowing(this);
-
     this->l_stand = resource_manager.getSprite("robot-left-spr");
     this->r_stand = resource_manager.getSprite("robot-right-spr");
     this->l_walk = resource_manager.getSprite("robot-left-walk-spr");
