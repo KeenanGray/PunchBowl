@@ -30,7 +30,7 @@ Organizer::Organizer() {
     this->player_count = 0;
     //No characters selected
 
-    for (int i = 0; i < 4; i++){
+    for (int i = 0; i < 5; i++){
         char_obj_array[i] = NULL;
     }
 }
@@ -213,6 +213,7 @@ void Organizer::startMatch() {
         Character *p_tempChar;
 
         p_tempChar = getCharacter(charArray[4]);
+        p_tempChar->setLives(3);
 
         //Not a joystick so ID is 4
         p_tempChar->setJoystickId(4);
@@ -322,21 +323,23 @@ void Organizer::draw() {
         int max_vert = -32766;
         int min_horiz = 32766;
         int max_horiz = -32766;
-        for (int i = 0; i < this->characterCount; i++) {
-            Character *temp_c = this->char_obj_array[i];
-            int temp_x = temp_c->getPos().getX();
-            int temp_y = temp_c->getPos().getY();
-            if (temp_x > max_horiz) {
-                max_horiz = temp_x;
-            }
-            if (temp_x < min_horiz) {
-                min_horiz = temp_x;
-            }
-            if (temp_y > max_vert) {
-                max_vert = temp_y;
-            }
-            if (temp_y < min_vert) {
-                min_vert = temp_y;
+        for (int i = 0; i < 5; i++) {
+            if (this->char_obj_array[i] != NULL) {
+                Character *temp_c = this->char_obj_array[i];
+                int temp_x = temp_c->getPos().getX();
+                int temp_y = temp_c->getPos().getY();
+                if (temp_x > max_horiz) {
+                    max_horiz = temp_x;
+                }
+                if (temp_x < min_horiz) {
+                    min_horiz = temp_x;
+                }
+                if (temp_y > max_vert) {
+                    max_vert = temp_y;
+                }
+                if (temp_y < min_vert) {
+                    min_vert = temp_y;
+                }
             }
         }
 
