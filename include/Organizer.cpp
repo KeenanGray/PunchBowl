@@ -111,6 +111,44 @@ int Organizer::eventHandler(const df::Event *p_e){
         }
     }
 
+    if (p_e->getType() == df::STEP_EVENT) {
+        if (matchStarted) {
+            df::WorldManager &world_manager = df::WorldManager::getInstance();
+            int min_vert = 32766;
+            int max_vert = -32766;
+            int min_horiz = 32766;
+            int max_horiz = -32766;
+            for (int i = 0; i < this->characterCount; i++) {
+                Character *temp_c = this->char_obj_array[i];
+                int temp_x = temp_c->getPos().getX();
+                int temp_y = temp_c->getPos().getY();
+                if (temp_x > max_horiz) {
+                    max_horiz = temp_x;
+                }
+                if (temp_x < min_horiz) {
+                    min_horiz = temp_x;
+                }
+                if (temp_y > max_vert) {
+                    max_vert = temp_y;
+                }
+                if (temp_y < min_vert) {
+                    min_vert = temp_y;
+                }
+            }
+
+            min_vert = std::max(0, min_vert - 24);
+            max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 24);
+            min_horiz = std::max(0, min_horiz - 48);
+            max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
+            int temp_width = (max_horiz-min_horiz)/3;
+            world_manager.setView(df::Box(
+                df::Position(min_horiz, (max_vert+min_vert-temp_width)/2), 
+                max_horiz-min_horiz, 
+                temp_width)
+            );
+        }
+    }
+
     //When a character is selected
     if (p_e->getType() == EVENT_SELECTED) {
         df::InputManager &input_manager = df::InputManager::getInstance();
@@ -189,6 +227,7 @@ void Organizer::startMatch() {
                 p_tempChar->setPos(starting_pos_2);
                 break;
         }
+        this->char_obj_array[i] = p_tempChar;
     }
     
     // Start a keyboard player
@@ -205,6 +244,7 @@ void Organizer::startMatch() {
 
         p_tempChar->setObjectColor(df::MAGENTA);
         p_tempChar->setPos(starting_pos_2);
+        this->char_obj_array[playersNum] = p_tempChar;
     }
 
     matchStarted = true;
