@@ -50,6 +50,8 @@ BullChar::BullChar() {
     this->r_atk_side = resource_manager.getSprite("bull-right-atk-side-spr");
     this->l_atk_up = resource_manager.getSprite("bull-left-atk-up-spr");
     this->r_atk_up = resource_manager.getSprite("bull-right-atk-up-spr");
+    this->l_atk_down = resource_manager.getSprite("bull-left-atk-down-spr");
+    this->r_atk_down = resource_manager.getSprite("bull-right-atk-down-spr");
 
 
     this->stand_s = 15;
@@ -67,6 +69,7 @@ BullChar::BullChar() {
     this->atk_neutral_s = 4;
     this->atk_side_s = 5;
     this->atk_up_s = 5;
+    this->atk_down_s = 8;
 
     this->setObjectColor(df::RED);
 
@@ -192,6 +195,57 @@ int BullChar::up_strike(int frame) {
             ));
     }
     else if (frame == 15) {
+        this->clearHitboxes();
+    }
+    return 0;
+}
+
+int BullChar::down_strike(int frame) {
+    if (frame == 0) {
+        this->setXVelocity(0);
+        this->attack_type = DOWN_STRIKE;
+        this->attack_frames = 24;
+        this->cancel_frames = 16;
+    }
+    else if (frame == 12) {
+        df::Position temp_relative_pos1(0, 3);
+        df::Position temp_direction1(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos1.setX(-8);
+            temp_direction1.setX(-3);
+        }
+        else {
+            temp_relative_pos1.setX(8);
+            temp_direction1.setX(3);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos1,
+            bull_stun_atk_down,
+            bull_damage_atk_down,
+            bull_knockback_atk_down,
+            temp_direction1
+            ));
+        df::Position temp_relative_pos2(0, 3);
+        df::Position temp_direction2(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos2.setX(8);
+            temp_direction2.setX(3);
+        }
+        else {
+            temp_relative_pos2.setX(-8);
+            temp_direction2.setX(-3);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos2,
+            bull_stun_atk_down,
+            bull_damage_atk_down,
+            bull_knockback_atk_down,
+            temp_direction2
+            ));
+    }
+    else if (frame == 6) {
         this->clearHitboxes();
     }
     return 0;

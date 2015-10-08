@@ -809,6 +809,7 @@ int Character::hit(Hitbox *p_h) {
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
     this->cancel_frames = 0;
+    this->clearHitboxes();
 
     // Reset recovery move
     this->recovery_available = true;
