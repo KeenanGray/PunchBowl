@@ -1,0 +1,13 @@
+frames 1
+width 6
+height 7
+color green
+ *    
+_|___ 
+[ o o]
+'  b  
+| ]  ]
+\ _ | 
+ v v  
+end
+eof

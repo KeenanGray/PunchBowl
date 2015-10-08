@@ -16,12 +16,6 @@
     <Filter Include="Resource Files\Sprites">
       <UniqueIdentifier>{1bafee6b-5ee5-4615-be6c-8fb2b2bdc43d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Sprites\alien-spr">
-      <UniqueIdentifier>{eb848165-9fdd-49fe-97b8-7dc22d50e974}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Sprites\bull-spr">
-      <UniqueIdentifier>{97450b9a-b45d-4983-8a69-2580d520a4d3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\game.cpp">
@@ -39,9 +33,6 @@
     <ClCompile Include="..\include\stage\Stage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\character\RobotCharacter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\include\character\CharTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,44 +42,24 @@
     <ClCompile Include="..\include\character\PlayerName.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Sprites\testsprite.txt">
-      <Filter>Resource Files\Sprites</Filter>
-    </Text>
-    <Text Include="Sprites\platform.txt">
-      <Filter>Resource Files\Sprites</Filter>
-    </Text>
-    <Text Include="Sprites\stages\ultimate_terminal.txt">
-      <Filter>Resource Files\Sprites</Filter>
-    </Text>
-    <Text Include="Sprites\alien-spr\alien-left-spr.txt">
-      <Filter>Resource Files\Sprites\alien-spr</Filter>
-    </Text>
-    <Text Include="Sprites\alien-spr\alien-left-walk-spr.txt">
-      <Filter>Resource Files\Sprites\alien-spr</Filter>
-    </Text>
-    <Text Include="Sprites\alien-spr\alien-right-spr.txt">
-      <Filter>Resource Files\Sprites\alien-spr</Filter>
-    </Text>
-    <Text Include="Sprites\alien-spr\alien-right-walk-spr.txt">
-      <Filter>Resource Files\Sprites\alien-spr</Filter>
-    </Text>
-    <Text Include="Sprites\bull-spr\bull-left-spr.txt">
-      <Filter>Resource Files\Sprites\bull-spr</Filter>
-    </Text>
-    <Text Include="Sprites\bull-spr\bull-left-walk-spr.txt">
-      <Filter>Resource Files\Sprites\bull-spr</Filter>
-    </Text>
-    <Text Include="Sprites\bull-spr\bull-right-spr.txt">
-      <Filter>Resource Files\Sprites\bull-spr</Filter>
-    </Text>
-    <Text Include="Sprites\bull-spr\bull-right-walk-spr.txt">
-      <Filter>Resource Files\Sprites\bull-spr</Filter>
-    </Text>
-    <Text Include="Sprites\Title.txt">
-      <Filter>Resource Files\Sprites</Filter>
-    </Text>
+    <ClCompile Include="..\include\Selector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\Icon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\Hitbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\SelectedEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\character\BullChar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\character\RobotChar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Platform.h">
@@ -103,9 +74,6 @@
     <ClInclude Include="..\include\stage\Stage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\character\RobotCharacter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\character\CharTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -113,6 +81,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\character\PlayerName.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Hitbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Selector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Icon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SelectedEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\character\RobotChar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\character\BullChar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

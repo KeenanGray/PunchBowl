@@ -15,14 +15,19 @@
 #include "utility.h"
 
 // Punchbowl headers
-#include "stage/UltimateTerminal.h"
 #include "Platform.h"
+#include "Selector.h"
+#include "Icon.h"
+
+//Stages
 #include "stage/Stage.h"
 #include "stage/UltimateTerminal.h"
+//Characters
 #include "character/Character.h"
 #include "character/CharTest.h"
+#include "character/BullChar.h"
 #include "character/ScytheGirl.h"
-#include "Platform.h"
+#include "character/RobotChar.h"
 
 class Organizer : public df::Object{
 private:
@@ -30,13 +35,24 @@ private:
         Organizer(Organizer const&);  //prevents copying
         void operator = (Organizer const&); //prevents 
         bool gameStarted;
+        bool charactersSelected;
+        bool matchStarted;
+
+        Characters charArray[4];
+        Stage *p_stage;
+        int characterCount;
+        
 
 public:
     static Organizer &getInstance();
     int eventHandler(const df::Event *p_e);
 
-    void startUpGame();
+    void startMatch();
     void startStage(Stage *p_s);
+
+    void Organizer::selectCharacters();
+
+    Character *getCharacter(int i);
 };
 
 

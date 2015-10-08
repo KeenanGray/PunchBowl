@@ -283,6 +283,7 @@ int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
         return 0;
     }
 
+
     return this->controls(temp_je);
 }
 
@@ -464,7 +465,7 @@ int Character::step() {
 
     //Move name  with character
     name->setPos(df::Position(getPos().getX(), getPos().getY() - getSprite()->getHeight()/2 - 1));//name.getOffset().getY()));
-    name->draw();
+
     // If a jump was not attempted in the past frame, a new jump can be attempted
     if (this->jump_this_frame == false) {
         this->currently_in_jump = false;

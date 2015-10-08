@@ -1,0 +1,11 @@
+frames 1
+width 6
+height 5
+color green
+      
+    //
+  /  /
+/_  _/
+ /_/  
+end
+eof

@@ -1,0 +1,11 @@
+frames 1
+width 10
+height5
+color red
+/\######/\
+\ \^^^\/ /
+#\@  @ |/#
+#(..)  /##
+##/    \##
+end
+eof
