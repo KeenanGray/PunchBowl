@@ -381,12 +381,11 @@ int Character::move(const df::EventJoystick *p_je) {
                         this->current_movement = DASHING;
                         return 1;
                     }
-                } else {
-                    // Do walk
-                    this->setXVelocity(this->x_axis/this->walk_div);
-                    this->current_movement = WALKING;
-                    return 1;
                 }
+                // Do walk
+                this->setXVelocity(this->x_axis/this->walk_div);
+                this->current_movement = WALKING;
+                return 1;
             }
         } 
         // Do DI calculations in the air
