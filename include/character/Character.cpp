@@ -258,8 +258,6 @@ int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
             temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 1);
         } else if (p_ke->getKey() == df::Input::S) {
             temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 0);
-        } else if (p_ke->getKey() == df::Input::F) {
-            temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_PRESSED, 3);
         } else {
             return 0;
         }
@@ -276,6 +274,8 @@ int Character::controlsKeyboard(const df::EventKeyboard *p_ke) {
             temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Y, crouchThreshold + 1);
         } else if (p_ke->getKey() == df::Input::D) {
             temp_je = new df::EventJoystick(this->joystick_id, df::Input::AXIS_Z, 100);
+        } else if (p_ke->getKey() == df::Input::F) {
+            temp_je = new df::EventJoystick(this->joystick_id, df::JOYSTICK_BUTTON_DOWN, 3);
         } else {
             return 0;
         }
@@ -299,6 +299,7 @@ int Character::jump(const df::EventJoystick *p_je) {
 
         // Checks the number of frames the jump button was hld down for.
         // Decides the strength of a jump
+
         if (this->jump_frames > DEFAULT_SHORTHOP_FRAMES && this->jump_frames < DEFAULT_LONGHOP_FRAMES) {
             // The strength of a jump can be increased by how long 
             // the user holds the button
@@ -367,6 +368,7 @@ int Character::move(const df::EventJoystick *p_je) {
             if (this->is_crouched) {
                 this->setXVelocity(this->x_axis/this->crawl_div);
                 this->current_movement = CRAWLING;
+                return 1;
             } else {
                 int step_count = df::GameManager::getInstance().getStepCount();
                 // If joystick was moved fast enough, then begin dashing
@@ -377,11 +379,13 @@ int Character::move(const df::EventJoystick *p_je) {
                         this->setXVelocity(this->x_axis/this->dash_div);
                         this->frame_last_stood = step_count;
                         this->current_movement = DASHING;
+                        return 1;
                     }
                 } else {
                     // Do walk
                     this->setXVelocity(this->x_axis/this->walk_div);
                     this->current_movement = WALKING;
+                    return 1;
                 }
             }
         } 
@@ -390,11 +394,13 @@ int Character::move(const df::EventJoystick *p_je) {
             if (this->getXVelocity() > -DEFAULT_MAX_DI_SPEED) {
                 //this->setXVelocity(temp_val/this->di_div, true);
                 this->setXVelocity(this->x_axis/2000.0, true);
+                return 1;
             }
         } else if (this->x_axis > 0) {
             if (this->getXVelocity() < DEFAULT_MAX_DI_SPEED) {
                 //this->setXVelocity(temp_val/this->di_div, true);
                 this->setXVelocity(this->x_axis/2000.0, true);
+                return 1;
             }
         }
     } else if (this->on_ground) {
@@ -496,11 +502,11 @@ int Character::step() {
                     } 
                     // Do actions for a platform
                     else if (dynamic_cast <const Platform *> (p_temp_o)) {
-                        this->on_platform = true;
                         if (this->getYVelocity() > -.1) {
                             if (this->getYVelocity() > 0) {
                                 this->setYVelocity(0);
                             } 
+                            this->on_platform = true;
                             this->on_ground = true;
                             this->is_falling = false;
                             this->recovery_available = true;

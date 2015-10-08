@@ -1,9 +1,9 @@
 #
-# Makefile for Dragonfly Egg library and test programs
+# Makefile for PUNCHBOWL!!!!!!!!!!!!!!!!
 #
 # Copyright Mark Claypool and WPI, 2015
 #
-# Modified by Lambert Wang for IMGD3000 Project 2: Dragonfly
+# Modified by Lambert Wang for IMGD3000 Project 3: PUNCHBOWL!!!!!!!!!!!!!!!!!!!!!!
 #
 # Usage instructions located in ../readme.txt
 
@@ -18,16 +18,21 @@ ENGINE= ../../dragonfly-lwang5/lib/dragonfly-lwang5-linux64.a
 
 # Location of engine code
 GAMESRC= \
-		../include/character/Character.cpp \
+		../include/character/BullChar.cpp \
 		../include/character/CharTest.cpp \
+		../include/character/Character.cpp \
 		../include/character/PlayerName.cpp \
+		../include/character/RobotChar.cpp \
 		../include/character/ScytheGirl.cpp \
 		../include/stage/Stage.cpp \
 		../include/stage/UltimateTerminal.cpp \
-		../include/Platform.cpp \
-		../include/Organizer.cpp \
 		../include/GameStart.cpp \
 		../include/Hitbox.cpp \
+		../include/Icon.cpp \
+		../include/Organizer.cpp \
+		../include/Platform.cpp \
+		../include/SelectedEvent.cpp \
+		../include/Selector.cpp \
 
 GAMEFILES= $(GAMESRC:.cpp=.o)
 

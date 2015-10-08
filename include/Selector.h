@@ -30,6 +30,13 @@ class Selector : public df::Object {
 private:
     unsigned int joystickID;
     int playerID; //Between 1 and 4
+
+    // Passthrough for keyboard controls
+    int keyboard(const df::EventKeyboard *p_ke);
+
+    // Whether or not x and y axis events were received
+    bool x_axis_received;
+    bool y_axis_received;
 public:
     Selector();
 

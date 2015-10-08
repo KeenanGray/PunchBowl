@@ -28,6 +28,7 @@ Organizer::Organizer(){
 
     //character count = 0;
     characterCount = 0;
+    this->player_count = 0;
     //No characters selected
 }
 
@@ -55,8 +56,18 @@ int Organizer::eventHandler(const df::Event *p_e){
         }
 
         if (keyboard_event->getKey() == df::Input::P) {
-            if (!gameStarted)
+            if (!gameStarted) {
                 selectCharacters();
+                gameStarted = true;
+            } else if (charactersSelected) { //Characters are selected - so start the match
+                if (!matchStarted) {
+                    startMatch();
+                } else {
+                    return 1; //Game started, characters selected, and match all started, ignore start button; 
+                }
+            } else { //Characters not selected - ignore start button
+                return 1;
+            }
             return 1;
         }
     }
@@ -104,11 +115,10 @@ int Organizer::eventHandler(const df::Event *p_e){
     if (p_e->getType() == EVENT_SELECTED) {
         df::InputManager &input_manager = df::InputManager::getInstance();
         df::LogManager &l_m = df::LogManager::getInstance();
-        int playerNum = input_manager.getJoystickCount();
         const SelectedEvent *p_se = static_cast<const SelectedEvent *> (p_e);
         l_m.writeLog(3, "Event_Selected Event recieved with char = %d", p_se->getSelectedChar());
         characterCount += 1;
-        if (characterCount == playerNum){
+        if (characterCount == this->player_count){
             charactersSelected = true;
         }
 
@@ -147,7 +157,8 @@ void Organizer::startMatch() {
     df::Position starting_pos_1(168, 200);
     df::Position starting_pos_2(64, 200);
 
-    for (int i = 0; i < i_m.getJoystickCount(); i++){
+    int playersNum = i_m.getJoystickCount();
+    for (int i = 0; i < playersNum; i++){
         //For each character, set the appropriate character class and controller
         Character *p_tempChar;
 
@@ -179,6 +190,23 @@ void Organizer::startMatch() {
                 break;
         }
     }
+    
+    // Start a keyboard player
+    if (playersNum < 2) {
+        //For each character, set the appropriate character class and controller
+        Character *p_tempChar;
+
+        p_tempChar = getCharacter(playersNum);
+
+        p_tempChar->setJoystickId(1024);
+    
+        p_tempChar->unregisterInterest(df::JOYSTICK_EVENT);
+        p_tempChar->registerInterest(df::KEYBOARD_EVENT);
+
+        p_tempChar->setObjectColor(df::MAGENTA);
+        p_tempChar->setPos(starting_pos_2);
+    }
+
     matchStarted = true;
 }
 
@@ -230,6 +258,19 @@ void Organizer::selectCharacters(){
                 tmp_sel->setObjectColor(df::BLUE);
                 break;
         }
+        this->player_count++;
+    }
+    // Start a keyboard player
+    if (playersNum < 2) {
+        Selector *tmp_sel = new Selector;
+        tmp_sel->setPlayerId(playersNum);
+        tmp_sel->setJoystickId(1024);
+        tmp_sel->unregisterInterest(df::JOYSTICK_EVENT);
+        tmp_sel->registerInterest(df::KEYBOARD_EVENT);
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+
+        tmp_sel->setObjectColor(df::MAGENTA);
+        this->player_count++;
     }
 
     //Create an icon for each of the characters

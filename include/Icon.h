@@ -41,7 +41,7 @@ private:
 
 public:
     //Constructor for icon with characterName string give
-    Icon::Icon(Characters new_iconChar, std::string new_name);
+    Icon(Characters new_iconChar, std::string new_name);
 
     //get and set iconChar
     void setIconChar(Characters new_iconChar);

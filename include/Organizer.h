@@ -41,6 +41,7 @@ private:
         Characters charArray[4];
         Stage *p_stage;
         int characterCount;
+        int player_count;
         
 
 public:
@@ -50,7 +51,7 @@ public:
     void startMatch();
     void startStage(Stage *p_s);
 
-    void Organizer::selectCharacters();
+    void selectCharacters();
 
     Character *getCharacter(int i);
 };
