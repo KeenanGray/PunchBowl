@@ -115,6 +115,40 @@ void loadResources() {
     */
 #pragma endregion
 
+#pragma region
+    //Robot
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-spr.txt", "robot-left-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-spr.txt", "robot-right-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-walk-spr.txt", "robot-left-walk-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-walk-spr.txt", "robot-right-walk-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-dash-spr.txt", "robot-left-dash-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-dash-spr.txt", "robot-right-dash-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-crouch-spr.txt", "robot-left-crouch-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-crouch-spr.txt", "robot-right-crouch-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-crawl-spr.txt", "robot-left-crawl-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-crawl-spr.txt", "robot-right-crawl-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-jump-spr.txt", "robot-left-jump-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-jump-spr.txt", "robot-right-jump-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-air-spr.txt", "robot-left-air-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-air-spr.txt", "robot-right-air-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-roll-spr.txt", "robot-left-roll-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-roll-spr.txt", "robot-right-roll-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-dodge-spr.txt", "robot-left-dodge-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-dodge-spr.txt", "robot-right-dodge-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-fall-spr.txt", "robot-left-fall-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-fall-spr.txt", "robot-right-fall-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-stunned-spr.txt", "robot-left-stunned-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-stunned-spr.txt", "robot-right-stunned-spr");
+
+
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-neutral-spr.txt", "robot-left-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-neutral-spr.txt", "robot-right-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-side-spr.txt", "robot-left-atk-side-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-side-spr.txt", "robot-right-atk-side-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-up-spr.txt", "robot-left-atk-up-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-up-spr.txt", "robot-right-atk-up-spr");
+#pragma endregion
+
 
 }
 
