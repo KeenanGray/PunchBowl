@@ -30,7 +30,7 @@ GameOver::GameOver(int winningPlayer){
     setTransparency('#'); //transparent sprite
 
 
-    time_to_live = p_temp_sprite->getFrameCount() * 15;
+    time_to_live = p_temp_sprite->getFrameCount() * 300;
 
     setLocation(df::CENTER_CENTER);
 
@@ -56,5 +56,25 @@ void GameOver::step() {
     if (time_to_live <= 0) {
         df::WorldManager &world_manager = df::WorldManager::getInstance();
         world_manager.markForDelete(this);
+    }
+}
+
+void GameOver::draw() {
+    df::Frame frame = this->getSprite()->getFrame(0);
+    int width = frame.getWidth();
+    int height = frame.getHeight();
+
+    std::string framestr = frame.getString();
+
+    df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            char char_to_draw = framestr[i*width+j];
+            if (char_to_draw != this->getTransparency()) {
+                df::Position temp_pos(1+j, 1+i);
+                graphics_manager.drawCh(temp_pos, char_to_draw, this->getColor(), true);
+            }
+        }
     }
 }

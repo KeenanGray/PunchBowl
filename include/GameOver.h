@@ -3,6 +3,7 @@
 
 #include "EventStep.h"
 #include "WorldManager.h"
+#include "GraphicsManager.h"
 #include "GameManager.h"
 #include "ResourceManager.h"
 #include "LogManager.h"
@@ -17,6 +18,7 @@ public:
     ~GameOver();
     int eventHandler(const df::Event *p_e);
     void step();
+    virtual void draw();
 };
 
 #endif

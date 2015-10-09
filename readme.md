@@ -2,7 +2,7 @@
 *PunchBowl
 ==========
 Version:  
-0.1.0 (Alpha)  
+v0.1 (Alpha)  
 Team Members: The Cargo Cult  
 Keenan Gray (krgray@wpi.edu)  
 Lambert Wang (lwang5@wpi.edu)  
@@ -10,6 +10,9 @@ Genre: 2D Fighting Platformer (similar to Smash Bros.)
 
 # Game Description: 
 In this game, two players face off in an arena.  The objective is for one player to knock the other out of the arena.  As the players fight, they build up a damage counter.  The higher a character’s damage, the farther they are thrown when they get hit.  As the game continues, helpful and harmful items will spawn which players can use to gain an advantage.  There are timed fights and last man standing fights.  In a timed fight, the player with more kills at the end of the match wins. In last man standing fights, each player has a certain number of lives.  
+
+The free software SFXR was used to generate the sound effects.  
+
 
 # Controls
 * Controller (Xbox 360)
@@ -27,7 +30,7 @@ In this game, two players face off in an arena.  The objective is for one player
   * Arrow Keys: Movement
 
 # Implementation Plan (Ordered by priority):
-* Engine Changes (Already completed as of Sept. 30)
+* Engine Changes
   * Resizing world view
   * Gamepad support
 * Characters
@@ -65,7 +68,7 @@ In this game, two players face off in an arena.  The objective is for one player
 
 # Schedule:
 * Art assets
-  * Character Sprites (Each character needs 25 sprites, or 50 if counting left and right)
+  * Character Sprites (Each character needs 19 sprites, or 38 if counting left and right)
     * Movement/Idle sprites
       * Standing
       * Walking
@@ -77,15 +80,16 @@ In this game, two players face off in an arena.  The objective is for one player
       * Rolling
       * Dodging
       * Falling
+      * Stunned
     * Combat sprites
-      * Jab
+      * Neutral Strike
       * Forward Strike
       * Up Strike
       * Down Strike
       * Neutral air
       * Up air
       * Down air
-      * Stunned
+      * Recovery
   * Stages
     * Sprite
     * Background
@@ -99,18 +103,15 @@ In this game, two players face off in an arena.  The objective is for one player
     * At least 1 Character
     * Controls/Movement
     * At least 1 Stage
-  * Optional tasks:
     * Menu
     * Fighting moves
 * Playable Tues oct 13
   * Tasks to complete before checkpoint:
-    * Menu
-    * Fighting
     * Items
-  * Optional tasks:
     * Additional Characters
     * Additional Stages
+    * Final playtesting
 * Presentation Thurs oct 15
   * Tasks to complete before checkpoint:
-    * Final playtesting
     * Slides
+    * Video

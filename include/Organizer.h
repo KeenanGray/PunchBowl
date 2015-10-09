@@ -19,7 +19,7 @@
 #include "Selector.h"
 #include "Icon.h"
 #include "EventDeath.h"
-#include "Gameover.h"
+#include "GameOver.h"
 
 //Stages
 #include "stage/Stage.h"

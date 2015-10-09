@@ -27,9 +27,10 @@ GAMESRC= \
 		../include/stage/Stage.cpp \
 		../include/stage/UltimateTerminal.cpp \
 		../include/EventDeath.cpp \
-		../include/GameStart.cpp \
+		../include/GameOver.cpp \
 		../include/Hitbox.cpp \
 		../include/Icon.cpp \
+		../include/LivesDisplay.cpp \
 		../include/Organizer.cpp \
 		../include/Platform.cpp \
 		../include/SelectedEvent.cpp \
