@@ -150,7 +150,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
         LivesDisplay *p_tmpLD = livesDisplayArray[p_de->getPlayerId()];
 
         df::WorldManager &world_manager = df::WorldManager::getInstance();
-        df::Position pos(world_manager.getBoundary().getHorizontal()/2, world_manager.getBoundary().getVertical() - 36);
+        df::Position pos(world_manager.getBoundary().getHorizontal()/2, world_manager.getBoundary().getVertical() - 96);
         p_tempChar->setPos(pos);
         p_tempChar->setXVelocity(0);
         p_tempChar->setYVelocity(0);
@@ -198,8 +198,8 @@ void Organizer::startMatch() {
     world_manager.markForDelete(this->bull_icon);
     world_manager.markForDelete(this->robot_icon);
 
-    df::Position starting_pos_1(world_manager.getBoundary().getHorizontal()*3/4, world_manager.getBoundary().getVertical() - 36);
-    df::Position starting_pos_2(world_manager.getBoundary().getHorizontal()/4, world_manager.getBoundary().getVertical() - 36);
+    df::Position starting_pos_1(world_manager.getBoundary().getHorizontal()*2/3, world_manager.getBoundary().getVertical() - 80);
+    df::Position starting_pos_2(world_manager.getBoundary().getHorizontal()/3, world_manager.getBoundary().getVertical() - 80);
 
     int controllerNum = i_m.getJoystickCount();
     //Characters are located at index in array that matches their number. (0-4) 
@@ -296,9 +296,9 @@ void Organizer::startStage(Stage *p_s) {
     Platform *p1 = new Platform();
     Platform *p2 = new Platform();
 
-    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal()+128, p_s->getStageBounds().getVertical()));
+    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal()+256, p_s->getStageBounds().getVertical()));
 
-    p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 24));
+    p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 56));
 
     p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 9));
     p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 9));
@@ -395,8 +395,8 @@ void Organizer::draw() {
             }
         }
 
-        min_vert = std::max(0, min_vert - 24);
-        max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 24);
+        min_vert = std::max(0, min_vert - 16);
+        max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 16);
         min_horiz = std::max(0, min_horiz - 48);
         max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
         int temp_width = (max_horiz - min_horiz) / 3;

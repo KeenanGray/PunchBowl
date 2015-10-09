@@ -1,5 +1,5 @@
 /**
-* Character Test
+* Bull Character
 */
 
 // Dragonfly Engine headers
@@ -57,7 +57,10 @@ BullChar::BullChar() {
     this->r_air_up = resource_manager.getSprite("bull-right-air-up-spr");
     this->l_air_down = resource_manager.getSprite("bull-left-air-down-spr");
     this->r_air_down = resource_manager.getSprite("bull-right-air-down-spr");
-
+    this->l_air_back = resource_manager.getSprite("bull-left-air-back-spr");
+    this->r_air_back = resource_manager.getSprite("bull-right-air-back-spr");
+    this->l_recovery = resource_manager.getSprite("bull-left-recovery-spr");
+    this->r_recovery = resource_manager.getSprite("bull-right-recovery-spr");
 
     this->stand_s = 15;
     this->walk_s = 8;
@@ -78,6 +81,8 @@ BullChar::BullChar() {
     this->air_neutral_s = 6;
     this->air_up_s = 7;
     this->air_down_s = 15;
+    this->air_back_s = 10;
+    this->recovery_s = 6;
 
     this->setObjectColor(df::RED);
 
@@ -98,7 +103,7 @@ int BullChar::neutral_jab(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(8);
+            temp_relative_pos.setX(6);
             temp_direction.setX(2);
         }
         else {
@@ -111,7 +116,8 @@ int BullChar::neutral_jab(int frame) {
             bull_stun_atk_neutral,
             bull_damage_atk_neutral,
             bull_knockback_atk_neutral,
-            temp_direction
+            temp_direction,
+            3
             ));
     }
     else if (frame == 4) {
@@ -136,7 +142,7 @@ int BullChar::side_strike(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(5);
+            temp_relative_pos.setX(6);
             temp_direction.setX(2);
         }
         else {
@@ -150,7 +156,7 @@ int BullChar::side_strike(int frame) {
             bull_damage_atk_side,
             bull_knockback_atk_side,
             temp_direction,
-            3
+            2
             ));
     }
     else if (frame == 10) {
@@ -170,7 +176,7 @@ int BullChar::up_strike(int frame) {
         df::Position temp_relative_pos(0, -6);
         df::Position temp_direction(0, -3);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(-3);
+            temp_relative_pos.setX(0);
             temp_direction.setX(1);
         }
         else {
@@ -184,7 +190,7 @@ int BullChar::up_strike(int frame) {
             bull_damage_atk_up,
             bull_knockback_atk_up,
             temp_direction,
-            4, 5
+            1, 5
             ));
     }
     else if (frame == 15) {
@@ -300,6 +306,40 @@ int BullChar::neutral_air(int frame) {
     return 0;
 }
 
+
+int BullChar::back_air(int frame) {
+    if (frame == 0) {
+        this->attack_type = BACK_AIR;
+        this->attack_frames = 20;
+        this->cancel_frames = 11;
+    }
+    else if (frame == 10) {
+        df::Position temp_relative_pos(0, 1);
+        df::Position temp_direction(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(-8);
+            temp_direction.setX(-2);
+        }
+        else {
+            temp_relative_pos.setX(5);
+            temp_direction.setX(2);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            bull_stun_air_back,
+            bull_damage_air_back,
+            bull_knockback_air_back,
+            temp_direction,
+            3
+            ));
+    }
+    else if (frame == 1) {
+        this->clearHitboxes();
+    }
+    return 0;
+}
+
 int BullChar::down_air(int frame) {
     if (frame == 0) {
         this->attack_type = DOWN_AIR;
@@ -362,5 +402,26 @@ int BullChar::up_air(int frame) {
 }
 
 int BullChar::recovery_special(int frame) {
+    if (frame == 0) {
+        this->attack_type = RECOVERY_SPECIAL;
+        this->attack_frames = 40;
+        this->cancel_frames = 0;
+        this->setYVelocity(-1.6);
+        this->is_falling = true;
+    }
+    else if (frame % 12 == 11) {
+        this->clearHitboxes();
+        df::Position temp_relative_pos(-9, -4);
+        df::Position temp_direction(0, -1);
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            bull_stun_recovery,
+            bull_damage_recovery,
+            bull_knockback_recovery,
+            temp_direction,
+            19
+            ));
+    }
     return 0;
 }

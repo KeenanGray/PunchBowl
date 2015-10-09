@@ -26,7 +26,7 @@ UltimateTerminal::UltimateTerminal() {
     this->setSpriteSlowdown(0);
     this->setObjectColor(df::BLUE);
 
-    this->ut_bound_height = 96;
+    this->ut_bound_height = 128;
     this->ut_bound_width = p_temp_sprite->getWidth();
 
     setStageBounds(df::Box(df::Position(), this->ut_bound_width, this->ut_bound_height));

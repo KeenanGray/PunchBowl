@@ -236,13 +236,13 @@ int Character::controls(const df::EventJoystick *p_je) {
                     case FACING_DOWN:
                         return this->down_air(0);
                     case FACING_RIGHT:
-                        if (this->getFacingDirection() == FACING_LEFT) {
+                        if (this->getFacingDirection() == FACING_RIGHT) {
                             return this->back_air(0);
                         } else {
                             return this->neutral_air(0);
                         }
                     case FACING_LEFT:
-                        if (this->getFacingDirection() == FACING_RIGHT) {
+                        if (this->getFacingDirection() == FACING_LEFT) {
                             return this->back_air(0);
                         } else {
                             return this->neutral_air(0);
