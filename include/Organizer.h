@@ -19,6 +19,7 @@
 #include "Selector.h"
 #include "Icon.h"
 #include "EventDeath.h"
+#include "Gameover.h"
 
 //Stages
 #include "stage/Stage.h"
@@ -29,6 +30,8 @@
 #include "character/BullChar.h"
 #include "character/ScytheGirl.h"
 #include "character/RobotChar.h"
+
+#include "LivesDisplay.h"
 
 class Organizer : public df::Object{
 private:
@@ -42,6 +45,8 @@ private:
 
         Characters charArray[5];
         Character *char_obj_array[5];
+        LivesDisplay *livesDisplayArray[5];
+
         Stage *p_stage;
         //Number of characters selected
         int characterCount;

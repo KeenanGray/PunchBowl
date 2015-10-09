@@ -143,14 +143,20 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-stunned-spr.txt", "robot-left-stunned-spr");
     resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-stunned-spr.txt", "robot-right-stunned-spr");
 
-
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-neutral-spr.txt", "robot-left-atk-neutral-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-neutral-spr.txt", "robot-right-atk-neutral-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-side-spr.txt", "robot-left-atk-side-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-side-spr.txt", "robot-right-atk-side-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-up-spr.txt", "robot-left-atk-up-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-up-spr.txt", "robot-right-atk-up-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-down-spr.txt", "robot-left-atk-down-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-down-spr.txt", "robot-right-atk-down-spr");
 #pragma endregion
+
+    resource_manager.loadSprite("Sprites/gameOver/player1Wins.txt", "player1Wins");
+    resource_manager.loadSprite("Sprites/gameOver/player2Wins.txt", "player2Wins");
+    resource_manager.loadSprite("Sprites/gameOver/player3Wins.txt", "player3Wins");
+    resource_manager.loadSprite("Sprites/gameOver/player4Wins.txt", "player4Wins");
 
 
 }

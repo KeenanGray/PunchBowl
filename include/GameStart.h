@@ -5,11 +5,6 @@
 
 #include "EventKeyboard.h"
 
-#include "GameStart.h"
-#include "Saucer.h"
-#include "Hero.h"
-#include "Points.h"
-
 GameStart::GameStart(){
     df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();

@@ -80,6 +80,7 @@ Character::Character() {
 
     this->received_y_axis = false;
     this->received_x_axis = false;
+
 }
 
 void Character::setJoystickId(unsigned int new_joystick) {
@@ -487,7 +488,7 @@ int Character::step() {
         for (li.first(); !li.isDone(); li.next()) {
             df::Object *p_temp_o = li.currentObject();
             // Ignore self
-            if (!(p_temp_o == this)) {
+            if (!(p_temp_o == this) && this != NULL) {
                 // The ground cannot be inside the character
                 if (!obj_inside.contains(p_temp_o)) {
                     // Do actions for a stage

@@ -75,9 +75,12 @@
     <ClCompile Include="..\include\character\CharTest.cpp" />
     <ClCompile Include="..\include\character\PlayerName.cpp" />
     <ClCompile Include="..\include\character\RobotChar.cpp" />
+    <ClCompile Include="..\include\EventDeath.cpp" />
     <ClCompile Include="..\include\game.cpp" />
+    <ClCompile Include="..\include\GameOver.cpp" />
     <ClCompile Include="..\include\Hitbox.cpp" />
     <ClCompile Include="..\include\Icon.cpp" />
+    <ClCompile Include="..\include\LivesDisplay.cpp" />
     <ClCompile Include="..\include\Organizer.cpp" />
     <ClCompile Include="..\include\Platform.cpp" />
     <ClCompile Include="..\include\SelectedEvent.cpp" />
@@ -91,8 +94,11 @@
     <ClInclude Include="..\include\character\CharTest.h" />
     <ClInclude Include="..\include\character\PlayerName.h" />
     <ClInclude Include="..\include\character\RobotChar.h" />
+    <ClInclude Include="..\include\EventDeath.h" />
+    <ClInclude Include="..\include\Gameover.h" />
     <ClInclude Include="..\include\Hitbox.h" />
     <ClInclude Include="..\include\Icon.h" />
+    <ClInclude Include="..\include\LivesDisplay.h" />
     <ClInclude Include="..\include\Organizer.h" />
     <ClInclude Include="..\include\Platform.h" />
     <ClInclude Include="..\include\SelectedEvent.h" />

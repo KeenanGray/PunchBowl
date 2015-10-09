@@ -50,6 +50,8 @@ public:
     virtual int neutral_jab(int frame);
     virtual int side_strike(int frame);
     virtual int up_strike(int frame);
+    virtual int down_strike(int frame);
+
 };
 
 #endif // __CHAR_TEST_H__
