@@ -62,7 +62,7 @@ const float joystickThreshold = 16;
 const float dashThreshold = 96;
 const float crouchThreshold = 40;
 const float dropDownThreshold = 96;
-const float triggerThreshold = 20;
+const float triggerThreshold = 80;
 
 // Default frame and speed data.
 // Frames to roll for
