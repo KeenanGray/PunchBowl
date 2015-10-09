@@ -90,6 +90,13 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-up-spr.txt", "bull-right-atk-up-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-down-spr.txt", "bull-left-atk-down-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-down-spr.txt", "bull-right-atk-down-spr");
+
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-air-neutral-spr.txt", "bull-left-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-air-neutral-spr.txt", "bull-right-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-air-up-spr.txt", "bull-left-air-up-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-air-up-spr.txt", "bull-right-air-up-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-air-down-spr.txt", "bull-left-air-down-spr");
+    resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-air-down-spr.txt", "bull-right-air-down-spr");
 #pragma endregion
 
 #pragma region LoadScytheGirl

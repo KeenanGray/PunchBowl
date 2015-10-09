@@ -29,6 +29,9 @@ class Hitbox : public df::Object {
         df::Position world_pos;
         // The location of the hitbox relative to the character
         df::Position relative_pos;
+        // Dimensions of the hitbox
+        int width;
+        int height;
 
         // Frames stunned for
         int stun;
@@ -57,7 +60,9 @@ class Hitbox : public df::Object {
             int init_stun,
             int init_damage,
             float init_knockback,
-            df::Position init_direction
+            df::Position init_direction,
+            int init_width = 1,
+            int init_height = 1
             );
         
         int eventHandler(const df::Event *p_e);

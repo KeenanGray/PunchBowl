@@ -17,7 +17,9 @@ Hitbox::Hitbox(
             int init_stun,
             int init_damage,
             float init_knockback,
-            df::Position init_direction
+            df::Position init_direction,
+            int width,
+            int height
             ) {
 
 
@@ -31,6 +33,8 @@ Hitbox::Hitbox(
 
     this->p_origin = init_origin;
     this->relative_pos = init_relative_pos;
+    this->width = width;
+    this->height = height;
 
     this->stun = init_stun;
     this->damage = init_damage;
@@ -59,7 +63,7 @@ int Hitbox::eventHandler(const df::Event *p_e) {
 int Hitbox::step() {
     this->updateWorldPos();
 
-    df::Box detection_box = df::Box(this->getPos());
+    df::Box detection_box = df::Box(this->getPos(), this->width, this->height);
 
     df::ObjectList obj_hit = df::WorldManager::getInstance().objectsInBox(detection_box);
 
@@ -121,5 +125,10 @@ df::Position Hitbox::getDirection() const {
 }
 
 void Hitbox::draw() {
-    // df::GraphicsManager::getInstance().drawCh(this->getPos(), '*', df::YELLOW);
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+            df::Position temp_pos = df::Position(this->getPos().getX()+i, this->getPos().getY()+j);
+            df::GraphicsManager::getInstance().drawCh(temp_pos, '*', df::YELLOW);
+        }
+    }
 }

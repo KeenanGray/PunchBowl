@@ -149,7 +149,8 @@ int Organizer::eventHandler(const df::Event *p_e) {
         Character *p_tempChar = char_obj_array[p_de->getPlayerId()];
         LivesDisplay *p_tmpLD = livesDisplayArray[p_de->getPlayerId()];
 
-        df::Position pos(168, 200);
+        df::WorldManager &world_manager = df::WorldManager::getInstance();
+        df::Position pos(world_manager.getBoundary().getHorizontal()/2, world_manager.getBoundary().getVertical() - 36);
         p_tempChar->setPos(pos);
         p_tempChar->setXVelocity(0);
         p_tempChar->setYVelocity(0);
@@ -193,8 +194,12 @@ void Organizer::startMatch() {
     p_stage = new UltimateTerminal;
     startStage(p_stage);
 
-    df::Position starting_pos_1(168, 200);
-    df::Position starting_pos_2(64, 200);
+    df::WorldManager &world_manager = df::WorldManager::getInstance();
+    world_manager.markForDelete(this->bull_icon);
+    world_manager.markForDelete(this->robot_icon);
+
+    df::Position starting_pos_1(world_manager.getBoundary().getHorizontal()*3/4, world_manager.getBoundary().getVertical() - 36);
+    df::Position starting_pos_2(world_manager.getBoundary().getHorizontal()/4, world_manager.getBoundary().getVertical() - 36);
 
     int controllerNum = i_m.getJoystickCount();
     //Characters are located at index in array that matches their number. (0-4) 
@@ -291,13 +296,9 @@ void Organizer::startStage(Stage *p_s) {
     Platform *p1 = new Platform();
     Platform *p2 = new Platform();
 
-    // world_manager.setView(df::Box(df::Position(0, 0), 35, 35));
-    world_manager.setBoundary(df::Box(df::Position(0, 0), p_s->getPos().getX() + 10, p_s->getPos().getY()));
+    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal()+128, p_s->getStageBounds().getVertical()));
 
-    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 90, p_s->getStageBounds().getVertical()));
-    // world_manager.setView(df::Box(df::Position(), 96, 32));
-
-    p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 30));
+    p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 24));
 
     p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 9));
     p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 9));
@@ -346,10 +347,10 @@ void Organizer::selectCharacters(){
     }
 
     //Create an icon for each of the characters
-    Icon *char1 = new Icon(BULL, "Bull");
-    Icon *char2 = new Icon(ROBOT, "Robot");
-    char1->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
-    char2->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
+    this->bull_icon = new Icon(BULL, "Bull");
+    this->robot_icon = new Icon(ROBOT, "Robot");
+    this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+    this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
 
     gameStarted = true;
 }

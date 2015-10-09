@@ -26,12 +26,11 @@ UltimateTerminal::UltimateTerminal() {
     this->setSpriteSlowdown(0);
     this->setObjectColor(df::BLUE);
 
-    this->ut_bound_height = 48;
+    this->ut_bound_height = 96;
     this->ut_bound_width = p_temp_sprite->getWidth();
 
-    setStageBounds(df::Box(df::Position(), this->ut_bound_width, this->ut_bound_width));
+    setStageBounds(df::Box(df::Position(), this->ut_bound_width, this->ut_bound_height));
 
-    // Set initial position to middle of left side
     df::Position pos(this->ut_bound_width / 2, this->ut_bound_height * 2 / 3);
     this->setPos(pos);
 

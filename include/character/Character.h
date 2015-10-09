@@ -36,6 +36,7 @@ enum Attack {
     DOWN_STRIKE,
     UP_STRIKE,
     NEUTRAL_AIR,
+    BACK_AIR,
     DOWN_AIR,
     UP_AIR,
     RECOVERY_SPECIAL,
@@ -79,7 +80,7 @@ const int DEFAULT_LONGHOP_FRAMES = 9;
 // Speed when rolling
 const float DEFAULT_ROLL_SPEED = 1.6;
 // Default jump speed for ground and air jumps
-const float DEFAULT_JUMP_SPEED = -0.80;
+const float DEFAULT_JUMP_SPEED = -0.88;
 // Amount to increase y velocity by per jump frame while button is held down
 const float DEFAULT_JUMP_INCREMENT = -0.08;
 // Amount of gravity
@@ -275,6 +276,10 @@ class Character : public df::Object {
         df::Sprite *l_air_down;
         df::Sprite *r_air_down;
         int air_down_s;
+        // BACK_AIR,
+        df::Sprite *l_air_back;
+        df::Sprite *r_air_back;
+        int air_back_s;
         // UP_AIR,
         df::Sprite *l_air_up;
         df::Sprite *r_air_up;
@@ -319,6 +324,7 @@ class Character : public df::Object {
         virtual int down_strike(int frame);
         virtual int up_strike(int frame);
         virtual int neutral_air(int frame);
+        virtual int back_air(int frame);
         virtual int down_air(int frame);
         virtual int up_air(int frame);
         virtual int recovery_special(int frame);

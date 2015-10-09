@@ -46,6 +46,9 @@ private:
         Characters charArray[5];
         Character *char_obj_array[5];
         LivesDisplay *livesDisplayArray[5];
+        
+        Icon *bull_icon;
+        Icon *robot_icon;
 
         Stage *p_stage;
         //Number of characters selected

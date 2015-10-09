@@ -12,6 +12,7 @@
 // Managers
 #include "GameManager.h"
 #include "InputManager.h"
+#include "LogManager.h"
 #include "ResourceManager.h"
 #include "WorldManager.h"
 
@@ -94,12 +95,16 @@ int Character::eventHandler(const df::Event *p_e) {
         if (p_je->getJoystick() != this->joystick_id) {
             return 0;
         }
+        df::LogManager::getInstance().writeLog(-1, "Character::eventHandler(): Handling JOYSTICK_EVENT");
         return this->controls(p_je);
     } else if (p_e->getType() == df::STEP_EVENT) {
+        df::LogManager::getInstance().writeLog(-1, "Character::eventHandler(): Handling STEP_EVENT");
         return this->step();
     } else if (p_e->getType() == df::OUT_EVENT) {
+        df::LogManager::getInstance().writeLog(-1, "Character::eventHandler(): Handling OUT_EVENT");
         return this->out();
     } else if (p_e->getType() == df::KEYBOARD_EVENT) {
+        df::LogManager::getInstance().writeLog(-1, "Character::eventHandler(): Handling KEYBOARD_EVENT");
         const df::EventKeyboard *p_ke = static_cast<const df::EventKeyboard *> (p_e);
         return this->controlsKeyboard(p_ke);
     }
@@ -230,6 +235,18 @@ int Character::controls(const df::EventJoystick *p_je) {
                         return this->up_air(0);
                     case FACING_DOWN:
                         return this->down_air(0);
+                    case FACING_RIGHT:
+                        if (this->getFacingDirection() == FACING_LEFT) {
+                            return this->back_air(0);
+                        } else {
+                            return this->neutral_air(0);
+                        }
+                    case FACING_LEFT:
+                        if (this->getFacingDirection() == FACING_RIGHT) {
+                            return this->back_air(0);
+                        } else {
+                            return this->neutral_air(0);
+                        }
                     default:
                         return this->neutral_air(0);
                 }
@@ -488,14 +505,20 @@ int Character::step() {
     // Check if grounded
     this->on_ground = false;
     this->on_platform = false;
+
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations");
     if (!obj_below.isEmpty() && this->jump_frames >= DEFAULT_SHORTHOP_FRAMES) {
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 1");
         df::ObjectListIterator li(&obj_below);
         for (li.first(); !li.isDone(); li.next()) {
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 2");
             df::Object *p_temp_o = li.currentObject();
             // Ignore self
             if (!(p_temp_o == this) && this != NULL) {
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 3");
                 // The ground cannot be inside the character
                 if (!obj_inside.contains(p_temp_o)) {
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 4");
                     // Do actions for a stage
                     if (dynamic_cast <const Stage *> (p_temp_o)) {
                         if (this->getYVelocity() > 0) {
@@ -525,8 +548,10 @@ int Character::step() {
         }
     }
 
+
     // Aerial 
     if (!this->on_ground) {
+        df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing air calculations");
         if (this->count_multi_jumps == 0) {
             this->count_multi_jumps = 1;
         }
@@ -646,6 +671,10 @@ int Character::animationSelector() {
                         this->neutral_air(this->attack_frames);
                         this->switchToSprite(this->l_air_neutral, this->air_neutral_s);
                         break;
+                    case BACK_AIR:
+                        this->back_air(this->attack_frames);
+                        this->switchToSprite(this->l_air_back, this->air_back_s);
+                        break;
                     case DOWN_AIR:
                         this->down_air(this->attack_frames);
                         this->switchToSprite(this->l_air_down, this->air_down_s);
@@ -680,6 +709,10 @@ int Character::animationSelector() {
                     case NEUTRAL_AIR:
                         this->neutral_air(this->attack_frames);
                         this->switchToSprite(this->r_air_neutral, this->air_neutral_s);
+                        break;
+                    case BACK_AIR:
+                        this->back_air(this->attack_frames);
+                        this->switchToSprite(this->r_air_back, this->air_back_s);
                         break;
                     case DOWN_AIR:
                         this->down_air(this->attack_frames);
@@ -834,7 +867,9 @@ int Character::hit(Hitbox *p_h) {
     float adjusted_knockback = p_h->getKnockback()*(1.0+float(this->damage)/100.0);
 
     this->setXVelocity(adjusted_knockback*x_component);
-    this->setYVelocity(adjusted_knockback*y_component);
+    if (!(this->on_ground && y_component > 0)) {
+        this->setYVelocity(std::min(0.9f, adjusted_knockback*y_component));
+    }
     
     std::string hit_sound = "hit1";
     switch(this->hit_sound_cycle) {
@@ -900,6 +935,10 @@ int Character::up_strike(int frame) {
 }
 
 int Character::neutral_air(int frame) {
+    return 0;
+}
+
+int Character::back_air(int frame) {
     return 0;
 }
 
