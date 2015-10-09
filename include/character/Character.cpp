@@ -80,6 +80,8 @@ Character::Character() {
 
     this->received_y_axis = false;
     this->received_x_axis = false;
+
+    this->hit_sound_cycle = 0;
 }
 
 void Character::setJoystickId(unsigned int new_joystick) {
@@ -322,6 +324,10 @@ int Character::jump(const df::EventJoystick *p_je) {
                 this->count_multi_jumps++;
                 this->currently_in_jump = true;
                 this->jump_frames = 0;
+
+                df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump1");
+                p_sound->play();
+
                 return 1;
             }
         }
@@ -829,6 +835,29 @@ int Character::hit(Hitbox *p_h) {
 
     this->setXVelocity(adjusted_knockback*x_component);
     this->setYVelocity(adjusted_knockback*y_component);
+    
+    std::string hit_sound = "hit1";
+    switch(this->hit_sound_cycle) {
+        case 1: 
+            hit_sound = "hit1";
+            this->hit_sound_cycle = 2;
+            break;
+        case 2: 
+            hit_sound = "hit2";
+            this->hit_sound_cycle = 3;
+            break;
+        case 3: 
+            hit_sound = "hit3";
+            this->hit_sound_cycle = 1;
+            break;
+        default: 
+            hit_sound = "hit1";
+            this->hit_sound_cycle = 2;
+            break;
+    }
+
+    df::Sound *p_sound = df::ResourceManager::getInstance().getSound(hit_sound);
+    p_sound->play();
 
     return 1;
 }
@@ -900,4 +929,7 @@ void Character::setLives(int new_lives){
 }
 int Character::getLives() const{
     return lives;
+}
+void Character::setDamage(int new_damage){
+    this->damage = new_damage;
 }
