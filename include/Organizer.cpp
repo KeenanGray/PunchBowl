@@ -134,6 +134,9 @@ int Organizer::eventHandler(const df::Event *p_e) {
                 break;
         }
 
+        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
+        p_sound->play();
+
         return 1;
     }
 
@@ -146,8 +149,11 @@ int Organizer::eventHandler(const df::Event *p_e) {
         Character *p_tempChar = char_obj_array[p_de->getPlayerId()];
         LivesDisplay *p_tmpLD = livesDisplayArray[p_de->getPlayerId()];
 
-        df::Position pos(64, 200);
+        df::Position pos(168, 200);
         p_tempChar->setPos(pos);
+        p_tempChar->setXVelocity(0);
+        p_tempChar->setYVelocity(0);
+        p_tempChar->setDamage(0);
         //Lose a life
         // l_m.writeLog("Player lives = %d", p_tempChar->getLives());
         p_tempChar->setLives(p_tempChar->getLives() - 1);
@@ -165,6 +171,11 @@ int Organizer::eventHandler(const df::Event *p_e) {
             }
         }
         // l_m.writeLog("Player %d has died has %d lives left", p_de->getPlayerId(), p_tempChar->getLives());
+        l_m.writeLog("Player %d has died has %d lives left", p_de->getPlayerId(), p_tempChar->getLives());
+
+        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("death");
+        p_sound->play();
+
         return 1;
     }
     return 0;

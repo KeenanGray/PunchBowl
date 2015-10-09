@@ -164,6 +164,9 @@ class Character : public df::Object {
         //# of lives
         int lives;
 
+        // For cycling between different hit sounds
+        int hit_sound_cycle;
+
     protected:
 
         // Various movement speed variables
@@ -345,6 +348,8 @@ class Character : public df::Object {
         //Get set lives
         void setLives(int new_lives);
         int getLives() const;
+
+        void setDamage(int new_damage);
 };
 
 #endif // __CHARACTER_H__

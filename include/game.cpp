@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
     df::LogManager &log_manager = df::LogManager::getInstance();
-    log_manager.setLogLevel(2);
+    log_manager.setLogLevel(-2);
     log_manager.setFlush(true);
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
@@ -153,10 +153,20 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-down-spr.txt", "robot-right-atk-down-spr");
 #pragma endregion
 
+
     resource_manager.loadSprite("Sprites/gameOver/player1Wins.txt", "player1Wins");
     resource_manager.loadSprite("Sprites/gameOver/player2Wins.txt", "player2Wins");
     resource_manager.loadSprite("Sprites/gameOver/player3Wins.txt", "player3Wins");
     resource_manager.loadSprite("Sprites/gameOver/player4Wins.txt", "player4Wins");
+
+    // Sounds
+    resource_manager.loadSound("Music/hits/hit1.wav", "hit1");
+    resource_manager.loadSound("Music/hits/hit2.wav", "hit2");
+    resource_manager.loadSound("Music/hits/hit3.wav", "hit3");
+    resource_manager.loadSound("Music/jump/jump1.wav", "jump1");
+    resource_manager.loadSound("Music/other/blip.wav", "blip");
+    resource_manager.loadSound("Music/other/death.wav", "death");
+
 
 
 }
