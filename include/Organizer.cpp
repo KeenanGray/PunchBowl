@@ -172,7 +172,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
             player_count--;
             if (player_count <= 1){
                 //Do end game stuff
-                int winPlayer = -1;
+                int winPlayer = 0;
                 for (int i = 0; i < 5; i++){
                     if (char_obj_array[i] != NULL){
                         winPlayer = i;
@@ -219,7 +219,7 @@ void Organizer::startMatch() {
         LivesDisplay *tmpLD = new LivesDisplay();
         //Set to correct character
         p_tempChar = getCharacter(charArray[i]);
-        p_tempChar->setLives(1);
+        p_tempChar->setLives(4);
 
         p_tempChar->registerInterest(df::JOYSTICK_EVENT);
 
@@ -273,7 +273,7 @@ void Organizer::startMatch() {
         Character *p_tempChar;
 
         p_tempChar = getCharacter(charArray[4]);
-        p_tempChar->setLives(1);
+        p_tempChar->setLives(4);
 
         //Not a joystick so ID is 4
         p_tempChar->setJoystickId(4);
