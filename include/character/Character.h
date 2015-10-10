@@ -362,6 +362,7 @@ class Character : public df::Object {
         int getLives() const;
 
         void setDamage(int new_damage);
+        void setFalling(bool new_falling);
 };
 
 #endif // __CHARACTER_H__

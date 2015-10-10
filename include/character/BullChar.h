@@ -8,11 +8,11 @@
 // Punchbowl headers
 #include "Character.h"
 
-const int bull_damage_atk_neutral = 7;
+const int bull_damage_atk_neutral = 8;
 const int bull_stun_atk_neutral = 5;
 const float bull_knockback_atk_neutral = .8;
 
-const int bull_damage_atk_side = 11;
+const int bull_damage_atk_side = 12;
 const int bull_stun_atk_side = 9;
 const float bull_knockback_atk_side = 1.1;
 

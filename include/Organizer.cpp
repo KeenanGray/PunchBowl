@@ -158,6 +158,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
         p_tempChar->setXVelocity(0);
         p_tempChar->setYVelocity(0);
         p_tempChar->setDamage(0);
+        p_tempChar->setFalling(false);
         //Lose a life
         // l_m.writeLog("Player lives = %d", p_tempChar->getLives());
         p_tempChar->setLives(p_tempChar->getLives() - 1);

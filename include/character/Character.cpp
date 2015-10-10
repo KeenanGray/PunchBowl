@@ -490,6 +490,7 @@ int Character::roll(const df::EventJoystick *p_je) {
             this->attack_frames = 0;
 
             this->roll_frames = DEFAULT_ROLL_FRAMES;
+            this->invincible_frames = DEFAULT_ROLL_FRAMES;
             this->cancel_frames = DEFAULT_ROLL_FRAMES+this->cancel_roll_frames;
 
             StickDirection temp_dir = this->getJoystickDirection();
@@ -1040,6 +1041,7 @@ int Character::recovery_special(int frame) {
 void Character::setName(PlayerName *new_playername){
     name = new_playername;
 }
+
 PlayerName *Character::getName() const{
     return name;
 }
@@ -1048,9 +1050,15 @@ PlayerName *Character::getName() const{
 void Character::setLives(int new_lives){
     lives = new_lives;
 }
+
 int Character::getLives() const{
     return lives;
 }
+
 void Character::setDamage(int new_damage){
     this->damage = new_damage;
+}
+
+void Character::setFalling(bool new_falling) {
+    this->is_falling = new_falling;
 }

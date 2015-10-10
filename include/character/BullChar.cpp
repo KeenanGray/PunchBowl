@@ -102,7 +102,7 @@ int BullChar::neutral_jab(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(7);
+            temp_relative_pos.setX(5);
             temp_direction.setX(2);
         }
         else {
@@ -116,7 +116,7 @@ int BullChar::neutral_jab(int frame) {
             bull_damage_atk_neutral,
             bull_knockback_atk_neutral,
             temp_direction,
-            3
+            5, 2
             ));
     }
     else if (frame == 4) {
@@ -141,7 +141,7 @@ int BullChar::side_strike(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(6);
+            temp_relative_pos.setX(4);
             temp_direction.setX(2);
         }
         else {
@@ -155,7 +155,7 @@ int BullChar::side_strike(int frame) {
             bull_damage_atk_side,
             bull_knockback_atk_side,
             temp_direction,
-            3, 2
+            5, 2
             ));
     }
     else if (frame == 4) {
