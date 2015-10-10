@@ -50,6 +50,14 @@ RobotChar::RobotChar() {
     this->r_atk_up = resource_manager.getSprite("robot-right-atk-up-spr");
     this->l_atk_down = resource_manager.getSprite("robot-left-atk-down-spr");
     this->r_atk_down = resource_manager.getSprite("robot-right-atk-down-spr");
+    this->l_air_neutral = resource_manager.getSprite("robot-left-air-neutral-spr");
+    this->r_air_neutral = resource_manager.getSprite("robot-right-air-neutral-spr");
+    this->l_air_up = resource_manager.getSprite("robot-left-air-up-spr");
+    this->r_air_up = resource_manager.getSprite("robot-right-air-up-spr");
+    this->l_air_down = resource_manager.getSprite("robot-left-air-down-spr");
+    this->r_air_down = resource_manager.getSprite("robot-right-air-down-spr");
+    this->l_air_back = resource_manager.getSprite("robot-left-air-back-spr");
+    this->r_air_back = resource_manager.getSprite("robot-right-air-back-spr");
     this->l_recovery = resource_manager.getSprite("robot-left-recovery-spr");
     this->r_recovery = resource_manager.getSprite("robot-right-recovery-spr");
 
@@ -235,6 +243,158 @@ int RobotChar::down_strike(int frame) {
     }
     return 0;
 }
+
+int RobotChar::neutral_air(int frame) {
+    if (frame == 0) {
+        this->attack_type = NEUTRAL_AIR;
+        this->attack_frames = 24;
+        this->cancel_frames = 24;
+    }
+    else if (frame == 18) {
+        df::Position temp_relative_pos(0, -1);
+        df::Position temp_direction(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(5);
+            temp_direction.setX(2);
+        }
+        else {
+            temp_relative_pos.setX(-7);
+            temp_direction.setX(-2);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            robot_stun_air_neutral,
+            robot_damage_air_neutral,
+            0,
+            temp_direction,
+            4,
+            2
+            ));
+    }
+    else if (frame == 12) {
+        this->clearHitboxes();
+    }
+    else if (frame == 6) {
+        df::Position temp_relative_pos(0, -1);
+        df::Position temp_direction(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(4);
+            temp_direction.setX(2);
+        }
+        else {
+            temp_relative_pos.setX(-7);
+            temp_direction.setX(-2);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            robot_stun_air_neutral,
+            robot_damage_air_neutral,
+            robot_knockback_air_neutral,
+            temp_direction,
+            4,
+            2
+            ));
+    }
+    return 0;
+}
+
+
+int RobotChar::back_air(int frame) {
+    if (frame == 0) {
+        this->attack_type = BACK_AIR;
+        this->attack_frames = 20;
+        this->cancel_frames = 11;
+    }
+    else if (frame == 10) {
+        df::Position temp_relative_pos(0, 1);
+        df::Position temp_direction(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(-8);
+            temp_direction.setX(-2);
+        }
+        else {
+            temp_relative_pos.setX(5);
+            temp_direction.setX(2);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            robot_stun_air_back,
+            robot_damage_air_back,
+            robot_knockback_air_back,
+            temp_direction,
+            3
+            ));
+    }
+    else if (frame == 1) {
+        this->clearHitboxes();
+    }
+    return 0;
+}
+
+int RobotChar::down_air(int frame) {
+    if (frame == 0) {
+        this->attack_type = DOWN_AIR;
+        this->attack_frames = 30;
+        this->cancel_frames = 24;
+    }
+    else if (frame == 15) {
+        df::Position temp_relative_pos(0, 5);
+        df::Position temp_direction(0, 1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(-1);
+        }
+        else {
+            temp_relative_pos.setX(-1);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            robot_stun_air_down,
+            robot_damage_air_down,
+            robot_knockback_air_down,
+            temp_direction,
+            3
+            ));
+    }
+    else if (frame == 7) {
+        this->clearHitboxes();
+    }
+    return 0;
+}
+
+int RobotChar::up_air(int frame) {
+    if (frame == 0) {
+        this->attack_type = UP_AIR;
+        this->attack_frames = 21;
+        this->cancel_frames = 21;
+    }
+    else if (frame == 7) {
+        df::Position temp_relative_pos(0, -5);
+        df::Position temp_direction(0, -3);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(-1);
+            temp_direction.setX(1);
+        }
+        else {
+            temp_relative_pos.setX(-2);
+            temp_direction.setX(-1);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            robot_stun_air_up,
+            robot_damage_air_up,
+            robot_knockback_air_up,
+            temp_direction,
+            3, 2
+            ));
+    }
+    return 0;
+}
+
 
 int RobotChar::recovery_special(int frame) {
     if (frame == 0) {

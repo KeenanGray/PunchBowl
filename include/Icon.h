@@ -27,7 +27,7 @@
 enum Characters
 {
     BULL,
-    SGIRL,
+    SCYTHEGIRL,
     ROBOT
 };
 

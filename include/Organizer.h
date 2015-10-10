@@ -49,6 +49,7 @@ private:
         
         Icon *bull_icon;
         Icon *robot_icon;
+        Icon *scytheGirl_icon;
 
         Stage *p_stage;
         //Number of characters selected

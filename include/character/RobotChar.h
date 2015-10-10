@@ -28,6 +28,10 @@ const int robot_damage_air_neutral = 1;
 const int robot_stun_air_neutral = 1;
 const float robot_knockback_air_neutral = .3;
 
+const int robot_damage_air_back = 9;
+const int robot_stun_air_back = 9;
+const float robot_knockback_air_back = 1.0;
+
 const int robot_damage_air_down = 1;
 const int robot_stun_air_down = 1;
 const float robot_knockback_air_down = .3;
@@ -51,7 +55,11 @@ public:
     virtual int side_strike(int frame);
     virtual int up_strike(int frame);
     virtual int down_strike(int frame);
-    int RobotChar::recovery_special(int frame);
+    virtual int neutral_air(int frame);
+    virtual int back_air(int frame);
+    virtual int down_air(int frame);
+    virtual int up_air(int frame);
+    virtual int recovery_special(int frame);
 
 
 };

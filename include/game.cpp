@@ -101,9 +101,6 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-air-back-spr.txt", "bull-right-air-back-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-recovery-spr.txt", "bull-left-recovery-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-recovery-spr.txt", "bull-right-recovery-spr");
-
-    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-recovery-spr.txt", "robot-left-recovery-spr");
-    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-recovery-spr.txt", "robot-right-recovery-spr");
 #pragma endregion
 
 #pragma region LoadScytheGirl
@@ -165,6 +162,17 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-up-spr.txt", "robot-right-atk-up-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-attack-down-spr.txt", "robot-left-atk-down-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-attack-down-spr.txt", "robot-right-atk-down-spr");
+
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-air-neutral-spr.txt", "robot-left-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-air-neutral-spr.txt", "robot-right-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-air-up-spr.txt", "robot-left-air-up-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-air-up-spr.txt", "robot-right-air-up-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-air-down-spr.txt", "robot-left-air-down-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-air-down-spr.txt", "robot-right-air-down-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-air-back-spr.txt", "robot-left-air-back-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-air-back-spr.txt", "robot-right-air-back-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-recovery-spr.txt", "robot-left-recovery-spr");
+    resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-recovery-spr.txt", "robot-right-recovery-spr");
 #pragma endregion
 
 
