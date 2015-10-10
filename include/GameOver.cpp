@@ -1,29 +1,15 @@
 #include "GameOver.h"
 
-GameOver::GameOver(int winningPlayer){
+GameOver::GameOver(int new_winningPlayer){
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     df::LogManager &log_manager = df::LogManager::getInstance();
     df::WorldManager &w_m = df::WorldManager::getInstance();
     w_m.setViewFollowing(this);
-    //Set to player1 as default
-    df::Sprite *p_temp_sprite = resource_manager.getSprite("player1Wins");
+    
+    winningPlayer = new_winningPlayer;
 
-    switch (winningPlayer){
-        case 0:
-            p_temp_sprite = resource_manager.getSprite("player1Wins");
-            break;
-        case 1:
-            p_temp_sprite = resource_manager.getSprite("player2Wins");
-            break;
-        case 2:
-            p_temp_sprite = resource_manager.getSprite("player3Wins");
-            break;
-        case 3:
-            p_temp_sprite = resource_manager.getSprite("player4Wins");
-        case 4:
-            p_temp_sprite = resource_manager.getSprite("player1Wins");
-            break;
-    }
+    df::Sprite *p_temp_sprite = getGameOverSprite();
+
     setSprite(p_temp_sprite);
     time_to_live = 100;
     setSpriteSlowdown(15); //1/3 speed animation
@@ -76,5 +62,26 @@ void GameOver::draw() {
                 graphics_manager.drawCh(temp_pos, char_to_draw, this->getColor(), true);
             }
         }
+    }
+}
+
+df::Sprite* GameOver::getGameOverSprite(){
+    df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
+    switch (winningPlayer){
+        case 0:
+            return resource_manager.getSprite("player1Wins");
+            break;
+        case 1:
+            return resource_manager.getSprite("player2Wins");
+            break;
+        case 2:
+            return resource_manager.getSprite("player3Wins");
+            break;
+        case 3:
+            return resource_manager.getSprite("player4Wins");
+            break;
+        case 4:
+            return resource_manager.getSprite("player2Wins");
+            break;
     }
 }

@@ -153,7 +153,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
         LivesDisplay *p_tmpLD = livesDisplayArray[p_de->getPlayerId()];
 
         df::WorldManager &world_manager = df::WorldManager::getInstance();
-        df::Position pos(world_manager.getBoundary().getHorizontal()/2, world_manager.getBoundary().getVertical() - 96);
+        df::Position pos(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 96);
         p_tempChar->setPos(pos);
         p_tempChar->setXVelocity(0);
         p_tempChar->setYVelocity(0);
@@ -172,7 +172,13 @@ int Organizer::eventHandler(const df::Event *p_e) {
             player_count--;
             if (player_count <= 1){
                 //Do end game stuff
-                new GameOver(p_de->getPlayerId());
+                int winPlayer = -1;
+                for (int i = 0; i < 5; i++){
+                    if (char_obj_array[i] != NULL){
+                        winPlayer = i;
+                    }
+                }
+                new GameOver(winPlayer);
             }
         }
         // l_m.writeLog("Player %d has died has %d lives left", p_de->getPlayerId(), p_tempChar->getLives());
@@ -202,8 +208,8 @@ void Organizer::startMatch() {
     world_manager.markForDelete(this->bull_icon);
     world_manager.markForDelete(this->robot_icon);
 
-    df::Position starting_pos_1(world_manager.getBoundary().getHorizontal()*2/3, world_manager.getBoundary().getVertical() - 80);
-    df::Position starting_pos_2(world_manager.getBoundary().getHorizontal()/3, world_manager.getBoundary().getVertical() - 80);
+    df::Position starting_pos_1(world_manager.getBoundary().getHorizontal() * 2 / 3, world_manager.getBoundary().getVertical() - 80);
+    df::Position starting_pos_2(world_manager.getBoundary().getHorizontal() / 3, world_manager.getBoundary().getVertical() - 80);
 
     int controllerNum = i_m.getJoystickCount();
     //Characters are located at index in array that matches their number. (0-4) 
@@ -213,7 +219,7 @@ void Organizer::startMatch() {
         LivesDisplay *tmpLD = new LivesDisplay();
         //Set to correct character
         p_tempChar = getCharacter(charArray[i]);
-        p_tempChar->setLives(3);
+        p_tempChar->setLives(1);
 
         p_tempChar->registerInterest(df::JOYSTICK_EVENT);
 
@@ -267,7 +273,7 @@ void Organizer::startMatch() {
         Character *p_tempChar;
 
         p_tempChar = getCharacter(charArray[4]);
-        p_tempChar->setLives(3);
+        p_tempChar->setLives(1);
 
         //Not a joystick so ID is 4
         p_tempChar->setJoystickId(4);
@@ -300,7 +306,7 @@ void Organizer::startStage(Stage *p_s) {
     Platform *p1 = new Platform();
     Platform *p2 = new Platform();
 
-    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal()+256, p_s->getStageBounds().getVertical()));
+    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 256, p_s->getStageBounds().getVertical()));
 
     p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 56));
 
