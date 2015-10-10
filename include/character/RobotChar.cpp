@@ -360,9 +360,7 @@ int RobotChar::up_air(int frame) {
 
 int RobotChar::recovery_special(int frame) {
     if (frame == 0) {
-        if (this->getYVelocity() > 0.0) {
-            this->setYVelocity(0);
-        }
+        this->setYVelocity(0);
         this->attack_type = RECOVERY_SPECIAL;
         this->attack_frames = 42;
         this->cancel_frames = 42;
@@ -371,7 +369,7 @@ int RobotChar::recovery_special(int frame) {
         p_sound->play();
     }
     else if (frame % 6 == 5) {
-        this->setYVelocity(-0.50, true);
+        this->setYVelocity(-0.52, true);
         this->clearHitboxes();
         df::Position temp_relative_pos(0, 4);
         df::Position temp_direction(0, -1);
