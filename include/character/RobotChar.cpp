@@ -50,6 +50,8 @@ RobotChar::RobotChar() {
     this->r_atk_up = resource_manager.getSprite("robot-right-atk-up-spr");
     this->l_atk_down = resource_manager.getSprite("robot-left-atk-down-spr");
     this->r_atk_down = resource_manager.getSprite("robot-right-atk-down-spr");
+    this->l_recovery = resource_manager.getSprite("robot-left-recovery-spr");
+    this->r_recovery = resource_manager.getSprite("robot-right-recovery-spr");
 
 
     this->stand_s = 15;
@@ -68,6 +70,7 @@ RobotChar::RobotChar() {
     this->atk_side_s = 5;
     this->atk_up_s = 5;
     this->atk_down_s = 8;
+    this->recovery_s = 6;
 
     this->setObjectColor(df::RED);
 
@@ -229,6 +232,31 @@ int RobotChar::down_strike(int frame) {
     }
     else if (frame == 6) {
         this->clearHitboxes();
+    }
+    return 0;
+}
+
+int RobotChar::recovery_special(int frame) {
+    if (frame == 0) {
+        this->attack_type = RECOVERY_SPECIAL;
+        this->attack_frames = 40;
+        this->cancel_frames = 0;
+        this->setYVelocity(-1.6);
+        this->is_falling = true;
+    }
+    else if (frame % 12 == 11) {
+        this->clearHitboxes();
+        df::Position temp_relative_pos(-9, -4);
+        df::Position temp_direction(0, -1);
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos,
+            robot_stun_recovery,
+            robot_damage_recovery,
+            robot_knockback_recovery,
+            temp_direction,
+            19
+            ));
     }
     return 0;
 }

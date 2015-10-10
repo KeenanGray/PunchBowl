@@ -51,6 +51,8 @@ public:
     virtual int side_strike(int frame);
     virtual int up_strike(int frame);
     virtual int down_strike(int frame);
+    virtual int recovery_special(int frame);
+
 
 };
 
