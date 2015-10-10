@@ -549,6 +549,7 @@ int Character::step() {
     // Get objects inside this character
     df::ObjectList obj_inside = world_manager.objectsInBox(world_box);
 
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Updating name position");
     if (this->name) {
         this->name->updatePosition();
     }

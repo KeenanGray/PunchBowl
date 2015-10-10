@@ -59,16 +59,21 @@ int Organizer::eventHandler(const df::Event *p_e) {
         }
 
         if (keyboard_event->getKey() == df::Input::P) {
-            if (!gameStarted) {
+            // Start Button
+            if (!gameStarted)  //Go from title screen to character select screen
+            {
                 selectCharacters();
             }
-            else if (charactersSelected) { //Characters are selected - so start the match
-                if (!matchStarted) {
-                    startMatch();
+            else //Game is started 
+            {
+                if (charactersSelected) { //Characters are selected - so start the match
+                    if (!matchStarted) {
+                        startMatch();
+                    }
+                    //Game started, characters selected, and match all started, ignore start button; 
+                    //Characters not selected - ignore start button
+                    return 1;
                 }
-                //Game started, characters selected, and match all started, ignore start button; 
-                //Characters not selected - ignore start button
-                return 1;
             }
         }
     }
@@ -201,7 +206,7 @@ void Organizer::startMatch() {
     df::InputManager &i_m = df::InputManager::getInstance();
     df::LogManager &l_m = df::LogManager::getInstance();
     df::WorldManager &w_m = df::WorldManager::getInstance();
-    l_m.writeLog("match starting");
+    l_m.writeLog("Organizer::startMatch(): Match starting");
     // Start up the match, at stage, with character 1 and character 2
 
     //Load the stage;
@@ -218,6 +223,7 @@ void Organizer::startMatch() {
     int controllerNum = i_m.getJoystickCount();
     //Characters are located at index in array that matches their number. (0-4) 
     for (int i = 0; i < controllerNum; i++){
+        l_m.writeLog("Organizer::startMatch(): Creating joystick player");
         //For each character, set the appropriate character class and controller
         Character *p_tempChar = NULL;
         LivesDisplay *tmpLD = new LivesDisplay();
@@ -279,6 +285,7 @@ void Organizer::startMatch() {
 
     // Start a keyboard player (Keyboard player only possible in 1v1 games.
     if (controllerNum < 2) {
+        l_m.writeLog("Organizer::startMatch(): Creating keyboard player");
         //Keyboard player's character is stored in 4th element of array.
         Character *p_tempChar = NULL;
 
@@ -290,13 +297,14 @@ void Organizer::startMatch() {
             //Not a joystick so ID is 4
             p_tempChar->setJoystickId(4);
 
-            p_tempChar->unregisterInterest(df::JOYSTICK_EVENT);
             p_tempChar->registerInterest(df::KEYBOARD_EVENT);
 
             p_tempChar->setObjectColor(df::MAGENTA);
             p_tempChar->setPos(starting_pos_2);
             this->char_obj_array[4] = p_tempChar;
             LivesDisplay *tmpLD = new LivesDisplay();
+            PlayerName *p_tempName = new PlayerName("Player ", char_obj_array[4]);
+            p_tempChar->setName(p_tempName);
             tmpLD->setValue(p_tempChar->getLives());
             tmpLD->setPos(df::Position(w_m.getView().getHorizontal() / 8, w_m.getView().getVertical() * 4 / 5));
             tmpLD->setColor(df::MAGENTA);
@@ -403,6 +411,7 @@ Character *Organizer::getCharacter(Characters character){
 void Organizer::draw() {
     if (matchStarted) {
         df::WorldManager &world_manager = df::WorldManager::getInstance();
+        df::LogManager &l_m = df::LogManager::getInstance();
         int min_vert = 32766;
         int max_vert = -32766;
         int min_horiz = 32766;
