@@ -67,6 +67,8 @@ const float triggerThreshold = 80;
 // Default frame and speed data.
 // Frames to roll for
 const int DEFAULT_ROLL_FRAMES = 16;
+// Additional frames to lock input for after rolling
+const int DEFAULT_CANCEL_ROLL_FRAMES = 5;
 // Number of frames to dodge for
 const int DEFAULT_DODGE_FRAMES = 32;
 // Used to determine how fast you need to move the stick to start dashing
@@ -78,11 +80,11 @@ const int DEFAULT_LONGHOP_FRAMES = 9;
 
 // Some characters use their own values for these variables
 // Speed when rolling
-const float DEFAULT_ROLL_SPEED = 1.6;
+const float DEFAULT_ROLL_SPEED = 1.0;
 // Default jump speed for ground and air jumps
-const float DEFAULT_JUMP_SPEED = -0.88;
+const float DEFAULT_JUMP_SPEED = -0.72;
 // Amount to increase y velocity by per jump frame while button is held down
-const float DEFAULT_JUMP_INCREMENT = -0.08;
+const float DEFAULT_JUMP_INCREMENT = -0.11;
 // Amount of gravity
 const float DEFAULT_GRAVITY = 0.05;
 const float DEFAULT_MAX_DI_SPEED = 0.8;
@@ -98,6 +100,8 @@ const float DEFAULT_DI_DIV = 2000.0;
 
 const std::string char_default_type = "char_default";
 
+class PlayerName;
+
 class Character : public df::Object {
     private:
         // The name object for the player
@@ -105,37 +109,6 @@ class Character : public df::Object {
 
         // The ID of the joystick this character listens to
         unsigned int joystick_id;
-
-        // Whether or not the character is grounded (either stage or platform)
-        bool on_ground;
-        // Whether or not the character is on a platform
-        bool on_platform;
-
-        // Frames remaining in this character's roll
-        int roll_frames;
-        // Frames that this character is currently dodging for
-        int dodge_frames;
-        // Frames that this character are stunned for
-        int stun_frames;
-        // Frames that this character is invincible for
-        int invincible_frames;
-
-        // Used to determine whether or not to dash
-        int frame_last_stood;
-        // Whether or not the character is crouched
-        bool is_crouched;
-        // Current state of movement
-        Movement current_movement;
-        // The direction the character is currently facing
-        StickDirection facing_direction;
-
-        // Used for determining whether a jump is a short hop or full jump
-        int jump_frames;
-        // Whether or not jump was called during this frame
-        bool jump_this_frame;
-        // Whether or not a character is currently in a jump
-        // This is true while the input for a jump is pressed
-        bool currently_in_jump;
 
         // The number of simultaneous jumps the character can do
         int num_multi_jumps;
@@ -169,6 +142,39 @@ class Character : public df::Object {
         int hit_sound_cycle;
 
     protected:
+
+        // Frames remaining in this character's roll
+        int roll_frames;
+        // Frames to add to cancel frames after rolling
+        int cancel_roll_frames;
+        // Frames that this character is currently dodging for
+        int dodge_frames;
+        // Frames that this character are stunned for
+        int stun_frames;
+        // Frames that this character is invincible for
+        int invincible_frames;
+
+        // Whether or not the character is grounded (either stage or platform)
+        bool on_ground;
+        // Whether or not the character is on a platform
+        bool on_platform;
+
+        // Used to determine whether or not to dash
+        int frame_last_stood;
+        // Whether or not the character is crouched
+        bool is_crouched;
+        // Current state of movement
+        Movement current_movement;
+        // The direction the character is currently facing
+        StickDirection facing_direction;
+
+        // Used for determining whether a jump is a short hop or full jump
+        int jump_frames;
+        // Whether or not jump was called during this frame
+        bool jump_this_frame;
+        // Whether or not a character is currently in a jump
+        // This is true while the input for a jump is pressed
+        bool currently_in_jump;
 
         // Various movement speed variables
         float roll_speed;
@@ -356,6 +362,7 @@ class Character : public df::Object {
         int getLives() const;
 
         void setDamage(int new_damage);
+        void setFalling(bool new_falling);
 };
 
 #endif // __CHARACTER_H__

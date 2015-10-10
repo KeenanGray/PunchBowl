@@ -21,13 +21,13 @@
 #include "stage/UltimateTerminal.h"
 #include "character/Character.h"
 #include "character/CharTest.h"
-#include "character/ScytheGirl.h"
+#include "character/ScytheGirlChar.h"
 #include "Platform.h"
 
 enum Characters
 {
     BULL,
-    SCYTHEGIRL,
+    SGIRL,
     ROBOT
 };
 

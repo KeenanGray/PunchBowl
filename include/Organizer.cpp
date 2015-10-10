@@ -130,6 +130,9 @@ int Organizer::eventHandler(const df::Event *p_e) {
             case ROBOT:
                 charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
                 break;
+            case SGIRL:
+                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+                break;
             default:
                 break;
         }
@@ -155,6 +158,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
         p_tempChar->setXVelocity(0);
         p_tempChar->setYVelocity(0);
         p_tempChar->setDamage(0);
+        p_tempChar->setFalling(false);
         //Lose a life
         // l_m.writeLog("Player lives = %d", p_tempChar->getLives());
         p_tempChar->setLives(p_tempChar->getLives() - 1);
@@ -349,8 +353,11 @@ void Organizer::selectCharacters(){
     //Create an icon for each of the characters
     this->bull_icon = new Icon(BULL, "Bull");
     this->robot_icon = new Icon(ROBOT, "Robot");
-    this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+    this->sgirl_icon = new Icon(SGIRL, "ScytheGirl");
+
+    this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 4));
     this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
+    this->sgirl_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
 
     gameStarted = true;
 }
@@ -362,6 +369,9 @@ Character *Organizer::getCharacter(Characters character){
             break;
         case ROBOT:
             return new RobotChar();
+            break;
+        case SGIRL:
+            return new ScytheGirlChar();
             break;
         default:
             break;

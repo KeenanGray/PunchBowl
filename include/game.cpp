@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
     df::LogManager &log_manager = df::LogManager::getInstance();
-    log_manager.setLogLevel(2);
+    log_manager.setLogLevel(-1);
     log_manager.setFlush(true);
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
@@ -50,6 +50,7 @@ void loadResources() {
 #pragma region CharacterIcons
     resource_manager.loadSprite("Sprites/icons/Bull-icon.txt", "Bull-icon");
     resource_manager.loadSprite("Sprites/icons/Robot-icon.txt", "Robot-icon");
+    resource_manager.loadSprite("Sprites/icons/Scythe-icon.txt", "ScytheGirl-icon");
 #pragma endregion
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
@@ -80,8 +81,6 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-left-stunned-spr.txt", "bull-left-stunned-spr");
     resource_manager.loadSprite("Sprites/bull-spr/move/bull-right-stunned-spr.txt", "bull-right-stunned-spr");
 
-
-
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-neutral-spr.txt", "bull-left-atk-neutral-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-right-attack-neutral-spr.txt", "bull-right-atk-neutral-spr");
     resource_manager.loadSprite("Sprites/bull-spr/attack/bull-left-attack-side-spr.txt", "bull-left-atk-side-spr");
@@ -107,7 +106,6 @@ void loadResources() {
     // Scythe Girl
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-spr.txt", "sg-left-spr");
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-spr.txt", "sg-right-spr");
-    /*
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-walk-spr.txt", "sg-left-walk-spr");
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-walk-spr.txt", "sg-right-walk-spr");
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-dash-spr.txt", "sg-left-dash-spr");
@@ -126,7 +124,37 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-dodge-spr.txt", "sg-right-dodge-spr");
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-fall-spr.txt", "sg-left-fall-spr");
     resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-fall-spr.txt", "sg-right-fall-spr");
-    */
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-left-stunned-spr.txt", "sg-left-stunned-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/move/scythe-girl-right-stunned-spr.txt", "sg-right-stunned-spr");
+
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-attack-neutral-spr.txt", "sg-left-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-attack-neutral-spr.txt", "sg-right-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-attack-side-spr.txt", "sg-left-atk-side-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-attack-side-spr.txt", "sg-right-atk-side-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-attack-up-spr.txt", "sg-left-atk-up-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-attack-up-spr.txt", "sg-right-atk-up-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-attack-down-spr.txt", "sg-left-atk-down-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-attack-down-spr.txt", "sg-right-atk-down-spr");
+
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-air-neutral-spr.txt", "sg-left-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-air-neutral-spr.txt", "sg-right-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-air-up-spr.txt", "sg-left-air-up-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-air-up-spr.txt", "sg-right-air-up-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-air-down-spr.txt", "sg-left-air-down-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-air-down-spr.txt", "sg-right-air-down-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-air-back-spr.txt", "sg-left-air-back-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-air-back-spr.txt", "sg-right-air-back-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-left-recovery-spr.txt", "sg-left-recovery-spr");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/attack/scythe-girl-right-recovery-spr.txt", "sg-right-recovery-spr");
+
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-0-ccw.txt", "scythe-0-ccw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-0-cw.txt", "scythe-0-cw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-90-ccw.txt", "scythe-90-ccw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-90-cw.txt", "scythe-90-cw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-180-ccw.txt", "scythe-180-ccw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-180-cw.txt", "scythe-180-cw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-270-ccw.txt", "scythe-270-ccw");
+    resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-270-cw.txt", "scythe-270-cw");
 #pragma endregion
 
 #pragma region
@@ -186,6 +214,8 @@ void loadResources() {
     resource_manager.loadSound("Music/hits/hit2.wav", "hit2");
     resource_manager.loadSound("Music/hits/hit3.wav", "hit3");
     resource_manager.loadSound("Music/jump/jump1.wav", "jump1");
+    resource_manager.loadSound("Music/jump/jump2.wav", "jump2");
+    resource_manager.loadSound("Music/jump/jump3.wav", "jump3");
     resource_manager.loadSound("Music/other/blip.wav", "blip");
     resource_manager.loadSound("Music/other/death.wav", "death");
 

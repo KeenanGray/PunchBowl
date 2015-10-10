@@ -28,7 +28,7 @@
 #include "character/Character.h"
 #include "character/CharTest.h"
 #include "character/BullChar.h"
-#include "character/ScytheGirl.h"
+#include "character/ScytheGirlChar.h"
 #include "character/RobotChar.h"
 
 #include "LivesDisplay.h"
@@ -49,7 +49,7 @@ private:
         
         Icon *bull_icon;
         Icon *robot_icon;
-        Icon *scytheGirl_icon;
+        Icon *sgirl_icon;
 
         Stage *p_stage;
         //Number of characters selected

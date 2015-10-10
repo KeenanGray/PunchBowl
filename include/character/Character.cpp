@@ -42,8 +42,10 @@ Character::Character() {
     this->is_falling = false;
 
     this->roll_frames = 0;
+    this->cancel_roll_frames = DEFAULT_CANCEL_ROLL_FRAMES;
     this->dodge_frames = 0;
     this->stun_frames = 0;
+    this->invincible_frames = 0;
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
     this->cancel_frames = 0;
@@ -488,7 +490,8 @@ int Character::roll(const df::EventJoystick *p_je) {
             this->attack_frames = 0;
 
             this->roll_frames = DEFAULT_ROLL_FRAMES;
-            this->cancel_frames = DEFAULT_ROLL_FRAMES + 6;
+            this->invincible_frames = DEFAULT_ROLL_FRAMES;
+            this->cancel_frames = DEFAULT_ROLL_FRAMES+this->cancel_roll_frames;
 
             StickDirection temp_dir = this->getJoystickDirection();
             if (temp_dir == FACING_RIGHT) {
@@ -519,12 +522,11 @@ int Character::dodge(const df::EventJoystick *p_je) {
             this->dodge_frames = DEFAULT_DODGE_FRAMES;
             this->invincible_frames = DEFAULT_DODGE_FRAMES;
             if (this->on_ground) {
-                this->cancel_frames = DEFAULT_DODGE_FRAMES + 5;
-            }
-            else {
+                this->cancel_frames = DEFAULT_DODGE_FRAMES+6;
+            } else {
                 // Directional air-dodge
-                this->setXVelocity(this->x_axis / this->dodge_div);
-                this->setYVelocity(this->y_axis / this->dodge_div);
+                this->setXVelocity(this->x_axis*1.6/this->dodge_div);
+                this->setYVelocity(this->y_axis/this->dodge_div);
                 this->is_falling = true;
             }
         }
@@ -544,8 +546,9 @@ int Character::step() {
     // Get objects inside this character
     df::ObjectList obj_inside = world_manager.objectsInBox(world_box);
 
-    //Move name  with character
-    name->setPos(df::Position(getPos().getX(), getPos().getY() - getSprite()->getHeight() / 2 - 1));//name.getOffset().getY()));
+    if (this->name) {
+        this->name->updatePosition();
+    }
 
     // If a jump was not attempted in the past frame, a new jump can be attempted
     if (this->jump_this_frame == false) {
@@ -560,19 +563,16 @@ int Character::step() {
 
     df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations");
     if (!obj_below.isEmpty() && this->jump_frames >= DEFAULT_SHORTHOP_FRAMES) {
-        df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 1");
         df::ObjectListIterator li(&obj_below);
         for (li.first(); !li.isDone(); li.next()) {
-            df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 2");
             df::Object *p_temp_o = li.currentObject();
             // Ignore self
             if (!(p_temp_o == this) && this != NULL) {
-                df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 3");
                 // The ground cannot be inside the character
                 if (!obj_inside.contains(p_temp_o)) {
-                    df::LogManager::getInstance().writeLog(-1, "Character::step(): Doing ground calculations 4");
                     // Do actions for a stage
                     if (dynamic_cast <const Stage *> (p_temp_o)) {
+                        df::LogManager::getInstance().writeLog(-1, "Character::step(): Currently on stage");
                         if (this->getYVelocity() > 0) {
                             this->setYVelocity(0);
                         }
@@ -583,6 +583,7 @@ int Character::step() {
                     }
                     // Do actions for a platform
                     else if (dynamic_cast <const Platform *> (p_temp_o)) {
+                        df::LogManager::getInstance().writeLog(-1, "Character::step(): Currently on platform");
                         if (this->getYVelocity() > -.1) {
                             if (this->getYVelocity() > 0) {
                                 this->setYVelocity(0);
@@ -915,8 +916,11 @@ void Character::switchToSprite(df::Sprite *sprite, int new_sprite_slowdown) {
 
 int Character::hit(Hitbox *p_h) {
     if (this->invincible_frames > 0) {
+        df::LogManager::getInstance().writeLog(-1, "Character::hit(): Invincible for %d frames", this->invincible_frames);
         return 0;
     }
+
+    df::LogManager::getInstance().writeLog(-1, "Character::hit(): Hit for %d damage", p_h->getDamage());
 
     // Instantly stop current attack
     // And cancel any movements currently
@@ -924,6 +928,7 @@ int Character::hit(Hitbox *p_h) {
     this->dodge_frames = 0;
     this->attack_frames = 0;
     this->attack_type = UNDEFINED_ATTACK;
+    this->is_falling = false;
     this->cancel_frames = 0;
     this->clearHitboxes();
 
@@ -976,6 +981,7 @@ int Character::hit(Hitbox *p_h) {
 void Character::clearHitboxes() {
     // Removes all hitboxes
     if (!this->hitboxes.isEmpty()) {
+        df::LogManager::getInstance().writeLog(-1, "Character::clearHitboxes(): Clearing hitboxes");
         df::ObjectList to_delete = this->hitboxes;
         df::ObjectListIterator li(&to_delete);
         for (li.first(); !li.isDone(); li.next()) {
@@ -983,6 +989,7 @@ void Character::clearHitboxes() {
             this->hitboxes.remove(p_o);
             delete p_o;
         }
+        df::LogManager::getInstance().writeLog(-1, "Character::clearHitboxes(): Hitboxes cleared");
     }
 }
 
@@ -1034,6 +1041,7 @@ int Character::recovery_special(int frame) {
 void Character::setName(PlayerName *new_playername){
     name = new_playername;
 }
+
 PlayerName *Character::getName() const{
     return name;
 }
@@ -1042,9 +1050,15 @@ PlayerName *Character::getName() const{
 void Character::setLives(int new_lives){
     lives = new_lives;
 }
+
 int Character::getLives() const{
     return lives;
 }
+
 void Character::setDamage(int new_damage){
     this->damage = new_damage;
+}
+
+void Character::setFalling(bool new_falling) {
+    this->is_falling = new_falling;
 }

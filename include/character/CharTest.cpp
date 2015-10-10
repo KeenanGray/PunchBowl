@@ -69,11 +69,11 @@ CharTest::CharTest() {
     this->atk_up_s = 5;
 
     this->setObjectColor(df::RED);
-    
-    setName(new PlayerName("charTest"));
 
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
+
+    setName(new PlayerName("charTest", this));
 }
 
 int CharTest::eventHandler(const df::Event *p_e) {

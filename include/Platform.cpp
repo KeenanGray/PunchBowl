@@ -19,6 +19,7 @@ Platform::Platform(){
     // Set object type.
     setType("Platform");
     setSolidness(df::SOFT);
+    this->setAltitude(0);
 
     setPos(df::Position(20, 10));
 

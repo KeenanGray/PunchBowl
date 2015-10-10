@@ -82,10 +82,10 @@ RobotChar::RobotChar() {
 
     this->setObjectColor(df::RED);
 
-    setName(new PlayerName("Robot"));
-
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
+
+    setName(new PlayerName("Robot", this));
 }
 
 int RobotChar::neutral_jab(int frame) {

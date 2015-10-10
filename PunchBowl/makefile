@@ -23,7 +23,8 @@ GAMESRC= \
 		../include/character/Character.cpp \
 		../include/character/PlayerName.cpp \
 		../include/character/RobotChar.cpp \
-		../include/character/ScytheGirl.cpp \
+		../include/character/Scythe.cpp \
+		../include/character/ScytheGirlChar.cpp \
 		../include/stage/Stage.cpp \
 		../include/stage/UltimateTerminal.cpp \
 		../include/EventDeath.cpp \
