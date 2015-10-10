@@ -25,7 +25,7 @@
 #include "Platform.h"
 #include "Icon.h"
 #include "SelectedEvent.h"
-#include "selectedObj.h"
+#include "SelectedObj.h"
 
 class Selector : public df::Object {
 private:

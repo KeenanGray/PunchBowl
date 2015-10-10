@@ -1,4 +1,4 @@
-#include "selectedObj.h"
+#include "SelectedObj.h"
 
 SelectedObj::SelectedObj(int new_playerId){
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
