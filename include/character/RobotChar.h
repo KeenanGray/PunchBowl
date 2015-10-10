@@ -14,7 +14,7 @@ const float robot_knockback_atk_neutral = .8;
 
 const int robot_damage_atk_side = 15;
 const int robot_stun_atk_side = 16;
-const float robot_knockback_atk_side = 1.4;
+const float robot_knockback_atk_side = 1.2;
 
 const int robot_damage_atk_down = 3;
 const int robot_stun_atk_down = 4;
@@ -22,7 +22,7 @@ const float robot_knockback_atk_down = .4;
 
 const int robot_damage_atk_up = 16;
 const int robot_stun_atk_up = 20;
-const float robot_knockback_atk_up = 1.5;
+const float robot_knockback_atk_up = 1.3;
 
 const int robot_damage_air_neutral = 12;
 const int robot_stun_air_neutral = 14;
