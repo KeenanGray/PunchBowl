@@ -14,27 +14,27 @@ const int sg_stun_atk_neutral = 6;
 const float sg_knockback_atk_neutral = .8;
 
 const int sg_damage_atk_side = 7;
-const int sg_stun_atk_side = 7;
+const int sg_stun_atk_side = 11;
 const float sg_knockback_atk_side = 1.1;
 
 const int sg_damage_atk_down = 9;
-const int sg_stun_atk_down = 8;
+const int sg_stun_atk_down = 10;
 const float sg_knockback_atk_down = 1.0;
 
 const int sg_damage_atk_up = 11;
-const int sg_stun_atk_up = 7;
+const int sg_stun_atk_up = 12;
 const float sg_knockback_atk_up = 1.2;
 
 const int sg_damage_air_neutral = 5;
-const int sg_stun_air_neutral = 3;
+const int sg_stun_air_neutral = 6;
 const float sg_knockback_air_neutral = 1.1;
 
 const int sg_damage_air_back = 8;
-const int sg_stun_air_back = 8;
+const int sg_stun_air_back = 10;
 const float sg_knockback_air_back = 0.8;
 
-const int sg_damage_air_down = 4;
-const int sg_stun_air_down = 0;
+const int sg_damage_air_down = 6;
+const int sg_stun_air_down = 4;
 const float sg_knockback_air_down = 1.0;
 
 const int sg_damage_air_up = 8;

@@ -343,24 +343,24 @@ int ScytheGirlChar::neutral_jab(int frame) {
         this->cancel_frames = 10;
         if (this->getFacingDirection() == FACING_RIGHT) {
             this->scythe->switchOrientation(SCYTHE_90_CCW);
-            this->scythe->setRelativePos(df::Position(3, -2));
+            this->scythe->setRelativePos(df::Position(1, -2));
         }
         else {
             this->scythe->switchOrientation(SCYTHE_270_CW);
-            this->scythe->setRelativePos(df::Position(-3, -2));
+            this->scythe->setRelativePos(df::Position(-1, -2));
         }
     }
     else if (frame == 10) {
         df::Position temp_relative_pos(0, -4);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            this->scythe->setRelativePos(df::Position(4, -3));
-            temp_relative_pos.setX(10);
+            this->scythe->setRelativePos(df::Position(2, -3));
+            temp_relative_pos.setX(8);
             temp_direction.setX(3);
         }
         else {
-            this->scythe->setRelativePos(df::Position(-4, -3));
-            temp_relative_pos.setX(-12);
+            this->scythe->setRelativePos(df::Position(-2, -3));
+            temp_relative_pos.setX(-10);
             temp_direction.setX(-3);
         }
         this->hitboxes.insert(new Hitbox(
@@ -375,10 +375,10 @@ int ScytheGirlChar::neutral_jab(int frame) {
     }
     else if (frame == 8) {
         if (this->getFacingDirection() == FACING_RIGHT) {
-            this->scythe->setRelativePos(df::Position(2, -3));
+            this->scythe->setRelativePos(df::Position(0, -3));
         }
         else {
-            this->scythe->setRelativePos(df::Position(-2, -3));
+            this->scythe->setRelativePos(df::Position(0, -3));
         }
         this->clearHitboxes();
     }
@@ -386,7 +386,7 @@ int ScytheGirlChar::neutral_jab(int frame) {
 }
 
 int ScytheGirlChar::side_strike(int frame) {
-    int lag = 28;
+    int lag = 24;
     if (frame == 0) {
         this->setXVelocity(0);
         this->attack_type = SIDE_STRIKE;
@@ -428,6 +428,12 @@ int ScytheGirlChar::side_strike(int frame) {
             ));
     }
     else if (frame == 7+lag) {
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            this->scythe->setRelativePos(df::Position(7, -3));
+        }
+        else {
+            this->scythe->setRelativePos(df::Position(-7, -3));
+        }
         this->clearHitboxes();
         this->setSpriteSlowdown(0);
     }
@@ -481,7 +487,7 @@ int ScytheGirlChar::up_strike(int frame) {
 }
 
 int ScytheGirlChar::down_strike(int frame) {
-    int lag = 30;
+    int lag = 25;
     if (frame == 0) {
         this->setXVelocity(0);
         this->attack_type = DOWN_STRIKE;
@@ -523,6 +529,12 @@ int ScytheGirlChar::down_strike(int frame) {
             ));
     }
     else if (frame == 5+lag) {
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            this->scythe->setRelativePos(df::Position(9, 0));
+        }
+        else {
+            this->scythe->setRelativePos(df::Position(-8, 0));
+        }
         this->clearHitboxes();
         this->setSpriteSlowdown(0);
     }
