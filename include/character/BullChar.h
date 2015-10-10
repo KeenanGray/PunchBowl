@@ -13,7 +13,7 @@ const int bull_stun_atk_neutral = 5;
 const float bull_knockback_atk_neutral = .8;
 
 const int bull_damage_atk_side = 12;
-const int bull_stun_atk_side = 9;
+const int bull_stun_atk_side = 10;
 const float bull_knockback_atk_side = 1.1;
 
 const int bull_damage_atk_down = 14;
@@ -38,7 +38,7 @@ const float bull_knockback_air_down = 0.9;
 
 const int bull_damage_air_up = 17;
 const int bull_stun_air_up = 15;
-const float bull_knockback_air_up = 1.1;
+const float bull_knockback_air_up = 1.3;
 
 const int bull_damage_recovery = 3;
 const int bull_stun_recovery = 0;
