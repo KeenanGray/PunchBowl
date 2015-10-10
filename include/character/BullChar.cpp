@@ -3,12 +3,9 @@
 */
 
 // Dragonfly Engine headers
-// Events
-#include "EventOut.h"
 // Managers
 #include "LogManager.h"
 #include "ResourceManager.h"
-#include "WorldManager.h"
 
 // Punchbowl headers
 #include "BullChar.h"
@@ -16,7 +13,6 @@
 BullChar::BullChar() {
     this->setType(char_bull_type);
 
-    df::WorldManager &world_manager = df::WorldManager::getInstance();
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
     this->l_stand = resource_manager.getSprite("bull-left-spr");
@@ -75,21 +71,24 @@ BullChar::BullChar() {
     this->stun_s = 0;
 
     this->atk_neutral_s = 4;
-    this->atk_side_s = 5;
-    this->atk_up_s = 5;
-    this->atk_down_s = 8;
-    this->air_neutral_s = 6;
-    this->air_up_s = 7;
+    this->atk_side_s = 4;
+    this->atk_up_s = 4;
+    this->atk_down_s = 6;
+    this->air_neutral_s = 4;
+    this->air_up_s = 5;
     this->air_down_s = 15;
-    this->air_back_s = 10;
+    this->air_back_s = 8;
     this->recovery_s = 6;
+
+    this->walk_div = 150.0;
+    this->dash_div = 75.0;
 
     this->setObjectColor(df::RED);
 
-    setName(new PlayerName("Bull"));
-
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
+
+    setName(new PlayerName("Bull", this));
 }
 
 int BullChar::neutral_jab(int frame) {
@@ -103,11 +102,11 @@ int BullChar::neutral_jab(int frame) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(6);
+            temp_relative_pos.setX(7);
             temp_direction.setX(2);
         }
         else {
-            temp_relative_pos.setX(-8);
+            temp_relative_pos.setX(-9);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -135,10 +134,10 @@ int BullChar::side_strike(int frame) {
             this->setXVelocity(-.2);
         }
         this->attack_type = SIDE_STRIKE;
-        this->attack_frames = 30;
-        this->cancel_frames = 25;
+        this->attack_frames = 24;
+        this->cancel_frames = 20;
     }
-    else if (frame == 15) {
+    else if (frame == 12) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -146,7 +145,7 @@ int BullChar::side_strike(int frame) {
             temp_direction.setX(2);
         }
         else {
-            temp_relative_pos.setX(-7);
+            temp_relative_pos.setX(-8);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -156,10 +155,10 @@ int BullChar::side_strike(int frame) {
             bull_damage_atk_side,
             bull_knockback_atk_side,
             temp_direction,
-            2
+            3, 2
             ));
     }
-    else if (frame == 10) {
+    else if (frame == 4) {
         this->clearHitboxes();
     }
     return 0;
@@ -169,10 +168,10 @@ int BullChar::up_strike(int frame) {
     if (frame == 0) {
         this->setXVelocity(0);
         this->attack_type = UP_STRIKE;
-        this->attack_frames = 20;
-        this->cancel_frames = 15;
+        this->attack_frames = 16;
+        this->cancel_frames = 12;
     }
-    else if (frame == 5) {
+    else if (frame == 12) {
         df::Position temp_relative_pos(0, -6);
         df::Position temp_direction(0, -3);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -180,7 +179,7 @@ int BullChar::up_strike(int frame) {
             temp_direction.setX(1);
         }
         else {
-            temp_relative_pos.setX(-1);
+            temp_relative_pos.setX(-3);
             temp_direction.setX(-1);
         }
         this->hitboxes.insert(new Hitbox(
@@ -190,10 +189,10 @@ int BullChar::up_strike(int frame) {
             bull_damage_atk_up,
             bull_knockback_atk_up,
             temp_direction,
-            1, 5
+            3, 5
             ));
     }
-    else if (frame == 15) {
+    else if (frame == 4) {
         this->clearHitboxes();
     }
     return 0;
@@ -203,18 +202,18 @@ int BullChar::down_strike(int frame) {
     if (frame == 0) {
         this->setXVelocity(0);
         this->attack_type = DOWN_STRIKE;
-        this->attack_frames = 24;
-        this->cancel_frames = 16;
+        this->attack_frames = 18;
+        this->cancel_frames = 12;
     }
     else if (frame == 12) {
         df::Position temp_relative_pos1(0, 3);
         df::Position temp_direction1(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos1.setX(-8);
+            temp_relative_pos1.setX(-9);
             temp_direction1.setX(-3);
         }
         else {
-            temp_relative_pos1.setX(7);
+            temp_relative_pos1.setX(6);
             temp_direction1.setX(3);
         }
         this->hitboxes.insert(new Hitbox(
@@ -223,16 +222,17 @@ int BullChar::down_strike(int frame) {
             bull_stun_atk_down,
             bull_damage_atk_down,
             bull_knockback_atk_down,
-            temp_direction1
+            temp_direction1,
+            3
             ));
         df::Position temp_relative_pos2(0, 3);
         df::Position temp_direction2(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos2.setX(7);
+            temp_relative_pos2.setX(6);
             temp_direction2.setX(3);
         }
         else {
-            temp_relative_pos2.setX(-8);
+            temp_relative_pos2.setX(-9);
             temp_direction2.setX(-3);
         }
         this->hitboxes.insert(new Hitbox(
@@ -241,7 +241,8 @@ int BullChar::down_strike(int frame) {
             bull_stun_atk_down,
             bull_damage_atk_down,
             bull_knockback_atk_down,
-            temp_direction2
+            temp_direction2,
+            3
             ));
     }
     else if (frame == 6) {
@@ -253,10 +254,10 @@ int BullChar::down_strike(int frame) {
 int BullChar::neutral_air(int frame) {
     if (frame == 0) {
         this->attack_type = NEUTRAL_AIR;
-        this->attack_frames = 24;
-        this->cancel_frames = 24;
+        this->attack_frames = 16;
+        this->cancel_frames = 16;
     }
-    else if (frame == 18) {
+    else if (frame == 12) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -278,10 +279,10 @@ int BullChar::neutral_air(int frame) {
             2
             ));
     }
-    else if (frame == 12) {
+    else if (frame == 8) {
         this->clearHitboxes();
     }
-    else if (frame == 6) {
+    else if (frame == 4) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -310,10 +311,10 @@ int BullChar::neutral_air(int frame) {
 int BullChar::back_air(int frame) {
     if (frame == 0) {
         this->attack_type = BACK_AIR;
-        this->attack_frames = 20;
-        this->cancel_frames = 11;
+        this->attack_frames = 16;
+        this->cancel_frames = 8;
     }
-    else if (frame == 10) {
+    else if (frame == 8) {
         df::Position temp_relative_pos(0, 1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -374,14 +375,14 @@ int BullChar::down_air(int frame) {
 int BullChar::up_air(int frame) {
     if (frame == 0) {
         this->attack_type = UP_AIR;
-        this->attack_frames = 21;
-        this->cancel_frames = 21;
+        this->attack_frames = 15;
+        this->cancel_frames = 15;
     }
-    else if (frame == 7) {
+    else if (frame == 8) {
         df::Position temp_relative_pos(0, -5);
         df::Position temp_direction(0, -3);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(-1);
+            temp_relative_pos.setX(-2);
             temp_direction.setX(1);
         }
         else {
@@ -395,7 +396,7 @@ int BullChar::up_air(int frame) {
             bull_damage_air_up,
             bull_knockback_air_up,
             temp_direction,
-            3, 2
+            4, 3
             ));
     }
     return 0;
@@ -408,10 +409,12 @@ int BullChar::recovery_special(int frame) {
         this->cancel_frames = 0;
         this->setYVelocity(-1.6);
         this->is_falling = true;
+        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump3");
+        p_sound->play();
     }
     else if (frame % 12 == 11) {
         this->clearHitboxes();
-        df::Position temp_relative_pos(-9, -4);
+        df::Position temp_relative_pos(-7, -4);
         df::Position temp_direction(0, -1);
         this->hitboxes.insert(new Hitbox(
             this,
@@ -420,7 +423,7 @@ int BullChar::recovery_special(int frame) {
             bull_damage_recovery,
             bull_knockback_recovery,
             temp_direction,
-            19
+            15
             ));
     }
     return 0;

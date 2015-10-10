@@ -40,9 +40,9 @@ const int bull_damage_air_up = 17;
 const int bull_stun_air_up = 15;
 const float bull_knockback_air_up = 1.1;
 
-const int bull_damage_recovery = 4;
+const int bull_damage_recovery = 3;
 const int bull_stun_recovery = 0;
-const float bull_knockback_recovery = .6;
+const float bull_knockback_recovery = .5;
 
 const std::string char_bull_type = "char_bull";
 
@@ -63,4 +63,4 @@ public:
     virtual int recovery_special(int frame);
 };
 
-#endif // __CHAR_TEST_H__
+#endif // __BULL_CHAR_H__
