@@ -85,7 +85,7 @@ RobotChar::RobotChar() {
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
 
-    setName(new PlayerName("Robot", this));
+    //setName(new PlayerName("Robot", this));
 }
 
 int RobotChar::neutral_jab(int frame) {

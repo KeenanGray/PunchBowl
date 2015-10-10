@@ -116,29 +116,34 @@ int Organizer::eventHandler(const df::Event *p_e) {
         df::LogManager &l_m = df::LogManager::getInstance();
         const SelectedEvent *p_se = static_cast<const SelectedEvent *> (p_e);
         l_m.writeLog(3, "Event_Selected Event recieved with char = %d", p_se->getSelectedChar());
-        characterCount += 1;
-        if (characterCount == this->player_count){
-            charactersSelected = true;
-        }
-
+        l_m.writeLog(3, "Player count = %d : CharacterCount = %d", player_count, characterCount);
         //Assign characters to array
         switch (p_se->getSelectedChar())
         {
+            case NONE:
+                characterCount--;
+                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+                break;
             case BULL:
+                characterCount++;
                 charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
                 break;
             case ROBOT:
+                characterCount++;
                 charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
                 break;
             case SGIRL:
+                characterCount++;
                 charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-                break;
-            default:
                 break;
         }
 
         df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
         p_sound->play();
+
+        if (characterCount == this->player_count){
+            charactersSelected = true;
+        }
 
         return 1;
     }
@@ -166,7 +171,6 @@ int Organizer::eventHandler(const df::Event *p_e) {
 
         if (p_tempChar->getLives() <= 0){
             world_manager.markForDelete(p_tempChar);
-            world_manager.markForDelete(p_tempChar->getName());
             char_obj_array[p_de->getPlayerId()] = NULL;
 
             player_count--;
@@ -215,81 +219,88 @@ void Organizer::startMatch() {
     //Characters are located at index in array that matches their number. (0-4) 
     for (int i = 0; i < controllerNum; i++){
         //For each character, set the appropriate character class and controller
-        Character *p_tempChar;
+        Character *p_tempChar = NULL;
         LivesDisplay *tmpLD = new LivesDisplay();
-        //Set to correct character
+        PlayerName *p_tempName = new PlayerName("Player ", char_obj_array[i]);
+        //Set to correct character (sets to NULL if character is None)
         p_tempChar = getCharacter(charArray[i]);
-        p_tempChar->setLives(1);
+        if (p_tempChar != NULL){
+            p_tempChar->setLives(1);
 
-        p_tempChar->registerInterest(df::JOYSTICK_EVENT);
+            p_tempChar->registerInterest(df::JOYSTICK_EVENT);
 
-        p_tempChar->setJoystickId(i); //Actual joystick ids are 0-4 
+            p_tempChar->setJoystickId(i); //Actual joystick ids are 0-4 
 
-        //    df::Position starting_pos_3(168, 200);
-        //    df::Position starting_pos_4(168, 200);
+            p_tempChar->setName(p_tempName);
+            //    df::Position starting_pos_3(168, 200);
+            //    df::Position starting_pos_4(168, 200);
 
-        //Set starting positions and colors
-        switch (i){
-            case 0:
-                p_tempChar->setObjectColor(df::RED);
-                p_tempChar->setPos(starting_pos_1);
+            //Set starting positions and colors
+            switch (i){
+                case 0:
+                    p_tempChar->setObjectColor(df::RED);
+                    p_tempChar->setPos(starting_pos_1);
 
-                tmpLD->setValue(p_tempChar->getLives());
-                tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 10, w_m.getView().getVertical() * 4 / 5));
-                tmpLD->setColor(df::RED);
-                break;
-            case 1:
-                p_tempChar->setObjectColor(df::GREEN);
-                p_tempChar->setPos(starting_pos_2);
+                    tmpLD->setValue(p_tempChar->getLives());
+                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 10, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setColor(df::RED);
+                    break;
+                case 1:
+                    p_tempChar->setObjectColor(df::GREEN);
+                    p_tempChar->setPos(starting_pos_2);
 
-                tmpLD->setValue(p_tempChar->getLives());
-                tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 25, w_m.getView().getVertical() * 4 / 5));
-                tmpLD->setColor(df::GREEN);
-                break;
-            case 2:
-                p_tempChar->setObjectColor(df::YELLOW);
-                p_tempChar->setPos(starting_pos_1);
+                    tmpLD->setValue(p_tempChar->getLives());
+                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 25, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setColor(df::GREEN);
+                    break;
+                case 2:
+                    p_tempChar->setObjectColor(df::YELLOW);
+                    p_tempChar->setPos(starting_pos_1);
 
-                tmpLD->setValue(p_tempChar->getLives());
-                tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 40, w_m.getView().getVertical() * 4 / 5));
-                tmpLD->setColor(df::YELLOW);
-                break;
-            case 3:
-                p_tempChar->setObjectColor(df::BLUE);
-                p_tempChar->setPos(starting_pos_2);
+                    tmpLD->setValue(p_tempChar->getLives());
+                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 40, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setColor(df::YELLOW);
+                    break;
+                case 3:
+                    p_tempChar->setObjectColor(df::BLUE);
+                    p_tempChar->setPos(starting_pos_2);
 
-                tmpLD->setValue(p_tempChar->getLives());
-                tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 55, w_m.getView().getVertical() * 4 / 5));
-                tmpLD->setColor(df::BLUE);
-                break;
+                    tmpLD->setValue(p_tempChar->getLives());
+                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 55, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setColor(df::BLUE);
+                    break;
+            }
+            this->char_obj_array[i] = p_tempChar;
+            livesDisplayArray[i] = tmpLD;
         }
-        this->char_obj_array[i] = p_tempChar;
-        livesDisplayArray[i] = tmpLD;
+        else char_obj_array[i] = NULL;
     }
 
     // Start a keyboard player (Keyboard player only possible in 1v1 games.
     if (controllerNum < 2) {
         //Keyboard player's character is stored in 4th element of array.
-        Character *p_tempChar;
+        Character *p_tempChar = NULL;
 
         p_tempChar = getCharacter(charArray[4]);
-        p_tempChar->setLives(1);
+        if (p_tempChar != NULL){
+            p_tempChar->setLives(1);
 
-        //Not a joystick so ID is 4
-        p_tempChar->setJoystickId(4);
+            //Not a joystick so ID is 4
+            p_tempChar->setJoystickId(4);
 
-        p_tempChar->unregisterInterest(df::JOYSTICK_EVENT);
-        p_tempChar->registerInterest(df::KEYBOARD_EVENT);
+            p_tempChar->unregisterInterest(df::JOYSTICK_EVENT);
+            p_tempChar->registerInterest(df::KEYBOARD_EVENT);
 
-        p_tempChar->setObjectColor(df::MAGENTA);
-        p_tempChar->setPos(starting_pos_2);
-        this->char_obj_array[4] = p_tempChar;
-        LivesDisplay *tmpLD = new LivesDisplay();
-        tmpLD->setValue(p_tempChar->getLives());
-        tmpLD->setPos(df::Position(w_m.getView().getHorizontal() / 8, w_m.getView().getVertical() * 4 / 5));
-        tmpLD->setColor(df::MAGENTA);
-        livesDisplayArray[4] = tmpLD;
-
+            p_tempChar->setObjectColor(df::MAGENTA);
+            p_tempChar->setPos(starting_pos_2);
+            this->char_obj_array[4] = p_tempChar;
+            LivesDisplay *tmpLD = new LivesDisplay();
+            tmpLD->setValue(p_tempChar->getLives());
+            tmpLD->setPos(df::Position(w_m.getView().getHorizontal() / 8, w_m.getView().getVertical() * 4 / 5));
+            tmpLD->setColor(df::MAGENTA);
+            livesDisplayArray[4] = tmpLD;
+        }
+        else char_obj_array[4] = NULL;
     }
 
     matchStarted = true;
@@ -370,6 +381,9 @@ void Organizer::selectCharacters(){
 
 Character *Organizer::getCharacter(Characters character){
     switch (character){
+        case NONE:
+            return NULL;
+            break;
         case BULL:
             return new BullChar();
             break;
@@ -426,4 +440,8 @@ void Organizer::draw() {
     if (!gameStarted) {
         Object::draw();
     }
+}
+
+bool Organizer::getMatchStarted() const{
+    return matchStarted;
 }

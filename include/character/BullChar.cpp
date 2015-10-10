@@ -88,7 +88,7 @@ BullChar::BullChar() {
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
 
-    setName(new PlayerName("Bull", this));
+    //setName(new PlayerName("Bull", this));
 }
 
 int BullChar::neutral_jab(int frame) {
