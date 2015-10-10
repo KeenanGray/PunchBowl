@@ -92,7 +92,7 @@ ScytheGirlChar::ScytheGirlChar() {
     this->setSprite(this->l_stand);
     this->setSpriteSlowdown(this->stand_s);
     
-    setName(new PlayerName("Scythe", this));
+    //setName(new PlayerName("Scythe", this));
 }
 
 int ScytheGirlChar::animationSelector() {

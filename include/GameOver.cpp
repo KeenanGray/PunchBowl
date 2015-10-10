@@ -81,6 +81,7 @@ df::Sprite* GameOver::getGameOverSprite(){
             return resource_manager.getSprite("player4Wins");
             break;
         case 4:
+            //Keyboard is player two
             return resource_manager.getSprite("player2Wins");
             break;
     }

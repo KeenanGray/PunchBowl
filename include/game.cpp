@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
     df::LogManager &log_manager = df::LogManager::getInstance();
-    log_manager.setLogLevel(-1);
+    log_manager.setLogLevel(2);
     log_manager.setFlush(true);
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
@@ -43,18 +43,19 @@ void loadResources() {
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     //Title screen sprite
-    resource_manager.loadSprite("Sprites/Title.txt", "Title");
+    resource_manager.loadSprite("Sprites/Title-spr.txt", "Title");
     //Character selector sprite
-    resource_manager.loadSprite("Sprites/Select-spr.txt", "selector");
+    resource_manager.loadSprite("Sprites/Selector-spr.txt", "selector");
+    resource_manager.loadSprite("Sprites/SelectedObj-spr.txt", "selectedObj");
     
 #pragma region CharacterIcons
-    resource_manager.loadSprite("Sprites/icons/Bull-icon.txt", "Bull-icon");
-    resource_manager.loadSprite("Sprites/icons/Robot-icon.txt", "Robot-icon");
-    resource_manager.loadSprite("Sprites/icons/Scythe-icon.txt", "ScytheGirl-icon");
+    resource_manager.loadSprite("Sprites/icons/Characters/Bull-icon.txt", "Bull-icon");
+    resource_manager.loadSprite("Sprites/icons/Characters/Robot-icon.txt", "Robot-icon");
+    resource_manager.loadSprite("Sprites/icons/Characters/Scythe-icon.txt", "ScytheGirl-icon");
 #pragma endregion
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
-    resource_manager.loadSprite("Sprites/platform.txt", "platform");
+    resource_manager.loadSprite("Sprites/platform-spr.txt", "platform");
 
 #pragma region LoadBullSprite
     //Bull

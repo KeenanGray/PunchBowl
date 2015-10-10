@@ -25,18 +25,25 @@
 #include "Platform.h"
 #include "Icon.h"
 #include "SelectedEvent.h"
+#include "selectedObj.h"
 
 class Selector : public df::Object {
 private:
     unsigned int joystickID;
-    int playerID; //Between 1 and 4
+    int playerID; //Between 0 and 4 (0-3 are controllers, 4 is keyboard)
 
     // Passthrough for keyboard controls
     int keyboard(const df::EventKeyboard *p_ke);
 
+    //thresholds for joystick input
+    const float joystickThreshold = 16;
+
+
     // Whether or not x and y axis events were received
     bool x_axis_received;
     bool y_axis_received;
+
+    bool hasSelected;
 public:
     Selector();
 

@@ -1,5 +1,5 @@
-#ifndef __Icon_H__
-#define __Icon_H__
+#ifndef __selectedObj_H__
+#define __selectedObj_H__
 
 // Dragonfly Engine headers
 // Events
@@ -23,31 +23,22 @@
 #include "character/CharTest.h"
 #include "character/ScytheGirlChar.h"
 #include "Platform.h"
+#include "Icon.h"
+#include "Selector.h"
+#include "Organizer.h"
 
-enum Characters
-{
-    NONE,
-    BULL,
-    SGIRL,
-    ROBOT
-};
-
-class Icon : public df::Object {
+class SelectedObj : public df::Object {
 private:
-    Icon(); //icon must be created with name
+    SelectedObj();
+    unsigned int joystickID;
 
-    Characters iconChar;
-    //Name used to load sprite
-    std::string name;
+    // Passthrough for keyboard controls
+    int keyboard(const df::EventKeyboard *p_ke);
 
 public:
-    //Constructor for icon with characterName string give
-    Icon(Characters new_iconChar, std::string new_name);
+    SelectedObj(int new_playerId);
 
-    //get and set iconChar
-    void setIconChar(Characters new_iconChar);
-    Characters getIconChar() const;
-
+    int eventHandler(const df::Event *p_e);
 };
 
 #endif

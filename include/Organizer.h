@@ -70,6 +70,8 @@ public:
     Character *getCharacter(Characters character);
 
     virtual void draw();
+
+    bool getMatchStarted() const;
 };
 
 
