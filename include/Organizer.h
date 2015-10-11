@@ -59,6 +59,9 @@ private:
         int characterCount;
         //Number of players in the game
         int player_count;
+
+        df::ViewObject *LivesCounter;
+        int numberOfLives;
         
 
 public:

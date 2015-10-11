@@ -5,7 +5,5 @@ LivesDisplay::LivesDisplay(){
     setViewString(LivesDisplay_STRING);
     setColor(df::YELLOW);
 
-    registerInterest(df::STEP_EVENT);
-
-
+    setAltitude(df::MAX_ALTITUDE);
 }

@@ -6,7 +6,7 @@ Organizer::Organizer() {
     setType("Organizer");
 
     setSolidness(df::SPECTRAL);
-
+    setAltitude(0);
     registerInterest(df::JOYSTICK_EVENT);
     registerInterest(df::KEYBOARD_EVENT);
     registerInterest(EVENT_SELECTED);
@@ -34,6 +34,14 @@ Organizer::Organizer() {
     for (int i = 0; i < 5; i++){
         char_obj_array[i] = NULL;
     }
+
+    numberOfLives = 3;
+    LivesCounter = new df::ViewObject(false, df::CENTER_CENTER, df::Color::WHITE);
+    LivesCounter->setValue(numberOfLives);
+    LivesCounter->setAltitude(df::MAX_ALTITUDE);
+    LivesCounter->setViewString("");
+    LivesCounter->setPos(df::Position(25, 19));
+
 }
 
 Organizer &Organizer::getInstance(){
@@ -77,7 +85,31 @@ int Organizer::eventHandler(const df::Event *p_e) {
                 }
             }
         }
+        if (keyboard_event->getKey() == df::Input::I) {
+            if (keyboard_event->getAction() == df::KEY_PRESSED){
+                // Increase lives
+                if (!gameStarted && !charactersSelected && !matchStarted){
+                    if (numberOfLives < 15){
+                        numberOfLives++;
+                        LivesCounter->setValue(numberOfLives);
+                    }
+                }
+            }
+        }
+
+        if (keyboard_event->getKey() == df::Input::K) {
+            if (keyboard_event->getAction() == df::KEY_PRESSED){
+                // Decrease Lives
+                if (!gameStarted && !charactersSelected && !matchStarted){
+                    if (numberOfLives > 1){
+                        numberOfLives--;
+                        LivesCounter->setValue(numberOfLives);
+                    }
+                }
+            }
+        }
     }
+
     if (p_e->getType() == df::JOYSTICK_EVENT) {
         const df::EventJoystick *p_je = static_cast<const df::EventJoystick *> (p_e);
         if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
@@ -111,6 +143,31 @@ int Organizer::eventHandler(const df::Event *p_e) {
                     df::GameManager &game_manager = df::GameManager::getInstance();
                     game_manager.setGameOver();
                     return 1;
+                }
+            }
+        }
+        if (p_je->getButton() == 3) {
+            // Y button
+            if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED){
+                // Increase lives
+                if (!gameStarted && !charactersSelected && !matchStarted){
+                    if (numberOfLives < 15){
+                        numberOfLives++;
+                        LivesCounter->setValue(numberOfLives);
+                    }
+                }
+            }
+        }
+
+        if (p_je->getButton() == 0) {
+            //A button
+            if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED){
+                // Decrease Lives
+                if (!gameStarted && !charactersSelected && !matchStarted){
+                    if (numberOfLives > 1){
+                        numberOfLives--;
+                        LivesCounter->setValue(numberOfLives);
+                    }
                 }
             }
         }
@@ -223,8 +280,11 @@ void Organizer::startMatch() {
     startStage(p_stage);
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
+    //Delete the Icons for each character
     world_manager.markForDelete(this->bull_icon);
     world_manager.markForDelete(this->robot_icon);
+    world_manager.markForDelete(this->sgirl_icon);
+
 
     int startX = world_manager.getBoundary().getHorizontal() * 2 / 3;
     int startY = world_manager.getBoundary().getVertical() - 80;
@@ -240,7 +300,7 @@ void Organizer::startMatch() {
         p_tempChar = getCharacter(charArray[i]);
 
         if (p_tempChar != NULL){
-            p_tempChar->setLives(1);
+            p_tempChar->setLives(numberOfLives);
 
             p_tempChar->registerInterest(df::JOYSTICK_EVENT);
 
@@ -253,7 +313,7 @@ void Organizer::startMatch() {
                     p_tempChar->setPos(df::Position(startX, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
-                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 10, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 10, startY));
                     tmpLD->setColor(df::RED);
                     break;
                 case 1:
@@ -296,7 +356,7 @@ void Organizer::startMatch() {
         p_tempChar = getCharacter(charArray[4]);
 
         if (p_tempChar != NULL){
-            p_tempChar->setLives(1);
+            p_tempChar->setLives(numberOfLives);
 
             //Not a joystick so ID is 4
             p_tempChar->setJoystickId(4);
@@ -308,7 +368,7 @@ void Organizer::startMatch() {
             this->char_obj_array[4] = p_tempChar;
             LivesDisplay *tmpLD = new LivesDisplay();
             tmpLD->setValue(p_tempChar->getLives());
-            tmpLD->setPos(df::Position(w_m.getView().getHorizontal() / 8, w_m.getView().getVertical() * 4 / 5));
+            tmpLD->setPos(df::Position(p_tempChar->getPos().getX(), p_tempChar->getPos().getY()));
             tmpLD->setColor(df::MAGENTA);
             livesDisplayArray[4] = tmpLD;
         }
@@ -330,150 +390,153 @@ void Organizer::startMatch() {
             }
         }
     }
-        matchStarted = true;
+    //Get rid of lives viewObjet
+    matchStarted = true;
+}
+
+void Organizer::startStage(Stage *p_s) {
+    df::WorldManager &world_manager = df::WorldManager::getInstance();
+
+    this->setSpriteIndex(2);
+    this->setSpriteSlowdown(0);
+    this->setAltitude(0);
+    this->setPos(world_manager.getView().getPos());
+
+    Platform *p1 = new Platform();
+    Platform *p2 = new Platform();
+
+    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 256, p_s->getStageBounds().getVertical()));
+
+    p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 56));
+
+    p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 9));
+    p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 9));
+}
+
+void Organizer::selectCharacters(){
+    df::InputManager &input_manager = df::InputManager::getInstance();
+    df::WorldManager &world_manager = df::WorldManager::getInstance();
+
+    int controllersNum = input_manager.getJoystickCount();
+    //Create character selectors for each player
+    for (int i = 0; i < controllersNum; i++){
+        Selector *tmp_sel = new Selector;
+        tmp_sel->setPlayerId(i);
+        tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+
+        switch (i){
+            case 0:
+                tmp_sel->setObjectColor(df::RED);
+                break;
+            case 1:
+                tmp_sel->setObjectColor(df::GREEN);
+                break;
+            case 2:
+                tmp_sel->setObjectColor(df::YELLOW);
+                break;
+            case 3:
+                tmp_sel->setObjectColor(df::BLUE);
+                break;
+        }
+        this->player_count++;
+    }
+    // Start a keyboard player; id is 5
+    if (controllersNum < 2) {
+        Selector *tmp_sel = new Selector;
+        tmp_sel->setPlayerId(4);
+        tmp_sel->setJoystickId(4);
+        tmp_sel->unregisterInterest(df::JOYSTICK_EVENT);
+        tmp_sel->registerInterest(df::KEYBOARD_EVENT);
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+
+        tmp_sel->setObjectColor(df::MAGENTA);
+        this->player_count++;
+
     }
 
-    void Organizer::startStage(Stage *p_s) {
+    //Create an icon for each of the characters
+    this->bull_icon = new Icon(BULL, "Bull");
+    this->robot_icon = new Icon(ROBOT, "Robot");
+    this->sgirl_icon = new Icon(SGIRL, "ScytheGirl");
+
+    this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 4));
+    this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
+    this->sgirl_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+
+    df::WorldManager &w_m = df::WorldManager::getInstance();
+    w_m.markForDelete(LivesCounter);
+    gameStarted = true;
+}
+
+Character *Organizer::getCharacter(Characters character){
+    switch (character){
+        case NONE:
+            return NULL;
+            break;
+        case BULL:
+            return new BullChar();
+            break;
+        case ROBOT:
+            return new RobotChar();
+            break;
+        case SGIRL:
+            return new ScytheGirlChar();
+            break;
+        default:
+            break;
+    }
+}
+
+void Organizer::draw() {
+    if (matchStarted) {
         df::WorldManager &world_manager = df::WorldManager::getInstance();
-
-        this->setSpriteIndex(2);
-        this->setSpriteSlowdown(0);
-        this->setAltitude(0);
-        this->setPos(world_manager.getView().getPos());
-
-        Platform *p1 = new Platform();
-        Platform *p2 = new Platform();
-
-        world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 256, p_s->getStageBounds().getVertical()));
-
-        p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 56));
-
-        p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 9));
-        p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 9));
-    }
-
-    void Organizer::selectCharacters(){
-        df::InputManager &input_manager = df::InputManager::getInstance();
-        df::WorldManager &world_manager = df::WorldManager::getInstance();
-
-        int controllersNum = input_manager.getJoystickCount();
-        //Create character selectors for each player
-        for (int i = 0; i < controllersNum; i++){
-            Selector *tmp_sel = new Selector;
-            tmp_sel->setPlayerId(i);
-            tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
-            tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
-
-            switch (i){
-                case 0:
-                    tmp_sel->setObjectColor(df::RED);
-                    break;
-                case 1:
-                    tmp_sel->setObjectColor(df::GREEN);
-                    break;
-                case 2:
-                    tmp_sel->setObjectColor(df::YELLOW);
-                    break;
-                case 3:
-                    tmp_sel->setObjectColor(df::BLUE);
-                    break;
-            }
-            this->player_count++;
-        }
-        // Start a keyboard player; id is 5
-        if (controllersNum < 2) {
-            Selector *tmp_sel = new Selector;
-            tmp_sel->setPlayerId(4);
-            tmp_sel->setJoystickId(4);
-            tmp_sel->unregisterInterest(df::JOYSTICK_EVENT);
-            tmp_sel->registerInterest(df::KEYBOARD_EVENT);
-            tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
-
-            tmp_sel->setObjectColor(df::MAGENTA);
-            this->player_count++;
-
-        }
-
-        //Create an icon for each of the characters
-        this->bull_icon = new Icon(BULL, "Bull");
-        this->robot_icon = new Icon(ROBOT, "Robot");
-        this->sgirl_icon = new Icon(SGIRL, "ScytheGirl");
-
-        this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 4));
-        this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
-        this->sgirl_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
-
-        gameStarted = true;
-    }
-
-    Character *Organizer::getCharacter(Characters character){
-        switch (character){
-            case NONE:
-                return NULL;
-                break;
-            case BULL:
-                return new BullChar();
-                break;
-            case ROBOT:
-                return new RobotChar();
-                break;
-            case SGIRL:
-                return new ScytheGirlChar();
-                break;
-            default:
-                break;
-        }
-    }
-
-    void Organizer::draw() {
-        if (matchStarted) {
-            df::WorldManager &world_manager = df::WorldManager::getInstance();
-            df::LogManager &l_m = df::LogManager::getInstance();
-            int min_vert = 32766;
-            int max_vert = -32766;
-            int min_horiz = 32766;
-            int max_horiz = -32766;
-            for (int i = 0; i < 5; i++) {
-                if (this->char_obj_array[i] != NULL) {
-                    Character *temp_c = this->char_obj_array[i];
-                    int temp_x = temp_c->getPos().getX();
-                    int temp_y = temp_c->getPos().getY();
-                    if (temp_x > max_horiz) {
-                        max_horiz = temp_x;
-                    }
-                    if (temp_x < min_horiz) {
-                        min_horiz = temp_x;
-                    }
-                    if (temp_y > max_vert) {
-                        max_vert = temp_y;
-                    }
-                    if (temp_y < min_vert) {
-                        min_vert = temp_y;
-                    }
+        df::LogManager &l_m = df::LogManager::getInstance();
+        int min_vert = 32766;
+        int max_vert = -32766;
+        int min_horiz = 32766;
+        int max_horiz = -32766;
+        for (int i = 0; i < 5; i++) {
+            if (this->char_obj_array[i] != NULL) {
+                Character *temp_c = this->char_obj_array[i];
+                int temp_x = temp_c->getPos().getX();
+                int temp_y = temp_c->getPos().getY();
+                if (temp_x > max_horiz) {
+                    max_horiz = temp_x;
+                }
+                if (temp_x < min_horiz) {
+                    min_horiz = temp_x;
+                }
+                if (temp_y > max_vert) {
+                    max_vert = temp_y;
+                }
+                if (temp_y < min_vert) {
+                    min_vert = temp_y;
                 }
             }
-
-            min_vert = std::max(0, min_vert - 16);
-            max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 16);
-            min_horiz = std::max(0, min_horiz - 48);
-            max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
-            int temp_width = (max_horiz - min_horiz) / 3;
-            world_manager.setView(df::Box(
-                df::Position(min_horiz, (max_vert + min_vert - temp_width) / 2),
-                max_horiz - min_horiz,
-                temp_width)
-                );
-            this->setPos(world_manager.getView().getPos());
         }
-        if (!gameStarted) {
-            Object::draw();
-        }
-    }
 
-    bool Organizer::getMatchStarted() const{
-        return matchStarted;
+        min_vert = std::max(0, min_vert - 16);
+        max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 16);
+        min_horiz = std::max(0, min_horiz - 48);
+        max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
+        int temp_width = (max_horiz - min_horiz) / 3;
+        world_manager.setView(df::Box(
+            df::Position(min_horiz, (max_vert + min_vert - temp_width) / 2),
+            max_horiz - min_horiz,
+            temp_width)
+            );
+        this->setPos(world_manager.getView().getPos());
     }
+    if (!gameStarted) {
+        Object::draw();
+    }
+}
 
-    int Organizer::getPlayerNum() const{
-        return player_count;
-    }
+bool Organizer::getMatchStarted() const{
+    return matchStarted;
+}
+
+int Organizer::getPlayerNum() const{
+    return player_count;
+}
