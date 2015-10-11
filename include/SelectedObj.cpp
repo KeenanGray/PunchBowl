@@ -59,10 +59,9 @@ int SelectedObj::eventHandler(const df::Event *p_e){
                             tmp_sel->setObjectColor(df::MAGENTA);
                             tmp_sel->unregisterInterest(df::JOYSTICK_EVENT);
                             tmp_sel->registerInterest(df::KEYBOARD_EVENT);
-                           // tmp_sel->setJoystickId(this->joystickID);
                             break;
                     }
-                    tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+                    tmp_sel->setPos(this->getPos());
                     return 1;
                 }
             }

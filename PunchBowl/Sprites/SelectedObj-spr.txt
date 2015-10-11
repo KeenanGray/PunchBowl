@@ -1,7 +1,8 @@
 frames 1
-width 1
-height 1
+width 2
+height 2
 color green
-O
+##
+##
 end
 eof

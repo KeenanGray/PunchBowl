@@ -1,6 +1,7 @@
 #ifndef __ORGANIZER_H__
 #define __ORGANIZER_H__
 
+#include <sstream>
 // Dragonfly Engine headers
 // Events
 #include "EventKeyboard.h"
@@ -12,6 +13,7 @@
 #include "ResourceManager.h"
 #include "WorldManager.h"
 
+#include "Clock.h"
 #include "utility.h"
 
 // Punchbowl headers
@@ -42,6 +44,7 @@ private:
         bool gameStarted;
         bool charactersSelected;
         bool matchStarted;
+        bool gameOver;
 
         Characters charArray[5];
         Character *char_obj_array[5];
@@ -72,6 +75,7 @@ public:
     virtual void draw();
 
     bool getMatchStarted() const;
+    int getPlayerNum() const;
 };
 
 

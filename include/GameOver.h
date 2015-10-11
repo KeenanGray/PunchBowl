@@ -9,6 +9,7 @@
 #include "LogManager.h"
 #include <stdlib.h>
 #include "ViewObject.h"
+#include "Organizer.h"
 class GameOver : public df::ViewObject {
 private:
     GameOver();

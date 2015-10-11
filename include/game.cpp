@@ -209,6 +209,11 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/gameOver/player2Wins.txt", "player2Wins");
     resource_manager.loadSprite("Sprites/gameOver/player3Wins.txt", "player3Wins");
     resource_manager.loadSprite("Sprites/gameOver/player4Wins.txt", "player4Wins");
+    resource_manager.loadSprite("Sprites/gameOver/nobodyWins.txt", "nobodyWins");
+    resource_manager.loadSprite("Sprites/gameOver/alone.txt", "alone");
+
+
+
 
     // Sounds
     resource_manager.loadSound("Music/hits/hit1.wav", "hit1");

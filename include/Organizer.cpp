@@ -24,6 +24,7 @@ Organizer::Organizer() {
     gameStarted = false;
     charactersSelected = false;
     matchStarted = false;
+    gameOver = false;
 
     //character count = 0;
     characterCount = 0;
@@ -144,6 +145,8 @@ int Organizer::eventHandler(const df::Event *p_e) {
         if (characterCount == this->player_count){
             charactersSelected = true;
         }
+        else
+            charactersSelected = false;
 
         return 1;
     }
@@ -173,16 +176,22 @@ int Organizer::eventHandler(const df::Event *p_e) {
             world_manager.markForDelete(p_tempChar);
             char_obj_array[p_de->getPlayerId()] = NULL;
 
-            player_count--;
-            if (player_count <= 1){
-                //Do end game stuff
-                int winPlayer = -1;
-                for (int i = 0; i < 5; i++){
-                    if (char_obj_array[i] != NULL){
-                        winPlayer = i;
-                    }
+            characterCount--;
+            if (characterCount <= 1){
+                if (!gameOver){
+                    //Do end game stuff
+                    int winPlayer = -1;
+                    for (int i = 0; i < 5; i++){
+                        if (char_obj_array[i] != NULL){
+                            char_obj_array[i]->setXVelocity(0);
+                            char_obj_array[i]->setYVelocity(0);
+                            char_obj_array[i]->setPos(pos);
+                            winPlayer = i;
+                        }
+                    } 
+                    new GameOver(winPlayer);
+                    gameOver = true;
                 }
-                new GameOver(winPlayer);
             }
         }
         // l_m.writeLog("Player %d has died has %d lives left", p_de->getPlayerId(), p_tempChar->getLives());
@@ -212,8 +221,8 @@ void Organizer::startMatch() {
     world_manager.markForDelete(this->bull_icon);
     world_manager.markForDelete(this->robot_icon);
 
-    df::Position starting_pos_1(world_manager.getBoundary().getHorizontal() * 2 / 3, world_manager.getBoundary().getVertical() - 80);
-    df::Position starting_pos_2(world_manager.getBoundary().getHorizontal() / 3, world_manager.getBoundary().getVertical() - 80);
+    int startX = world_manager.getBoundary().getHorizontal() * 2 / 3;
+    int startY = world_manager.getBoundary().getVertical() - 80;
 
     int controllerNum = i_m.getJoystickCount();
     //Characters are located at index in array that matches their number. (0-4) 
@@ -221,7 +230,6 @@ void Organizer::startMatch() {
         //For each character, set the appropriate character class and controller
         Character *p_tempChar = NULL;
         LivesDisplay *tmpLD = new LivesDisplay();
-        PlayerName *p_tempName = new PlayerName("Player ", char_obj_array[i]);
         //Set to correct character (sets to NULL if character is None)
         p_tempChar = getCharacter(charArray[i]);
         if (p_tempChar != NULL){
@@ -231,15 +239,11 @@ void Organizer::startMatch() {
 
             p_tempChar->setJoystickId(i); //Actual joystick ids are 0-4 
 
-            p_tempChar->setName(p_tempName);
-            //    df::Position starting_pos_3(168, 200);
-            //    df::Position starting_pos_4(168, 200);
-
             //Set starting positions and colors
             switch (i){
                 case 0:
                     p_tempChar->setObjectColor(df::RED);
-                    p_tempChar->setPos(starting_pos_1);
+                    p_tempChar->setPos(df::Position(startX, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 10, w_m.getView().getVertical() * 4 / 5));
@@ -247,7 +251,7 @@ void Organizer::startMatch() {
                     break;
                 case 1:
                     p_tempChar->setObjectColor(df::GREEN);
-                    p_tempChar->setPos(starting_pos_2);
+                    p_tempChar->setPos(df::Position(startX - 60, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 25, w_m.getView().getVertical() * 4 / 5));
@@ -255,7 +259,7 @@ void Organizer::startMatch() {
                     break;
                 case 2:
                     p_tempChar->setObjectColor(df::YELLOW);
-                    p_tempChar->setPos(starting_pos_1);
+                    p_tempChar->setPos(df::Position(startX - 120, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 40, w_m.getView().getVertical() * 4 / 5));
@@ -263,7 +267,7 @@ void Organizer::startMatch() {
                     break;
                 case 3:
                     p_tempChar->setObjectColor(df::BLUE);
-                    p_tempChar->setPos(starting_pos_2);
+                    p_tempChar->setPos(df::Position(startX - 180, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 55, w_m.getView().getVertical() * 4 / 5));
@@ -292,7 +296,7 @@ void Organizer::startMatch() {
             p_tempChar->registerInterest(df::KEYBOARD_EVENT);
 
             p_tempChar->setObjectColor(df::MAGENTA);
-            p_tempChar->setPos(starting_pos_2);
+            p_tempChar->setPos(df::Position(startX - 180, startY));
             this->char_obj_array[4] = p_tempChar;
             LivesDisplay *tmpLD = new LivesDisplay();
             tmpLD->setValue(p_tempChar->getLives());
@@ -303,6 +307,17 @@ void Organizer::startMatch() {
         else char_obj_array[4] = NULL;
     }
 
+    //set player names
+    for (int i = 0; i < 5; i++){
+        if (char_obj_array[i] != NULL){
+            std::ostringstream numString;
+            numString << i+1;
+            std::string nameString = "Player " + numString.str();
+            PlayerName *p_tempName = new PlayerName(nameString, char_obj_array[i]);
+            char_obj_array[i]->setName(p_tempName);
+        }
+    }
+    
     matchStarted = true;
 }
 
@@ -444,4 +459,8 @@ void Organizer::draw() {
 
 bool Organizer::getMatchStarted() const{
     return matchStarted;
+}
+
+int Organizer::getPlayerNum() const{
+    return player_count;
 }
