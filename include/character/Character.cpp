@@ -526,7 +526,10 @@ int Character::dodge(const df::EventJoystick *p_je) {
             } else {
                 // Directional air-dodge
                 this->setXVelocity(this->x_axis*1.6/this->dodge_div);
-                this->setYVelocity(this->y_axis/this->dodge_div);
+                float temp_y_vel = this->y_axis/this->dodge_div;
+                if (this->getYVelocity() < temp_y_vel) {
+                    this->setYVelocity(temp_y_vel);
+                }
                 this->is_falling = true;
             }
         }
@@ -546,6 +549,7 @@ int Character::step() {
     // Get objects inside this character
     df::ObjectList obj_inside = world_manager.objectsInBox(world_box);
 
+    df::LogManager::getInstance().writeLog(-1, "Character::step(): Updating name position");
     if (this->name) {
         this->name->updatePosition();
     }

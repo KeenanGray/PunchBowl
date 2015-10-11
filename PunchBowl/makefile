@@ -35,6 +35,7 @@ GAMESRC= \
 		../include/Organizer.cpp \
 		../include/Platform.cpp \
 		../include/SelectedEvent.cpp \
+		../include/SelectedObj.cpp \
 		../include/Selector.cpp \
 
 GAMEFILES= $(GAMESRC:.cpp=.o)

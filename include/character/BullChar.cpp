@@ -60,7 +60,7 @@ BullChar::BullChar() {
 
     this->stand_s = 15;
     this->walk_s = 8;
-    this->dash_s = 6;
+    this->dash_s = 5;
     this->crouch_s = 0;
     this->crawl_s = 10;
     this->jump_s = 2;
@@ -406,7 +406,7 @@ int BullChar::recovery_special(int frame) {
     if (frame == 0) {
         this->attack_type = RECOVERY_SPECIAL;
         this->attack_frames = 40;
-        this->cancel_frames = 0;
+        this->cancel_frames = 40;
         this->setYVelocity(-1.6);
         this->is_falling = true;
         df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump3");

@@ -124,11 +124,11 @@ df::Position Hitbox::getDirection() const {
     return this->direction;
 }
 
-void Hitbox::draw() {
+void Hitbox::draw() {/*
     for (int i = 0; i < width; i++) {
         for (int j = 0; j < height; j++) {
             df::Position temp_pos = df::Position(this->getPos().getX()+i, this->getPos().getY()+j);
            // df::GraphicsManager::getInstance().drawCh(temp_pos, '*', df::YELLOW);
         }
-    }
+    }*/
 }
