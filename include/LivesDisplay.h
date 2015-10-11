@@ -10,8 +10,12 @@
 
 class LivesDisplay : public df::ViewObject {
 private:
-
+    ViewObject *DamageDisplay;
 public:
     LivesDisplay();
+    virtual void draw();
+
+    //get the damage display
+    ViewObject *getDD() const;
 };
 #endif

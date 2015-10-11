@@ -23,6 +23,7 @@
 #include "../stage/UltimateTerminal.h"
 #include "../Platform.h"
 #include "../EventDeath.h"
+#include "../Organizer.h"
 
 Character::Character() {
     // Set some default attributes
@@ -644,6 +645,8 @@ int Character::step() {
     // Determine which animation to use
     this->animationSelector();
 
+    
+
     return 1;
 }
 
@@ -941,7 +944,7 @@ int Character::hit(Hitbox *p_h) {
 
     // Add stun and damage
     this->stun_frames = p_h->getStun();
-    this->damage += p_h->getDamage();
+    this->setDamage(this->damage + p_h->getDamage());
 
     // Calculate the horizontal and vertial ratio for the knockback
     df::Position direction = p_h->getDirection();
@@ -1061,6 +1064,17 @@ int Character::getLives() const{
 
 void Character::setDamage(int new_damage){
     this->damage = new_damage;
+
+    Organizer &p_org = Organizer::getInstance();
+    LivesDisplay** p_tmp_array = p_org.getLivesDisplay();
+
+    for (int i = 0; i < 5; i++){
+        if (i == joystick_id){
+            LivesDisplay *tmp_ld = p_tmp_array[i];
+            tmp_ld->getDD()->setValue(damage);
+        }
+    }
+
 }
 
 void Character::setFalling(bool new_falling) {

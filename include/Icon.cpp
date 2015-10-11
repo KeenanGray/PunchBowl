@@ -9,7 +9,7 @@ Icon::Icon(Characters new_iconChar, std::string new_name){
     registerInterest(df::STEP_EVENT);
 
     setSolidness(df::SOFT);
-
+    setAltitude(4);
     iconChar = new_iconChar;
     name = new_name;
     //Set icon spr based on characters name
@@ -25,4 +25,14 @@ void Icon::setIconChar(Characters new_iconChar){
 }
 Characters Icon::getIconChar() const{
     return iconChar;
+}
+
+void Icon::draw(){
+    df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
+
+    df::Object::draw();
+
+    graphics_manager.drawString(df::Position(this->getPos().getX() - 5,
+        this->getPos().getY() + this->getSprite()->getHeight() / 2)
+        , name, df::LEFT_JUSTIFIED, df::Color::WHITE, false);
 }

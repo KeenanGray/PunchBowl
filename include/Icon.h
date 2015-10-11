@@ -48,6 +48,7 @@ public:
     void setIconChar(Characters new_iconChar);
     Characters getIconChar() const;
 
+    virtual void draw();
 };
 
 #endif

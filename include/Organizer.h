@@ -79,6 +79,8 @@ public:
 
     bool getMatchStarted() const;
     int getPlayerNum() const;
+
+    LivesDisplay** getLivesDisplay();
 };
 
 

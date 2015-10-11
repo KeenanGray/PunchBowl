@@ -132,7 +132,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
                 }
             }
 
-            if (p_je->getButton() == 6) {
+   /*         if (p_je->getButton() == 6) {
                 // Back Button
                 if (!gameStarted){
                     df::GameManager &game_manager = df::GameManager::getInstance();
@@ -145,7 +145,9 @@ int Organizer::eventHandler(const df::Event *p_e) {
                     return 1;
                 }
             }
+        */
         }
+        
         if (p_je->getButton() == 3) {
             // Y button
             if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED){
@@ -313,7 +315,7 @@ void Organizer::startMatch() {
                     p_tempChar->setPos(df::Position(startX, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
-                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 10, startY));
+                    tmpLD->setPos(df::Position(10, 21));
                     tmpLD->setColor(df::RED);
                     break;
                 case 1:
@@ -321,7 +323,7 @@ void Organizer::startMatch() {
                     p_tempChar->setPos(df::Position(startX - 60, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
-                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 25, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setPos(df::Position(25, 21));
                     tmpLD->setColor(df::GREEN);
                     break;
                 case 2:
@@ -329,7 +331,7 @@ void Organizer::startMatch() {
                     p_tempChar->setPos(df::Position(startX - 120, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
-                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 40, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setPos(df::Position(40, 21));
                     tmpLD->setColor(df::YELLOW);
                     break;
                 case 3:
@@ -337,7 +339,7 @@ void Organizer::startMatch() {
                     p_tempChar->setPos(df::Position(startX - 180, startY));
 
                     tmpLD->setValue(p_tempChar->getLives());
-                    tmpLD->setPos(df::Position(w_m.getView().getHorizontal() * 1 / 6 + 55, w_m.getView().getVertical() * 4 / 5));
+                    tmpLD->setPos(df::Position(55, 21));
                     tmpLD->setColor(df::BLUE);
                     break;
             }
@@ -368,7 +370,10 @@ void Organizer::startMatch() {
             this->char_obj_array[4] = p_tempChar;
             LivesDisplay *tmpLD = new LivesDisplay();
             tmpLD->setValue(p_tempChar->getLives());
-            tmpLD->setPos(df::Position(p_tempChar->getPos().getX(), p_tempChar->getPos().getY()));
+            if (player_count == 1)
+                tmpLD->setPos(df::Position(10, 21));
+            else
+                tmpLD->setPos(df::Position(25, 21));
             tmpLD->setColor(df::MAGENTA);
             livesDisplayArray[4] = tmpLD;
         }
@@ -386,7 +391,10 @@ void Organizer::startMatch() {
                 char_obj_array[i]->setName(p_tempName);
             }
             else{
-                char_obj_array[i]->setName(new PlayerName("Player 2", char_obj_array[i]));
+                if (player_count == 1)
+                    char_obj_array[i]->setName(new PlayerName("Player 1", char_obj_array[i]));
+                else
+                    char_obj_array[i]->setName(new PlayerName("Player 2", char_obj_array[i]));
             }
         }
     }
@@ -539,4 +547,8 @@ bool Organizer::getMatchStarted() const{
 
 int Organizer::getPlayerNum() const{
     return player_count;
+}
+
+LivesDisplay** Organizer::getLivesDisplay(){
+    return livesDisplayArray;
 }
