@@ -52,6 +52,8 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/icons/Characters/Bull-icon.txt", "Bull-icon");
     resource_manager.loadSprite("Sprites/icons/Characters/Robot-icon.txt", "Robot-icon");
     resource_manager.loadSprite("Sprites/icons/Characters/Scythe-icon.txt", "ScytheGirl-icon");
+    resource_manager.loadSprite("Sprites/icons/Characters/Octopus-icon.txt", "Octopus-icon");
+
 #pragma endregion
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
@@ -158,7 +160,7 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/scythe-girl-spr/scythe/scythe-270-cw.txt", "scythe-270-cw");
 #pragma endregion
 
-#pragma region
+#pragma region loadRobotSprites
     //Robot
     resource_manager.loadSprite("Sprites/robot-spr/move/robot-left-spr.txt", "robot-left-spr");
     resource_manager.loadSprite("Sprites/robot-spr/move/robot-right-spr.txt", "robot-right-spr");
@@ -202,6 +204,52 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-air-back-spr.txt", "robot-right-air-back-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-left-recovery-spr.txt", "robot-left-recovery-spr");
     resource_manager.loadSprite("Sprites/robot-spr/attack/robot-right-recovery-spr.txt", "robot-right-recovery-spr");
+#pragma endregion
+
+#pragma region loadOctopusSprites
+    //Octopus
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-spr.txt", "octopus-left-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-spr.txt", "octopus-right-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-walk-spr.txt", "octopus-left-walk-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-walk-spr.txt", "octopus-right-walk-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-dash-spr.txt", "octopus-left-dash-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-dash-spr.txt", "octopus-right-dash-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-crouch-spr.txt", "octopus-left-crouch-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-crouch-spr.txt", "octopus-right-crouch-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-crawl-spr.txt", "octopus-left-crawl-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-crawl-spr.txt", "octopus-right-crawl-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-jump-spr.txt", "octopus-left-jump-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-jump-spr.txt", "octopus-right-jump-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-air-spr.txt", "octopus-left-air-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-air-spr.txt", "octopus-right-air-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-roll-spr.txt", "octopus-left-roll-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-roll-spr.txt", "octopus-right-roll-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-dodge-spr.txt", "octopus-left-dodge-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-dodge-spr.txt", "octopus-right-dodge-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-fall-spr.txt", "octopus-left-fall-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-fall-spr.txt", "octopus-right-fall-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-left-stunned-spr.txt", "octopus-left-stunned-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/move/octopus-right-stunned-spr.txt", "octopus-right-stunned-spr");
+
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-attack-neutral-spr.txt", "octopus-left-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-attack-neutral-spr.txt", "octopus-right-atk-neutral-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-attack-side-spr.txt", "octopus-left-atk-side-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-attack-side-spr.txt", "octopus-right-atk-side-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-attack-up-spr.txt", "octopus-left-atk-up-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-attack-up-spr.txt", "octopus-right-atk-up-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-attack-down-spr.txt", "octopus-left-atk-down-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-attack-down-spr.txt", "octopus-right-atk-down-spr");
+
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-air-neutral-spr.txt", "octopus-left-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-air-neutral-spr.txt", "octopus-right-air-neutral-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-air-up-spr.txt", "octopus-left-air-up-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-air-up-spr.txt", "octopus-right-air-up-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-air-down-spr.txt", "octopus-left-air-down-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-air-down-spr.txt", "octopus-right-air-down-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-air-back-spr.txt", "octopus-left-air-back-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-air-back-spr.txt", "octopus-right-air-back-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-left-recovery-spr.txt", "octopus-left-recovery-spr");
+    resource_manager.loadSprite("Sprites/octopus-spr/attack/octopus-right-recovery-spr.txt", "octopus-right-recovery-spr");
 #pragma endregion
 
 
