@@ -979,6 +979,7 @@ int Character::hit(Hitbox *p_h) {
             break;
     }
 
+    df::LogManager::getInstance().writeLog(-1, "Character::hit(): Playing sound %s", hit_sound.c_str());
     df::Sound *p_sound = df::ResourceManager::getInstance().getSound(hit_sound);
     p_sound->play();
 
@@ -1070,8 +1071,10 @@ void Character::setDamage(int new_damage){
 
     for (int i = 0; i < 5; i++){
         if (i == joystick_id){
-            LivesDisplay *tmp_ld = p_tmp_array[i];
-            tmp_ld->getDD()->setValue(damage);
+            if (p_tmp_array[i]) {
+                LivesDisplay *tmp_ld = p_tmp_array[i];
+                tmp_ld->getDD()->setValue(damage);
+            }
         }
     }
 
