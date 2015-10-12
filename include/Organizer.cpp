@@ -42,6 +42,7 @@ Organizer::Organizer() {
     LivesCounter->setViewString("");
     LivesCounter->setPos(df::Position(25, 19));
 
+    df::ResourceManager::getInstance().getMusic("main")->play(true);
 }
 
 Organizer &Organizer::getInstance(){
