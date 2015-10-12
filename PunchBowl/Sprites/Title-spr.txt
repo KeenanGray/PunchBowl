@@ -22,8 +22,8 @@ color yellow
              \|||||||         \||||||         \|||||\||||        \||      
                                                                           
                             Press Start <P> to Play                       
-       Y [I] Lives +                                                      
-       A [K] Lives -                                                      
+                                                                          
+                                                                          
                                                                           
 end
 eof
