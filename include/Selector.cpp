@@ -60,6 +60,7 @@ int Selector::eventHandler(const df::Event *p_e){
 
                     df::ObjectListIterator li(&obj_hit);
                     Icon *p_icon;
+                    StageIcon *p_stageicon;
                     for (li.first(); !li.isDone(); li.next()) {
                         df::Object *p_o = li.currentObject();
                         if (p_icon = dynamic_cast<Icon *> (p_o)) {
@@ -86,6 +87,10 @@ int Selector::eventHandler(const df::Event *p_e){
                                     p_so->setObjectColor(df::MAGENTA);
                                     break;
                             }
+                            return 1;
+                        } else if (p_stageicon = dynamic_cast<StageIcon *> (p_o)) {
+                            world_manager.markForDelete(this);
+                            world_manager.onEvent(new SelectedEvent(p_stageicon->getIconStage()));
                             return 1;
                         }
                     }

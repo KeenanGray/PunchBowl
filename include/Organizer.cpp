@@ -16,15 +16,13 @@ Organizer::Organizer() {
     setSprite(tmp_spr);
     setSpriteSlowdown(25);
 
-    world_manager.setView(df::Box(df::Position(), tmp_spr->getWidth() + 10, tmp_spr->getHeight() + 10));
-    world_manager.setBoundary(df::Box(df::Position(), tmp_spr->getWidth() + 10, tmp_spr->getHeight() + 10));
+    world_manager.setView(df::Box(df::Position(), tmp_spr->getWidth() + 42, tmp_spr->getHeight() + 10));
+    world_manager.setBoundary(df::Box(df::Position(), tmp_spr->getWidth() + 42, tmp_spr->getHeight() + 10));
 
     setPos(df::Position(world_manager.getView().getHorizontal() / 2, world_manager.getView().getVertical() / 2));
 
-    gameStarted = false;
-    charactersSelected = false;
-    matchStarted = false;
-    gameOver = false;
+    this->gameOver = false;
+    this->state = SPLASH_SCREEN;
 
     //character count = 0;
     characterCount = 0;
@@ -55,56 +53,47 @@ int Organizer::eventHandler(const df::Event *p_e) {
 
     if (p_e->getType() == df::KEYBOARD_EVENT) {
         const df::EventKeyboard *keyboard_event = static_cast<const df::EventKeyboard *> (p_e);
-        if (keyboard_event->getKey() == df::Input::Q) {
-            if (!gameStarted){
+        if (keyboard_event->getAction() == df::KEY_PRESSED) {
+            if (keyboard_event->getKey() == df::Input::Q) {
                 df::GameManager &game_manager = df::GameManager::getInstance();
                 game_manager.setGameOver();
                 return 1;
             }
-            else{
-                df::GameManager &game_manager = df::GameManager::getInstance();
-                game_manager.setGameOver();
-                return 1;
-            }
-        }
 
-        if (keyboard_event->getKey() == df::Input::P) {
-            // Start Button
-            if (!gameStarted)  //Go from title screen to character select screen
-            {
-                selectCharacters();
-            }
-            else //Game is started 
-            {
-                if (charactersSelected) { //Characters are selected - so start the match
-                    if (!matchStarted) {
-                        startMatch();
-                    }
-                    //Game started, characters selected, and match all started, ignore start button; 
-                    //Characters not selected - ignore start button
-                    return 1;
+            if (keyboard_event->getKey() == df::Input::P) {
+                switch (this->state) {
+                    case SPLASH_SCREEN:
+                        this->selectCharacters();
+                        return 1;
+                    case CHARACTER_SCREEN:
+                        if (this->charactersSelected) {
+                            this->selectStage();
+                        }
+                        return 1;
+                    default:
+                        return 0;
                 }
             }
-        }
-        if (keyboard_event->getKey() == df::Input::I) {
-            if (keyboard_event->getAction() == df::KEY_PRESSED){
-                // Increase lives
-                if (!gameStarted && !charactersSelected && !matchStarted){
-                    if (numberOfLives < 15){
-                        numberOfLives++;
-                        LivesCounter->setValue(numberOfLives);
+            if (keyboard_event->getKey() == df::Input::I) {
+                if (keyboard_event->getAction() == df::KEY_PRESSED){
+                    // Increase lives
+                    if (this->state == SPLASH_SCREEN){
+                        if (numberOfLives < 15){
+                            numberOfLives++;
+                            LivesCounter->setValue(numberOfLives);
+                        }
                     }
                 }
             }
-        }
 
-        if (keyboard_event->getKey() == df::Input::K) {
-            if (keyboard_event->getAction() == df::KEY_PRESSED){
-                // Decrease Lives
-                if (!gameStarted && !charactersSelected && !matchStarted){
-                    if (numberOfLives > 1){
-                        numberOfLives--;
-                        LivesCounter->setValue(numberOfLives);
+            if (keyboard_event->getKey() == df::Input::K) {
+                if (keyboard_event->getAction() == df::KEY_PRESSED){
+                    // Decrease Lives
+                    if (this->state == SPLASH_SCREEN){
+                        if (numberOfLives > 1){
+                            numberOfLives--;
+                            LivesCounter->setValue(numberOfLives);
+                        }
                     }
                 }
             }
@@ -115,21 +104,17 @@ int Organizer::eventHandler(const df::Event *p_e) {
         const df::EventJoystick *p_je = static_cast<const df::EventJoystick *> (p_e);
         if (p_je->getAction() == df::JOYSTICK_BUTTON_DOWN) {
             if (p_je->getButton() == 7) {
-                // Start Button
-                if (!gameStarted)  //Go from title screen to character select screen
-                {
-                    selectCharacters();
-                }
-                else //Game is started 
-                {
-                    if (charactersSelected) { //Characters are selected - so start the match
-                        if (!matchStarted) {
-                            startMatch();
-                        }
-                        //Game started, characters selected, and match all started, ignore start button; 
-                        //Characters not selected - ignore start button
+                switch (this->state) {
+                    case SPLASH_SCREEN:
+                        this->selectCharacters();
                         return 1;
-                    }
+                    case CHARACTER_SCREEN:
+                        if (this->charactersSelected) {
+                            this->selectStage();
+                        }
+                        return 1;
+                    default:
+                        return 0;
                 }
             }
         }
@@ -138,7 +123,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
             // Y button
             if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED){
                 // Increase lives
-                if (!gameStarted && !charactersSelected && !matchStarted){
+                if (this->state == SPLASH_SCREEN){
                     if (numberOfLives < 15){
                         numberOfLives++;
                         LivesCounter->setValue(numberOfLives);
@@ -151,7 +136,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
             //A button
             if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED){
                 // Decrease Lives
-                if (!gameStarted && !charactersSelected && !matchStarted){
+                if (this->state == SPLASH_SCREEN){
                     if (numberOfLives > 1){
                         numberOfLives--;
                         LivesCounter->setValue(numberOfLives);
@@ -163,30 +148,48 @@ int Organizer::eventHandler(const df::Event *p_e) {
 
     //When a character is selected
     if (p_e->getType() == EVENT_SELECTED) {
-        df::InputManager &input_manager = df::InputManager::getInstance();
-        df::LogManager &l_m = df::LogManager::getInstance();
         const SelectedEvent *p_se = static_cast<const SelectedEvent *> (p_e);
-        l_m.writeLog(3, "Event_Selected Event recieved with char = %d", p_se->getSelectedChar());
-        l_m.writeLog(3, "Player count = %d : CharacterCount = %d", player_count, characterCount);
-        //Assign characters to array
-        if (p_se->getSelectedChar() == NONE)
-        {
-            characterCount--;
-            charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-        }
-        else{
-            characterCount++;
-            charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-        }
+        if (p_se->isCharacter()) {
+            df::InputManager &input_manager = df::InputManager::getInstance();
+            df::LogManager &l_m = df::LogManager::getInstance();
+            l_m.writeLog(3, "Event_Selected Event recieved with char = %d", p_se->getSelectedChar());
+            l_m.writeLog(3, "Player count = %d : CharacterCount = %d", player_count, characterCount);
+            //Assign characters to array
+            if (p_se->getSelectedChar() == NONE)
+            {
+                characterCount--;
+                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+            }
+            else{
+                    characterCount++;
+                    charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+            }
 
-        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
-        p_sound->play();
+            df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
+            p_sound->play();
 
-        if (characterCount == this->player_count){
-            charactersSelected = true;
+            if (characterCount == this->player_count){
+                charactersSelected = true;
+            }
+            else
+                charactersSelected = false;
+        } else {
+            switch(p_se->getSelectedStage()) {
+                case ULTIMATE_TERMINAL:
+                    this->p_stage = new UltimateTerminal;
+                    break;
+                case VORTEX:
+                    this->p_stage = new Vortex;
+                    break;
+                case VACATION:
+                    this->p_stage = new Vacation;
+                    break;
+                default:
+                    this->p_stage = new UltimateTerminal;
+                    break;
+            }
+            this->startMatch();
         }
-        else
-            charactersSelected = false;
 
         return 1;
     }
@@ -201,8 +204,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
         LivesDisplay *p_tmpLD = livesDisplayArray[p_de->getPlayerId()];
 
         df::WorldManager &world_manager = df::WorldManager::getInstance();
-        df::Position pos(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 96);
-        p_tempChar->setPos(pos);
+        p_tempChar->setPos(this->p_stage->getRespawnPosition());
         p_tempChar->setXVelocity(0);
         p_tempChar->setYVelocity(0);
         p_tempChar->setDamage(0);
@@ -225,7 +227,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
                         if (char_obj_array[i] != NULL){
                             char_obj_array[i]->setXVelocity(0);
                             char_obj_array[i]->setYVelocity(0);
-                            char_obj_array[i]->setPos(pos);
+                            char_obj_array[i]->setPos(this->p_stage->getRespawnPosition());
                             winPlayer = i;
                         }
                     }
@@ -254,19 +256,15 @@ void Organizer::startMatch() {
     // Start up the match, at stage, with character 1 and character 2
 
     //Load the stage;
-    p_stage = new UltimateTerminal;
-    startStage(p_stage);
+    startStage();
 
     df::WorldManager &world_manager = df::WorldManager::getInstance();
-    //Delete the Icons for each character
-    world_manager.markForDelete(this->bull_icon);
-    world_manager.markForDelete(this->robot_icon);
-    world_manager.markForDelete(this->sgirl_icon);
-    world_manager.markForDelete(this->octopus_icon);
+    //Delete the Icons for each stage
+    world_manager.markForDelete(this->ut_icon);
+    world_manager.markForDelete(this->vortex_icon);
+    world_manager.markForDelete(this->vacation_icon);
 
-
-    int startX = world_manager.getBoundary().getHorizontal() * 2 / 3;
-    int startY = world_manager.getBoundary().getVertical() - 80;
+    df::Position *start_pos_list = p_stage->getStartingPositions();
 
     int controllerNum = i_m.getJoystickCount();
     //Characters are located at index in array that matches their number. (0-4) 
@@ -289,35 +287,35 @@ void Organizer::startMatch() {
             switch (i){
                 case 0:
                     p_tempChar->setObjectColor(df::RED);
-                    p_tempChar->setPos(df::Position(startX, startY));
+                    p_tempChar->setPos(start_pos_list[0]);
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(10, 21));
                     tmpLD->setColor(df::RED);
                     break;
                 case 1:
-                    p_tempChar->setObjectColor(df::GREEN);
-                    p_tempChar->setPos(df::Position(startX - 60, startY));
+                    p_tempChar->setObjectColor(df::BLUE);
+                    p_tempChar->setPos(start_pos_list[1]);
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(25, 21));
-                    tmpLD->setColor(df::GREEN);
+                    tmpLD->setColor(df::BLUE);
                     break;
                 case 2:
                     p_tempChar->setObjectColor(df::YELLOW);
-                    p_tempChar->setPos(df::Position(startX - 120, startY));
+                    p_tempChar->setPos(start_pos_list[2]);
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(40, 21));
                     tmpLD->setColor(df::YELLOW);
                     break;
                 case 3:
-                    p_tempChar->setObjectColor(df::BLUE);
-                    p_tempChar->setPos(df::Position(startX - 180, startY));
+                    p_tempChar->setObjectColor(df::MAGENTA);
+                    p_tempChar->setPos(start_pos_list[3]);
 
                     tmpLD->setValue(p_tempChar->getLives());
                     tmpLD->setPos(df::Position(55, 21));
-                    tmpLD->setColor(df::BLUE);
+                    tmpLD->setColor(df::MAGENTA);
                     break;
             }
             this->char_obj_array[i] = p_tempChar;
@@ -343,7 +341,7 @@ void Organizer::startMatch() {
             p_tempChar->registerInterest(df::KEYBOARD_EVENT);
 
             p_tempChar->setObjectColor(df::MAGENTA);
-            p_tempChar->setPos(df::Position(startX - 180, startY));
+            p_tempChar->setPos(start_pos_list[3]);
             this->char_obj_array[4] = p_tempChar;
             LivesDisplay *tmpLD = new LivesDisplay();
             tmpLD->setValue(p_tempChar->getLives());
@@ -376,10 +374,10 @@ void Organizer::startMatch() {
         }
     }
     //Get rid of lives viewObjet
-    matchStarted = true;
+    this->state = GAME_SCREEN;
 }
 
-void Organizer::startStage(Stage *p_s) {
+void Organizer::startStage() {
     df::WorldManager &world_manager = df::WorldManager::getInstance();
 
     this->setSpriteIndex(2);
@@ -387,15 +385,7 @@ void Organizer::startStage(Stage *p_s) {
     this->setAltitude(0);
     this->setPos(world_manager.getView().getPos());
 
-    Platform *p1 = new Platform();
-    Platform *p2 = new Platform();
-
-    world_manager.setBoundary(df::Box(df::Position(), p_s->getStageBounds().getHorizontal() + 256, p_s->getStageBounds().getVertical()));
-
-    p_s->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() - 56));
-
-    p1->setPos(df::Position(p_s->getPos().getX() - 45, p_s->getPos().getY() - 9));
-    p2->setPos(df::Position(p_s->getPos().getX() + 45, p_s->getPos().getY() - 9));
+    world_manager.setBoundary(df::Box(df::Position(), p_stage->getStageBounds().getHorizontal(), p_stage->getStageBounds().getVertical()));
 }
 
 void Organizer::selectCharacters(){
@@ -415,13 +405,13 @@ void Organizer::selectCharacters(){
                 tmp_sel->setObjectColor(df::RED);
                 break;
             case 1:
-                tmp_sel->setObjectColor(df::GREEN);
+                tmp_sel->setObjectColor(df::BLUE);
                 break;
             case 2:
                 tmp_sel->setObjectColor(df::YELLOW);
                 break;
             case 3:
-                tmp_sel->setObjectColor(df::BLUE);
+                tmp_sel->setObjectColor(df::MAGENTA);
                 break;
         }
         this->player_count++;
@@ -458,7 +448,47 @@ void Organizer::selectCharacters(){
 
     df::WorldManager &w_m = df::WorldManager::getInstance();
     w_m.markForDelete(LivesCounter);
-    gameStarted = true;
+    this->state = CHARACTER_SCREEN;
+}
+
+void Organizer::selectStage(){
+    df::InputManager &input_manager = df::InputManager::getInstance();
+    df::WorldManager &world_manager = df::WorldManager::getInstance();
+
+    int controllersNum = input_manager.getJoystickCount();
+    // Start a keyboard player; id is 5
+    if (controllersNum < 1) {
+        Selector *tmp_sel = new Selector;
+        tmp_sel->setPlayerId(4);
+        tmp_sel->setJoystickId(4);
+        tmp_sel->unregisterInterest(df::JOYSTICK_EVENT);
+        tmp_sel->registerInterest(df::KEYBOARD_EVENT);
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+        tmp_sel->setObjectColor(df::MAGENTA);
+        this->player_count++;
+    } else {
+        Selector *tmp_sel = new Selector;
+        tmp_sel->setPlayerId(0);
+        tmp_sel->setJoystickId(input_manager.getJoysticks()[0]);
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+        tmp_sel->setObjectColor(df::RED);
+        this->player_count++;
+    }
+    world_manager.markForDelete(this->bull_icon);
+    world_manager.markForDelete(this->robot_icon);
+    world_manager.markForDelete(this->sgirl_icon);
+    world_manager.markForDelete(this->octopus_icon);
+
+    //Create an icon for each of the stages
+    this->ut_icon = new StageIcon(ULTIMATE_TERMINAL, "Terminal");
+    this->vortex_icon = new StageIcon(VORTEX, "Vortex");
+    this->vacation_icon = new StageIcon(VACATION, "Vacation");
+
+    this->ut_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 4));
+    this->vortex_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
+    this->vacation_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+
+    this->state = STAGE_SCREEN;
 }
 
 Character *Organizer::getCharacter(Characters character){
@@ -484,9 +514,9 @@ Character *Organizer::getCharacter(Characters character){
 
 void Organizer::draw() {
     df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
-
-    if (matchStarted) {
+    if (state == GAME_SCREEN) {
         df::WorldManager &world_manager = df::WorldManager::getInstance();
+
         df::LogManager &l_m = df::LogManager::getInstance();
         int min_vert = 32766;
         int max_vert = -32766;
@@ -516,19 +546,19 @@ void Organizer::draw() {
         max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 16);
         min_horiz = std::max(0, min_horiz - 48);
         max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
-        int temp_width = (max_horiz - min_horiz) / 3;
+        int temp_height = (max_horiz - min_horiz) / 4;
         world_manager.setView(df::Box(
-            df::Position(min_horiz, (max_vert + min_vert - temp_width) / 2),
+            df::Position(min_horiz, (max_vert + min_vert - temp_height) / 2),
             max_horiz - min_horiz,
-            temp_width)
+            temp_height)
             );
         this->setPos(world_manager.getView().getPos());
     }
-    if (!gameStarted) {
+    if (state == SPLASH_SCREEN) {
         Object::draw();
     }
 
-    if (gameStarted){
+    if (this->state != SPLASH_SCREEN) {
         std::ostringstream i;
         i << characterCount;
         std::string CharacterNumberStr = "Characters Selected " + i.str();
@@ -547,7 +577,11 @@ void Organizer::draw() {
 }
 
 bool Organizer::getMatchStarted() const{
-    return matchStarted;
+    return this->state == GAME_SCREEN;
+}
+
+ScreenState Organizer::getState() const{
+    return this->state;
 }
 
 int Organizer::getPlayerNum() const{

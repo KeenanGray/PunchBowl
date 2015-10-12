@@ -47,13 +47,13 @@ int SelectedObj::eventHandler(const df::Event *p_e){
                             tmp_sel->setObjectColor(df::RED);
                             break;
                         case 1:
-                            tmp_sel->setObjectColor(df::GREEN);
+                            tmp_sel->setObjectColor(df::BLUE);
                             break;
                         case 2:
                             tmp_sel->setObjectColor(df::YELLOW);
                             break;
                         case 3:
-                            tmp_sel->setObjectColor(df::BLUE);
+                            tmp_sel->setObjectColor(df::MAGENTA);
                             break;
                         case 4:
                             tmp_sel->setObjectColor(df::MAGENTA);
@@ -70,7 +70,7 @@ int SelectedObj::eventHandler(const df::Event *p_e){
     }
     if (p_e->getType() == df::STEP_EVENT) {
         Organizer &p_org = Organizer::getInstance();
-        if (p_org.getMatchStarted()){
+        if (p_org.getState() != CHARACTER_SCREEN){
             world_manager.markForDelete(this);
         }
     }

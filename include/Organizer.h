@@ -22,10 +22,13 @@
 #include "Icon.h"
 #include "EventDeath.h"
 #include "GameOver.h"
+#include "StageIcon.h"
 
 //Stages
 #include "stage/Stage.h"
 #include "stage/UltimateTerminal.h"
+#include "stage/Vortex.h"
+#include "stage/Vacation.h"
 //Characters
 #include "character/Character.h"
 #include "character/CharTest.h"
@@ -36,15 +39,23 @@
 
 #include "LivesDisplay.h"
 
+enum ScreenState {
+    UNDEFINED_STATE = -1,
+    SPLASH_SCREEN,
+    CHARACTER_SCREEN,
+    STAGE_SCREEN,
+    GAME_SCREEN,
+};
+
 class Organizer : public df::Object{
 private:
         Organizer(); //Private constructor for singleton
         Organizer(Organizer const&);  //prevents copying
         void operator = (Organizer const&); //prevents 
 
-        bool gameStarted;
+        ScreenState state;
+
         bool charactersSelected;
-        bool matchStarted;
         bool gameOver;
 
         Characters charArray[5];
@@ -56,7 +67,12 @@ private:
         Icon *sgirl_icon;
         Icon *octopus_icon;
 
+        StageIcon *ut_icon;
+        StageIcon *vortex_icon;
+        StageIcon *vacation_icon;
+
         Stage *p_stage;
+
         //Number of characters selected
         int characterCount;
         //Number of players in the game
@@ -71,15 +87,17 @@ public:
     int eventHandler(const df::Event *p_e);
 
     void startMatch();
-    void startStage(Stage *p_s);
+    void startStage();
 
     void selectCharacters();
+    void selectStage();
 
     Character *getCharacter(Characters character);
 
     virtual void draw();
 
     bool getMatchStarted() const;
+    ScreenState getState() const;
     int getPlayerNum() const;
 
     LivesDisplay** getLivesDisplay();

@@ -15,14 +15,9 @@
 #include "utility.h"
 
 // Punchbowl headers
-#include "stage/UltimateTerminal.h"
-#include "Platform.h"
-#include "stage/Stage.h"
-#include "stage/UltimateTerminal.h"
 #include "character/Character.h"
 #include "character/CharTest.h"
 #include "character/ScytheGirlChar.h"
-#include "Platform.h"
 
 enum Characters
 {

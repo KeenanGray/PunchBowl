@@ -54,10 +54,20 @@ void loadResources() {
     resource_manager.loadSprite("Sprites/icons/Characters/Scythe-icon.txt", "ScytheGirl-icon");
     resource_manager.loadSprite("Sprites/icons/Characters/Octopus-icon.txt", "Octopus-icon");
 
+    resource_manager.loadSprite("Sprites/icons/Stages/UT_icon.txt", "UT-icon");
+    resource_manager.loadSprite("Sprites/icons/Stages/Vortex_icon.txt", "Vortex-icon");
+    resource_manager.loadSprite("Sprites/icons/Stages/Vacation_icon.txt", "Vacation-icon");
+
 #pragma endregion
     resource_manager.loadSprite("Sprites/testsprite.txt", "test");
     resource_manager.loadSprite("Sprites/stages/ultimate_terminal.txt", "stage_ut");
-    resource_manager.loadSprite("Sprites/platform-spr.txt", "platform");
+    resource_manager.loadSprite("Sprites/stages/ut-platform-spr.txt", "ut-platform");
+
+    resource_manager.loadSprite("Sprites/stages/vortex.txt", "stage_vortex");
+    resource_manager.loadSprite("Sprites/stages/vortex-platform-spr.txt", "vortex-platform");
+
+    resource_manager.loadSprite("Sprites/stages/vacation.txt", "stage_vacation");
+    resource_manager.loadSprite("Sprites/stages/vacation-platform-spr.txt", "vacation-platform");
 
 #pragma region LoadBullSprite
     //Bull

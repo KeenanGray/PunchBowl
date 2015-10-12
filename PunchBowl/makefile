@@ -21,12 +21,15 @@ GAMESRC= \
 		../include/character/BullChar.cpp \
 		../include/character/CharTest.cpp \
 		../include/character/Character.cpp \
+		../include/character/OctopusChar.cpp \
 		../include/character/PlayerName.cpp \
 		../include/character/RobotChar.cpp \
 		../include/character/Scythe.cpp \
 		../include/character/ScytheGirlChar.cpp \
 		../include/stage/Stage.cpp \
 		../include/stage/UltimateTerminal.cpp \
+		../include/stage/Vortex.cpp \
+		../include/stage/Vacation.cpp \
 		../include/EventDeath.cpp \
 		../include/GameOver.cpp \
 		../include/Hitbox.cpp \
@@ -37,6 +40,7 @@ GAMESRC= \
 		../include/SelectedEvent.cpp \
 		../include/SelectedObj.cpp \
 		../include/Selector.cpp \
+		../include/StageIcon.cpp \
 
 GAMEFILES= $(GAMESRC:.cpp=.o)
 

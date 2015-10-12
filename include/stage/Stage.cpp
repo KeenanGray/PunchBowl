@@ -35,3 +35,11 @@ df::Box Stage::getStageBounds() const{
 void Stage::setStageBounds(df::Box new_stage_bounds){
     stage_bounds = new_stage_bounds;
 }
+
+df::Position *Stage::getStartingPositions() {
+    return this->starting_positions;
+}
+
+df::Position Stage::getRespawnPosition() {
+    return this->respawn_position;
+}

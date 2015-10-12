@@ -71,7 +71,7 @@ BullChar::BullChar() {
     this->stun_s = 0;
 
     this->atk_neutral_s = 4;
-    this->atk_side_s = 4;
+    this->atk_side_s = 3;
     this->atk_up_s = 4;
     this->atk_down_s = 6;
     this->air_neutral_s = 4;
@@ -126,6 +126,7 @@ int BullChar::neutral_jab(int frame) {
 }
 
 int BullChar::side_strike(int frame) {
+    int lag = 8;
     if (frame == 0) {
         if (this->getFacingDirection() == FACING_RIGHT) {
             this->setXVelocity(.2);
@@ -134,10 +135,10 @@ int BullChar::side_strike(int frame) {
             this->setXVelocity(-.2);
         }
         this->attack_type = SIDE_STRIKE;
-        this->attack_frames = 24;
-        this->cancel_frames = 20;
+        this->attack_frames = 18+lag;
+        this->cancel_frames = 15+lag;
     }
-    else if (frame == 12) {
+    else if (frame == 9+lag) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -158,7 +159,9 @@ int BullChar::side_strike(int frame) {
             5, 2
             ));
     }
-    else if (frame == 4) {
+    else if (frame == 3+lag) {
+        this->setSpriteSlowdown(0);
+        this->setXVelocity(0);
         this->clearHitboxes();
     }
     return 0;

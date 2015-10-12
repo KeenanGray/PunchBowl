@@ -1,7 +1,7 @@
 frames 1
 width 13
 height 7
-color white
+color blue
  ___________ 
 |## _______#|
 |#_/       '|

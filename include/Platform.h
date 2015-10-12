@@ -12,11 +12,13 @@
 #include "EventStep.h"
 #include "EventJoystick.h"
 //Game includes
+#include "stage/Stage.h"
 
 class Platform : public df::Object{
 private:
-public:
     Platform();
+public:
+    Platform(Stages s);
     ~Platform();
 
     int eventHandler(const df::Event *p_e);
