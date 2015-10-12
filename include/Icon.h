@@ -29,7 +29,8 @@ enum Characters
     NONE,
     BULL,
     SGIRL,
-    ROBOT
+    ROBOT,
+    OCTOPUS
 };
 
 class Icon : public df::Object {

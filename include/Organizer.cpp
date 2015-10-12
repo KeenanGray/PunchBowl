@@ -132,21 +132,6 @@ int Organizer::eventHandler(const df::Event *p_e) {
                     }
                 }
             }
-
-   /*         if (p_je->getButton() == 6) {
-                // Back Button
-                if (!gameStarted){
-                    df::GameManager &game_manager = df::GameManager::getInstance();
-                    game_manager.setGameOver();
-                    return 1;
-                }
-                else{
-                    df::GameManager &game_manager = df::GameManager::getInstance();
-                    game_manager.setGameOver();
-                    return 1;
-                }
-            }
-        */
         }
         
         if (p_je->getButton() == 3) {
@@ -184,24 +169,14 @@ int Organizer::eventHandler(const df::Event *p_e) {
         l_m.writeLog(3, "Event_Selected Event recieved with char = %d", p_se->getSelectedChar());
         l_m.writeLog(3, "Player count = %d : CharacterCount = %d", player_count, characterCount);
         //Assign characters to array
-        switch (p_se->getSelectedChar())
+        if (p_se->getSelectedChar() == NONE)
         {
-            case NONE:
-                characterCount--;
-                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-                break;
-            case BULL:
+            characterCount--;
+            charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+        }
+        else{
                 characterCount++;
                 charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-                break;
-            case ROBOT:
-                characterCount++;
-                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-                break;
-            case SGIRL:
-                characterCount++;
-                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
-                break;
         }
 
         df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
@@ -287,6 +262,7 @@ void Organizer::startMatch() {
     world_manager.markForDelete(this->bull_icon);
     world_manager.markForDelete(this->robot_icon);
     world_manager.markForDelete(this->sgirl_icon);
+    world_manager.markForDelete(this->octopus_icon);
 
 
     int startX = world_manager.getBoundary().getHorizontal() * 2 / 3;
@@ -468,10 +444,13 @@ void Organizer::selectCharacters(){
     this->bull_icon = new Icon(BULL, "Bull");
     this->robot_icon = new Icon(ROBOT, "Robot");
     this->sgirl_icon = new Icon(SGIRL, "ScytheGirl");
+    this->octopus_icon = new Icon(OCTOPUS, "Octopus");
 
     this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 4));
     this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
     this->sgirl_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
+    this->octopus_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+
 
     df::WorldManager &w_m = df::WorldManager::getInstance();
     w_m.markForDelete(LivesCounter);
@@ -492,6 +471,8 @@ Character *Organizer::getCharacter(Characters character){
         case SGIRL:
             return new ScytheGirlChar();
             break;
+        case OCTOPUS:
+            return new OctopusChar();
         default:
             break;
     }
