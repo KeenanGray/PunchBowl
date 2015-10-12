@@ -225,6 +225,8 @@ void loadResources() {
     resource_manager.loadSound("Music/other/blip.wav", "blip");
     resource_manager.loadSound("Music/other/death.wav", "death");
 
+    resource_manager.loadMusic("Music/soundtrack/punchbowl_loop_1.wav", "main");
+
 
 
 }
