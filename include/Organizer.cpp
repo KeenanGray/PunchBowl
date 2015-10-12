@@ -133,7 +133,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
                 }
             }
         }
-        
+
         if (p_je->getButton() == 3) {
             // Y button
             if (p_je->getAction() == df::JOYSTICK_BUTTON_PRESSED){
@@ -175,8 +175,8 @@ int Organizer::eventHandler(const df::Event *p_e) {
             charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
         }
         else{
-                characterCount++;
-                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+            characterCount++;
+            charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
         }
 
         df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
@@ -408,7 +408,7 @@ void Organizer::selectCharacters(){
         Selector *tmp_sel = new Selector;
         tmp_sel->setPlayerId(i);
         tmp_sel->setJoystickId(input_manager.getJoysticks()[i]);
-        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+        tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4 + (i * 10), world_manager.getBoundary().getVertical() / 2));
 
         switch (i){
             case 0:
@@ -446,10 +446,14 @@ void Organizer::selectCharacters(){
     this->sgirl_icon = new Icon(SGIRL, "ScytheGirl");
     this->octopus_icon = new Icon(OCTOPUS, "Octopus");
 
-    this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 4));
-    this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4, world_manager.getBoundary().getVertical() / 4));
-    this->sgirl_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4, world_manager.getBoundary().getVertical() / 4));
-    this->octopus_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
+    this->bull_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2,
+        world_manager.getBoundary().getVertical() / 4));
+    this->robot_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() * 3 / 4,
+        world_manager.getBoundary().getVertical() / 4));
+    this->sgirl_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 4,
+        world_manager.getBoundary().getVertical() / 4));
+    this->octopus_icon->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2,
+        world_manager.getBoundary().getVertical() * 2 / 4));
 
 
     df::WorldManager &w_m = df::WorldManager::getInstance();
@@ -479,6 +483,8 @@ Character *Organizer::getCharacter(Characters character){
 }
 
 void Organizer::draw() {
+    df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
+
     if (matchStarted) {
         df::WorldManager &world_manager = df::WorldManager::getInstance();
         df::LogManager &l_m = df::LogManager::getInstance();
@@ -520,6 +526,23 @@ void Organizer::draw() {
     }
     if (!gameStarted) {
         Object::draw();
+    }
+
+    if (gameStarted){
+        std::ostringstream i;
+        i << characterCount;
+        std::string CharacterNumberStr = "Characters Selected " + i.str();
+        if (!charactersSelected){
+            graphics_manager.drawString(df::Position(5, 25), "A [Key A] to Select", df::LEFT_JUSTIFIED, df::WHITE);
+            graphics_manager.drawString(df::Position(5, 26), "B [Key X] to Cancel", df::LEFT_JUSTIFIED, df::WHITE);
+            graphics_manager.drawString(df::Position(5, 27), CharacterNumberStr, df::LEFT_JUSTIFIED, df::WHITE);
+
+        }
+        else{
+            graphics_manager.drawString(df::Position(5, 25), "Press Start [Key P] to Play", df::LEFT_JUSTIFIED, df::WHITE);
+            graphics_manager.drawString(df::Position(5, 26), "B [Key X] to Cancel", df::LEFT_JUSTIFIED, df::WHITE);
+            graphics_manager.drawString(df::Position(5, 27), CharacterNumberStr, df::LEFT_JUSTIFIED, df::WHITE);
+        }
     }
 }
 
