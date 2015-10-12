@@ -38,7 +38,7 @@ Organizer::Organizer() {
     LivesCounter->setValue(numberOfLives);
     LivesCounter->setAltitude(df::MAX_ALTITUDE);
     LivesCounter->setViewString("");
-    LivesCounter->setPos(df::Position(25, 19));
+    LivesCounter->setPos(df::Position(16, 18));
 
     df::ResourceManager::getInstance().getMusic("main")->play(true);
 }
@@ -556,12 +556,15 @@ void Organizer::draw() {
     }
     if (state == SPLASH_SCREEN) {
         Object::draw();
+        graphics_manager.drawString(df::Position(5, 24), "Y [Key I] Lives +", df::LEFT_JUSTIFIED, df::WHITE);
+        graphics_manager.drawString(df::Position(5, 25), "A [Key K] Lives -", df::LEFT_JUSTIFIED, df::WHITE);
     }
 
     if (this->state != SPLASH_SCREEN) {
         std::ostringstream i;
         i << characterCount;
         std::string CharacterNumberStr = "Characters Selected " + i.str();
+    
         if (!charactersSelected){
             graphics_manager.drawString(df::Position(5, 25), "A [Key A] to Select", df::LEFT_JUSTIFIED, df::WHITE);
             graphics_manager.drawString(df::Position(5, 26), "B [Key X] to Cancel", df::LEFT_JUSTIFIED, df::WHITE);
