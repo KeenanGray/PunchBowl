@@ -494,6 +494,9 @@ int Character::roll(const df::EventJoystick *p_je) {
             this->invincible_frames = DEFAULT_ROLL_FRAMES;
             this->cancel_frames = DEFAULT_ROLL_FRAMES+this->cancel_roll_frames;
 
+            df::Sound *p_sound = df::ResourceManager::getInstance().getSound("roll");
+            p_sound->play();
+
             StickDirection temp_dir = this->getJoystickDirection();
             if (temp_dir == FACING_RIGHT) {
                 this->setXVelocity(-this->roll_speed);

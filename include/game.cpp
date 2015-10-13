@@ -287,6 +287,7 @@ void loadResources() {
     resource_manager.loadSound("Music/other/blip.wav", "blip");
     resource_manager.loadSound("Music/other/death.wav", "death");
     resource_manager.loadSound("Music/other/dodge.wav", "dodge");
+    resource_manager.loadSound("Music/other/roll.wav", "roll");
 
     resource_manager.loadMusic("Music/soundtrack/main_theme.wav", "main");
     resource_manager.loadMusic("Music/soundtrack/combat1.wav", "combat1");

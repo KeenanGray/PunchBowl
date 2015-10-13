@@ -551,12 +551,21 @@ void Organizer::draw() {
         max_vert = std::min(world_manager.getBoundary().getVertical(), max_vert + 16);
         min_horiz = std::max(0, min_horiz - 48);
         max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
-        int temp_height = (max_horiz - min_horiz) / 4;
-        world_manager.setView(df::Box(
-            df::Position(min_horiz, (max_vert + min_vert - temp_height) / 2),
-            max_horiz - min_horiz,
-            temp_height)
-            );
+        int temp_height = (max_vert - min_vert);
+        int temp_width = (max_horiz - min_horiz);
+        if (temp_height*4 > temp_width) {
+            world_manager.setView(df::Box(
+                df::Position(min_horiz, min_vert),
+                temp_height*4,
+                temp_height)
+                );
+        } else {
+            world_manager.setView(df::Box(
+                df::Position(min_horiz, min_vert),
+                temp_width,
+                temp_width / 4)
+                );
+        }
         this->setPos(world_manager.getView().getPos());
     }
     if (state == SPLASH_SCREEN) {
@@ -565,7 +574,7 @@ void Organizer::draw() {
         graphics_manager.drawString(df::Position(5, 25), "A [Key K] Lives -", df::LEFT_JUSTIFIED, df::WHITE);
     }
 
-    if (this->state != SPLASH_SCREEN) {
+    if (this->state != SPLASH_SCREEN && this->state != GAME_SCREEN) {
         std::ostringstream i;
         i << characterCount;
         std::string CharacterNumberStr = "Characters Selected " + i.str();
