@@ -290,6 +290,7 @@ void loadResources() {
 
     resource_manager.loadMusic("Music/soundtrack/main_theme.wav", "main");
     resource_manager.loadMusic("Music/soundtrack/combat1.wav", "combat1");
+    resource_manager.loadMusic("Music/soundtrack/combat2.wav", "combat2");
 
 
 

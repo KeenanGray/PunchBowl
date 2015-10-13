@@ -185,7 +185,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
                     this->p_stage = new Vortex;
                     break;
                 case VACATION:
-                    df::ResourceManager::getInstance().getMusic("combat1")->play(true);
+                    df::ResourceManager::getInstance().getMusic("combat2")->play(true);
                     this->p_stage = new Vacation;
                     break;
                 default:
