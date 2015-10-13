@@ -8,15 +8,15 @@
 // Punchbowl headers
 #include "Character.h"
 
-const int robot_damage_atk_neutral = 4;
-const int robot_stun_atk_neutral = 10;
+const int robot_damage_atk_neutral = 10;
+const int robot_stun_atk_neutral = 12;
 const float robot_knockback_atk_neutral = .8;
 
-const int robot_damage_atk_side = 15;
+const int robot_damage_atk_side = 14;
 const int robot_stun_atk_side = 16;
 const float robot_knockback_atk_side = 1.2;
 
-const int robot_damage_atk_down = 3;
+const int robot_damage_atk_down = 4;
 const int robot_stun_atk_down = 4;
 const float robot_knockback_atk_down = .4;
 
@@ -24,16 +24,16 @@ const int robot_damage_atk_up = 16;
 const int robot_stun_atk_up = 20;
 const float robot_knockback_atk_up = 1.3;
 
-const int robot_damage_air_neutral = 12;
+const int robot_damage_air_neutral = 16;
 const int robot_stun_air_neutral = 14;
 const float robot_knockback_air_neutral = 1.0;
 
-const int robot_damage_air_back = 9;
-const int robot_stun_air_back = 9;
+const int robot_damage_air_back = 14;
+const int robot_stun_air_back = 12;
 const float robot_knockback_air_back = 1.0;
 
-const int robot_damage_air_down = 16;
-const int robot_stun_air_down = 10;
+const int robot_damage_air_down = 18;
+const int robot_stun_air_down = 20;
 const float robot_knockback_air_down = 0.8;
 
 const int robot_damage_air_up = 12;

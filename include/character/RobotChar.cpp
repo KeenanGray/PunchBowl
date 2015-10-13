@@ -75,10 +75,10 @@ RobotChar::RobotChar() {
     this->atk_side_s = 6;
     this->atk_up_s = 8;
     this->atk_down_s = 4;
-    this->air_neutral_s = 5;
+    this->air_neutral_s = 3;
     this->air_up_s = 8;
     this->air_down_s = 20;
-    this->air_back_s = 10;
+    this->air_back_s = 8;
     this->recovery_s = 6;
 
     this->dodge_div = 100.0;
@@ -232,10 +232,10 @@ int RobotChar::down_strike(int frame) {
 int RobotChar::neutral_air(int frame) {
     if (frame == 0) {
         this->attack_type = NEUTRAL_AIR;
-        this->attack_frames = 20;
-        this->cancel_frames = 15;
+        this->attack_frames = 12;
+        this->cancel_frames = 9;
     }
-    else if (frame == 10) {
+    else if (frame == 6) {
         df::Position temp_relative_pos(0, -1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -263,10 +263,10 @@ int RobotChar::neutral_air(int frame) {
 int RobotChar::back_air(int frame) {
     if (frame == 0) {
         this->attack_type = BACK_AIR;
-        this->attack_frames = 20;
-        this->cancel_frames = 11;
+        this->attack_frames = 16;
+        this->cancel_frames = 12;
     }
-    else if (frame == 10) {
+    else if (frame == 12) {
         df::Position temp_relative_pos(0, 0);
         df::Position temp_direction(0, 2);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -286,9 +286,6 @@ int RobotChar::back_air(int frame) {
             temp_direction,
             3, 2
             ));
-    }
-    else if (frame == 1) {
-        this->clearHitboxes();
     }
     return 0;
 }
@@ -365,10 +362,11 @@ int RobotChar::recovery_special(int frame) {
         this->attack_frames = 42;
         this->cancel_frames = 42;
         this->is_falling = true;
-        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump3");
+        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump4");
         p_sound->play();
     }
     else if (frame % 6 == 5) {
+        this->is_falling = true;
         this->setYVelocity(-0.52, true);
         this->clearHitboxes();
         df::Position temp_relative_pos(0, 4);

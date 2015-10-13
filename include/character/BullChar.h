@@ -32,7 +32,7 @@ const int bull_damage_air_back = 11;
 const int bull_stun_air_back = 12;
 const float bull_knockback_air_back = 1.0;
 
-const int bull_damage_air_down = 13;
+const int bull_damage_air_down = 18;
 const int bull_stun_air_down = 20;
 const float bull_knockback_air_down = 0.9;
 

@@ -409,7 +409,7 @@ int OctopusChar::recovery_special(int frame) {
         this->cancel_frames = 40;
         this->setYVelocity(-1.6);
         this->is_falling = true;
-        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump3");
+        df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump5");
         p_sound->play();
     }
     else if (frame % 12 == 11) {

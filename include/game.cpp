@@ -277,13 +277,19 @@ void loadResources() {
     resource_manager.loadSound("Music/hits/hit1.wav", "hit1");
     resource_manager.loadSound("Music/hits/hit2.wav", "hit2");
     resource_manager.loadSound("Music/hits/hit3.wav", "hit3");
+    resource_manager.loadSound("Music/hits/heavy_hit1.wav", "heavy1");
+    resource_manager.loadSound("Music/hits/heavy_hit2.wav", "heavy2");
     resource_manager.loadSound("Music/jump/jump1.wav", "jump1");
     resource_manager.loadSound("Music/jump/jump2.wav", "jump2");
     resource_manager.loadSound("Music/jump/jump3.wav", "jump3");
+    resource_manager.loadSound("Music/jump/jump4.wav", "jump4");
+    resource_manager.loadSound("Music/jump/jump5.wav", "jump5");
     resource_manager.loadSound("Music/other/blip.wav", "blip");
     resource_manager.loadSound("Music/other/death.wav", "death");
+    resource_manager.loadSound("Music/other/dodge.wav", "dodge");
 
-    resource_manager.loadMusic("Music/soundtrack/punchbowl_loop_1.wav", "main");
+    resource_manager.loadMusic("Music/soundtrack/main_theme.wav", "main");
+    resource_manager.loadMusic("Music/soundtrack/combat1.wav", "combat1");
 
 
 

@@ -174,17 +174,22 @@ int Organizer::eventHandler(const df::Event *p_e) {
             else
                 charactersSelected = false;
         } else {
+            df::ResourceManager::getInstance().getMusic("main")->stop();
             switch(p_se->getSelectedStage()) {
                 case ULTIMATE_TERMINAL:
+                    df::ResourceManager::getInstance().getMusic("combat1")->play(true);
                     this->p_stage = new UltimateTerminal;
                     break;
                 case VORTEX:
+                    df::ResourceManager::getInstance().getMusic("combat1")->play(true);
                     this->p_stage = new Vortex;
                     break;
                 case VACATION:
+                    df::ResourceManager::getInstance().getMusic("combat1")->play(true);
                     this->p_stage = new Vacation;
                     break;
                 default:
+                    df::ResourceManager::getInstance().getMusic("combat1")->play(true);
                     this->p_stage = new UltimateTerminal;
                     break;
             }

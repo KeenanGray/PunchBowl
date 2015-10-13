@@ -416,6 +416,7 @@ int BullChar::recovery_special(int frame) {
         p_sound->play();
     }
     else if (frame % 12 == 11) {
+        this->is_falling = true;
         this->clearHitboxes();
         df::Position temp_relative_pos(-7, -4);
         df::Position temp_direction(0, -1);

@@ -40,7 +40,7 @@ Character::Character() {
     this->on_ground = true;
     this->on_platform = false;
     this->is_crouched = false;
-    this->is_falling = false;
+    this->is_falling = true;
 
     this->roll_frames = 0;
     this->cancel_roll_frames = DEFAULT_CANCEL_ROLL_FRAMES;
@@ -522,6 +522,10 @@ int Character::dodge(const df::EventJoystick *p_je) {
 
             this->dodge_frames = DEFAULT_DODGE_FRAMES;
             this->invincible_frames = DEFAULT_DODGE_FRAMES;
+
+            df::Sound *p_sound = df::ResourceManager::getInstance().getSound("dodge");
+            p_sound->play();
+
             if (this->on_ground) {
                 this->cancel_frames = DEFAULT_DODGE_FRAMES+6;
             } else {
@@ -960,23 +964,41 @@ int Character::hit(Hitbox *p_h) {
     }
 
     std::string hit_sound = "hit1";
-    switch (this->hit_sound_cycle) {
-        case 1:
-            hit_sound = "hit1";
-            this->hit_sound_cycle = 2;
-            break;
-        case 2:
-            hit_sound = "hit2";
-            this->hit_sound_cycle = 3;
-            break;
-        case 3:
-            hit_sound = "hit3";
-            this->hit_sound_cycle = 1;
-            break;
-        default:
-            hit_sound = "hit1";
-            this->hit_sound_cycle = 2;
-            break;
+    
+    if (p_h->getDamage() >= 15) {
+        switch (this->hit_sound_cycle) {
+            case 1:
+                hit_sound = "heavy1";
+                this->hit_sound_cycle = 2;
+                break;
+            case 2:
+                hit_sound = "heavy2";
+                this->hit_sound_cycle = 3;
+                break;
+            default:
+                hit_sound = "heavy1";
+                this->hit_sound_cycle = 2;
+                break;
+        }
+    } else {
+        switch (this->hit_sound_cycle) {
+            case 1:
+                hit_sound = "hit1";
+                this->hit_sound_cycle = 2;
+                break;
+            case 2:
+                hit_sound = "hit2";
+                this->hit_sound_cycle = 3;
+                break;
+            case 3:
+                hit_sound = "hit3";
+                this->hit_sound_cycle = 1;
+                break;
+            default:
+                hit_sound = "hit1";
+                this->hit_sound_cycle = 2;
+                break;
+        }
     }
 
     df::LogManager::getInstance().writeLog(-1, "Character::hit(): Playing sound %s", hit_sound.c_str());

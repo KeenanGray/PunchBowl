@@ -26,16 +26,16 @@ UltimateTerminal::UltimateTerminal() {
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
 
-    setStageBounds(df::Box(df::Position(), 480, 128));
+    setStageBounds(df::Box(df::Position(), 480, 96));
 
-    this->starting_positions[0] = df::Position(135, 80);
-    this->starting_positions[1] = df::Position(205, 80);
-    this->starting_positions[2] = df::Position(275, 80);
-    this->starting_positions[3] = df::Position(345, 80);
+    this->starting_positions[0] = df::Position(135, 48);
+    this->starting_positions[1] = df::Position(205, 48);
+    this->starting_positions[2] = df::Position(275, 48);
+    this->starting_positions[3] = df::Position(345, 48);
 
-    this->respawn_position = df::Position(240, 72);
+    this->respawn_position = df::Position(240, 40);
 
-    this->setPos(df::Position(240, 96));
+    this->setPos(df::Position(240, 64));
 
     Platform *p1 = new Platform(ULTIMATE_TERMINAL);
     Platform *p2 = new Platform(ULTIMATE_TERMINAL);
