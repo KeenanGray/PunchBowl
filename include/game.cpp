@@ -284,7 +284,6 @@ void loadResources() {
     resource_manager.loadSound("Music/jump/jump3.wav", "jump3");
     resource_manager.loadSound("Music/jump/jump4.wav", "jump4");
     resource_manager.loadSound("Music/jump/jump5.wav", "jump5");
-    resource_manager.loadSound("Music/other/blip.wav", "blip");
     resource_manager.loadSound("Music/other/death.wav", "death");
     resource_manager.loadSound("Music/other/dodge.wav", "dodge");
     resource_manager.loadSound("Music/other/roll.wav", "roll");
@@ -292,6 +291,7 @@ void loadResources() {
     resource_manager.loadMusic("Music/soundtrack/main_theme.wav", "main");
     resource_manager.loadMusic("Music/soundtrack/combat1.wav", "combat1");
     resource_manager.loadMusic("Music/soundtrack/combat2.wav", "combat2");
+    resource_manager.loadMusic("Music/soundtrack/combat3.wav", "combat3");
 
 
 

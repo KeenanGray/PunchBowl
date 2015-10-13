@@ -165,9 +165,6 @@ int Organizer::eventHandler(const df::Event *p_e) {
                     charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
             }
 
-            df::Sound *p_sound = df::ResourceManager::getInstance().getSound("blip");
-            p_sound->play();
-
             if (characterCount == this->player_count){
                 charactersSelected = true;
             }
@@ -181,7 +178,7 @@ int Organizer::eventHandler(const df::Event *p_e) {
                     this->p_stage = new UltimateTerminal;
                     break;
                 case VORTEX:
-                    df::ResourceManager::getInstance().getMusic("combat1")->play(true);
+                    df::ResourceManager::getInstance().getMusic("combat3")->play(true);
                     this->p_stage = new Vortex;
                     break;
                 case VACATION:
