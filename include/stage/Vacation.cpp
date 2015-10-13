@@ -30,10 +30,10 @@ Vacation::Vacation() {
 
     setStageBounds(df::Box(df::Position(), 480, 96));
 
-    this->starting_positions[0] = df::Position(180, 56);
-    this->starting_positions[1] = df::Position(220, 56);
-    this->starting_positions[2] = df::Position(260, 56);
-    this->starting_positions[3] = df::Position(300, 56);
+    this->starting_positions[0] = df::Position(165, 56);
+    this->starting_positions[1] = df::Position(215, 56);
+    this->starting_positions[2] = df::Position(265, 56);
+    this->starting_positions[3] = df::Position(315, 56);
 
     this->respawn_position = df::Position(240, 48);
 

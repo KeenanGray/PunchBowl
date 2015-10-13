@@ -32,10 +32,10 @@ Vortex::Vortex() {
 
     setStageBounds(df::Box(df::Position(), 540, 96));
 
-    this->starting_positions[0] = df::Position(180, 40);
-    this->starting_positions[1] = df::Position(230, 50);
-    this->starting_positions[2] = df::Position(310, 50);
-    this->starting_positions[3] = df::Position(350, 40);
+    this->starting_positions[0] = df::Position(135, 40);
+    this->starting_positions[1] = df::Position(225, 40);
+    this->starting_positions[2] = df::Position(315, 40);
+    this->starting_positions[3] = df::Position(405, 40);
 
     this->respawn_position = df::Position(270, 60);
 
@@ -47,13 +47,11 @@ Vortex::Vortex() {
     Platform *p4 = new Platform(VORTEX);
     Platform *p5 = new Platform(VORTEX);
     Platform *p6 = new Platform(VORTEX);
-    Platform *p7 = new Platform(VORTEX);
 
-    p1->setPos(df::Position(this->getPos().getX() - 40, this->getPos().getY() - 10));
-    p2->setPos(df::Position(this->getPos().getX() + 40, this->getPos().getY() - 10));
-    p3->setPos(df::Position(this->getPos().getX() - 80, this->getPos().getY() - 20));
-    p4->setPos(df::Position(this->getPos().getX() + 80, this->getPos().getY() - 20));
-    p5->setPos(df::Position(this->getPos().getX() + 120, this->getPos().getY() - 30));
-    p6->setPos(df::Position(this->getPos().getX() - 120, this->getPos().getY() - 30));
-    p7->setPos(df::Position(this->getPos().getX(), this->getPos().getY() - 30));
+    p1->setPos(df::Position(this->getPos().getX() - 96, this->getPos().getY() - 4));
+    p2->setPos(df::Position(this->getPos().getX() + 96, this->getPos().getY() - 4));
+    p3->setPos(df::Position(this->getPos().getX() - 48, this->getPos().getY() - 12));
+    p4->setPos(df::Position(this->getPos().getX() + 48, this->getPos().getY() - 12));
+    p5->setPos(df::Position(this->getPos().getX() + 144, this->getPos().getY() - 12));
+    p6->setPos(df::Position(this->getPos().getX() - 144, this->getPos().getY() - 12));
 }
