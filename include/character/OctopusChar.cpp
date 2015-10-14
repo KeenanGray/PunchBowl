@@ -70,18 +70,19 @@ OctopusChar::OctopusChar() {
     this->stun_s = 0;
     this->stun_s = 0;
 
-    this->atk_neutral_s = 4;
+    this->atk_neutral_s = 8;
     this->atk_side_s = 4;
-    this->atk_up_s = 4;
+    this->atk_up_s = 6;
     this->atk_down_s = 6;
-    this->air_neutral_s = 4;
-    this->air_up_s = 5;
-    this->air_down_s = 15;
-    this->air_back_s = 8;
-    this->recovery_s = 6;
+    this->air_neutral_s = 9;
+    this->air_up_s = 10;
+    this->air_down_s = 9;
+    this->air_back_s = 10;
+    this->recovery_s = 12;
 
-    this->walk_div = 150.0;
-    this->dash_div = 75.0;
+    this->count_multi_jumps = 5;
+    this->jump_speed = -0.4;
+    this->terminal_velocity = 0.32;
 
     this->setObjectColor(df::RED);
 
@@ -98,15 +99,15 @@ int OctopusChar::neutral_jab(int frame) {
         this->attack_frames = 16;
         this->cancel_frames = 12;
     }
-    else if (frame == 12) {
-        df::Position temp_relative_pos(0, -1);
+    else if (frame == 8) {
+        df::Position temp_relative_pos(0, -2);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(5);
+            temp_relative_pos.setX(9);
             temp_direction.setX(2);
         }
         else {
-            temp_relative_pos.setX(-9);
+            temp_relative_pos.setX(-15);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -116,7 +117,7 @@ int OctopusChar::neutral_jab(int frame) {
             octopus_damage_atk_neutral,
             octopus_knockback_atk_neutral,
             temp_direction,
-            5, 2
+            7, 2
             ));
     }
     else if (frame == 4) {
@@ -127,25 +128,20 @@ int OctopusChar::neutral_jab(int frame) {
 
 int OctopusChar::side_strike(int frame) {
     if (frame == 0) {
-        if (this->getFacingDirection() == FACING_RIGHT) {
-            this->setXVelocity(.2);
-        }
-        else {
-            this->setXVelocity(-.2);
-        }
+        this->setXVelocity(0);
         this->attack_type = SIDE_STRIKE;
-        this->attack_frames = 24;
-        this->cancel_frames = 20;
+        this->attack_frames = 16;
+        this->cancel_frames = 12;
     }
     else if (frame == 12) {
-        df::Position temp_relative_pos(0, -1);
+        df::Position temp_relative_pos(0, -2);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(4);
+            temp_relative_pos.setX(9);
             temp_direction.setX(2);
         }
         else {
-            temp_relative_pos.setX(-8);
+            temp_relative_pos.setX(-15);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -155,7 +151,7 @@ int OctopusChar::side_strike(int frame) {
             octopus_damage_atk_side,
             octopus_knockback_atk_side,
             temp_direction,
-            5, 2
+            7, 2
             ));
     }
     else if (frame == 4) {
@@ -168,31 +164,51 @@ int OctopusChar::up_strike(int frame) {
     if (frame == 0) {
         this->setXVelocity(0);
         this->attack_type = UP_STRIKE;
-        this->attack_frames = 16;
-        this->cancel_frames = 12;
+        this->attack_frames = 18;
+        this->cancel_frames = 15;
     }
     else if (frame == 12) {
-        df::Position temp_relative_pos(0, -6);
-        df::Position temp_direction(0, -3);
+        df::Position temp_relative_pos1(0, -4);
+        df::Position temp_direction1(0, -3);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(0);
-            temp_direction.setX(1);
+            temp_relative_pos1.setX(5);
+            temp_direction1.setX(1);
         }
         else {
-            temp_relative_pos.setX(-3);
-            temp_direction.setX(-1);
+            temp_relative_pos1.setX(-8);
+            temp_direction1.setX(-1);
         }
         this->hitboxes.insert(new Hitbox(
             this,
-            temp_relative_pos,
+            temp_relative_pos1,
             octopus_stun_atk_up,
             octopus_damage_atk_up,
             octopus_knockback_atk_up,
-            temp_direction,
-            3, 5
+            temp_direction1,
+            3, 3
+            ));
+
+        df::Position temp_relative_pos2(0, -4);
+        df::Position temp_direction2(0, -3);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos2.setX(-6);
+            temp_direction2.setX(1);
+        }
+        else {
+            temp_relative_pos2.setX(3);
+            temp_direction2.setX(-1);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos2,
+            octopus_stun_atk_up,
+            octopus_damage_atk_up,
+            octopus_knockback_atk_up,
+            temp_direction2,
+            3, 3
             ));
     }
-    else if (frame == 4) {
+    else if (frame == 3) {
         this->clearHitboxes();
     }
     return 0;
@@ -202,8 +218,8 @@ int OctopusChar::down_strike(int frame) {
     if (frame == 0) {
         this->setXVelocity(0);
         this->attack_type = DOWN_STRIKE;
-        this->attack_frames = 18;
-        this->cancel_frames = 12;
+        this->attack_frames = 24;
+        this->cancel_frames = 20;
     }
     else if (frame == 12) {
         df::Position temp_relative_pos1(0, 3);
@@ -245,7 +261,7 @@ int OctopusChar::down_strike(int frame) {
             3
             ));
     }
-    else if (frame == 6) {
+    else if (frame == 4) {
         this->clearHitboxes();
     }
     return 0;
@@ -254,18 +270,18 @@ int OctopusChar::down_strike(int frame) {
 int OctopusChar::neutral_air(int frame) {
     if (frame == 0) {
         this->attack_type = NEUTRAL_AIR;
-        this->attack_frames = 16;
-        this->cancel_frames = 16;
+        this->attack_frames = 18;
+        this->cancel_frames = 15;
     }
-    else if (frame == 12) {
-        df::Position temp_relative_pos(0, -1);
+    else if (frame == 9) {
+        df::Position temp_relative_pos(0, -2);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(5);
+            temp_relative_pos.setX(10);
             temp_direction.setX(2);
         }
         else {
-            temp_relative_pos.setX(-7);
+            temp_relative_pos.setX(-12);
             temp_direction.setX(-2);
         }
         this->hitboxes.insert(new Hitbox(
@@ -279,30 +295,8 @@ int OctopusChar::neutral_air(int frame) {
             2
             ));
     }
-    else if (frame == 8) {
+    else if (frame == 3) {
         this->clearHitboxes();
-    }
-    else if (frame == 4) {
-        df::Position temp_relative_pos(0, -1);
-        df::Position temp_direction(0, -1);
-        if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(4);
-            temp_direction.setX(2);
-        }
-        else {
-            temp_relative_pos.setX(-7);
-            temp_direction.setX(-2);
-        }
-        this->hitboxes.insert(new Hitbox(
-            this,
-            temp_relative_pos,
-            octopus_stun_air_neutral,
-            octopus_damage_air_neutral,
-            octopus_knockback_air_neutral,
-            temp_direction,
-            4,
-            2
-            ));
     }
     return 0;
 }
@@ -311,10 +305,10 @@ int OctopusChar::neutral_air(int frame) {
 int OctopusChar::back_air(int frame) {
     if (frame == 0) {
         this->attack_type = BACK_AIR;
-        this->attack_frames = 16;
-        this->cancel_frames = 8;
+        this->attack_frames = 20;
+        this->cancel_frames = 15;
     }
-    else if (frame == 8) {
+    else if (frame == 10) {
         df::Position temp_relative_pos(0, 1);
         df::Position temp_direction(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
@@ -335,38 +329,57 @@ int OctopusChar::back_air(int frame) {
             3
             ));
     }
-    else if (frame == 1) {
-        this->clearHitboxes();
-    }
     return 0;
 }
 
 int OctopusChar::down_air(int frame) {
     if (frame == 0) {
+        this->setXVelocity(0);
         this->attack_type = DOWN_AIR;
-        this->attack_frames = 30;
-        this->cancel_frames = 24;
+        this->attack_frames = 18;
+        this->cancel_frames = 9;
     }
-    else if (frame == 15) {
-        df::Position temp_relative_pos(0, 5);
-        df::Position temp_direction(0, 1);
+    else if (frame == 12) {
+        df::Position temp_relative_pos1(0, 3);
+        df::Position temp_direction1(0, 1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(-1);
+            temp_relative_pos1.setX(-9);
+            temp_direction1.setX(-3);
         }
         else {
-            temp_relative_pos.setX(-1);
+            temp_relative_pos1.setX(6);
+            temp_direction1.setX(3);
         }
         this->hitboxes.insert(new Hitbox(
             this,
-            temp_relative_pos,
+            temp_relative_pos1,
             octopus_stun_air_down,
             octopus_damage_air_down,
             octopus_knockback_air_down,
-            temp_direction,
+            temp_direction1,
+            3
+            ));
+        df::Position temp_relative_pos2(0, 3);
+        df::Position temp_direction2(0, 1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos2.setX(6);
+            temp_direction2.setX(3);
+        }
+        else {
+            temp_relative_pos2.setX(-9);
+            temp_direction2.setX(-3);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos2,
+            octopus_stun_air_down,
+            octopus_damage_air_down,
+            octopus_knockback_air_down,
+            temp_direction2,
             3
             ));
     }
-    else if (frame == 7) {
+    else if (frame == 3) {
         this->clearHitboxes();
     }
     return 0;
@@ -374,48 +387,76 @@ int OctopusChar::down_air(int frame) {
 
 int OctopusChar::up_air(int frame) {
     if (frame == 0) {
+        this->setXVelocity(0);
         this->attack_type = UP_AIR;
-        this->attack_frames = 15;
-        this->cancel_frames = 15;
+        this->attack_frames = 30;
+        this->cancel_frames = 24;
     }
-    else if (frame == 8) {
-        df::Position temp_relative_pos(0, -5);
-        df::Position temp_direction(0, -3);
+    else if (frame == 15) {
+        df::Position temp_relative_pos1(0, -3);
+        df::Position temp_direction1(0, -1);
         if (this->getFacingDirection() == FACING_RIGHT) {
-            temp_relative_pos.setX(-2);
-            temp_direction.setX(1);
+            temp_relative_pos1.setX(-9);
+            temp_direction1.setX(-3);
         }
         else {
-            temp_relative_pos.setX(-2);
-            temp_direction.setX(-1);
+            temp_relative_pos1.setX(6);
+            temp_direction1.setX(3);
         }
         this->hitboxes.insert(new Hitbox(
             this,
-            temp_relative_pos,
+            temp_relative_pos1,
             octopus_stun_air_up,
             octopus_damage_air_up,
             octopus_knockback_air_up,
-            temp_direction,
-            4, 3
+            temp_direction1,
+            3
             ));
+        df::Position temp_relative_pos2(0, -3);
+        df::Position temp_direction2(0, -1);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos2.setX(6);
+            temp_direction2.setX(3);
+        }
+        else {
+            temp_relative_pos2.setX(-9);
+            temp_direction2.setX(-3);
+        }
+        this->hitboxes.insert(new Hitbox(
+            this,
+            temp_relative_pos2,
+            octopus_stun_air_up,
+            octopus_damage_air_up,
+            octopus_knockback_air_up,
+            temp_direction2,
+            3
+            ));
+    }
+    else if (frame == 6) {
+        this->clearHitboxes();
     }
     return 0;
 }
-
 int OctopusChar::recovery_special(int frame) {
     if (frame == 0) {
+        setXVelocity(0);
         this->attack_type = RECOVERY_SPECIAL;
-        this->attack_frames = 40;
-        this->cancel_frames = 40;
-        this->setYVelocity(-1.6);
-        this->is_falling = true;
+        this->attack_frames = 72;
+        this->cancel_frames = 48;
         df::Sound *p_sound = df::ResourceManager::getInstance().getSound("jump5");
         p_sound->play();
     }
-    else if (frame % 12 == 11) {
-        this->clearHitboxes();
-        df::Position temp_relative_pos(-7, -4);
-        df::Position temp_direction(0, -1);
+    else if (frame == 36) {
+        df::Position temp_relative_pos(0, -2);
+        df::Position temp_direction(0, -5);
+        if (this->getFacingDirection() == FACING_RIGHT) {
+            temp_relative_pos.setX(2);
+            temp_direction.setX(1);
+        }
+        else {
+            temp_relative_pos.setX(-5);
+            temp_direction.setX(-1);
+        }
         this->hitboxes.insert(new Hitbox(
             this,
             temp_relative_pos,
@@ -423,7 +464,7 @@ int OctopusChar::recovery_special(int frame) {
             octopus_damage_recovery,
             octopus_knockback_recovery,
             temp_direction,
-            15
+            4,2
             ));
     }
     return 0;

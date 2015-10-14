@@ -40,9 +40,9 @@ const int octopus_damage_air_up = 17;
 const int octopus_stun_air_up = 15;
 const float octopus_knockback_air_up = 1.3;
 
-const int octopus_damage_recovery = 3;
-const int octopus_stun_recovery = 0;
-const float octopus_knockback_recovery = .5;
+const int octopus_damage_recovery = 14;
+const int octopus_stun_recovery = 20;
+const float octopus_knockback_recovery = 1.4;
 
 const std::string char_octopus_type = "char_octopus";
 

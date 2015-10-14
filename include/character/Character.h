@@ -112,8 +112,7 @@ class Character : public df::Object {
 
         // The number of simultaneous jumps the character can do
         int num_multi_jumps;
-        // The current jump number the character is on
-        int count_multi_jumps;
+
 
         df::Position startPos;
 
@@ -142,6 +141,8 @@ class Character : public df::Object {
         int hit_sound_cycle;
 
     protected:
+        // The current jump number the character is on
+        int count_multi_jumps;
 
         // Frames remaining in this character's roll
         int roll_frames;
