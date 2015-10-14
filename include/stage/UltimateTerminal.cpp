@@ -25,6 +25,8 @@ UltimateTerminal::UltimateTerminal() {
 
     this->setSprite(p_temp_sprite);
     this->setSpriteSlowdown(0);
+    this->setAltitude(0);
+    this->setTransparency('#');
 
     setStageBounds(df::Box(df::Position(), 480, 96));
 

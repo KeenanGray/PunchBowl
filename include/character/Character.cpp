@@ -188,7 +188,6 @@ int Character::controls(const df::EventJoystick *p_je) {
     // Standard inputs
     // Axis events
     if (p_je->getAction() == df::AXIS) {
-        df::LogManager::getInstance().writeLog("Axis input is %d, %f", p_je->getAxis(), p_je->getAxisValue());
         if (p_je->getAxis() == df::Input::AXIS_X) {
             this->received_x_axis = true;
             this->x_axis = p_je->getAxisValue();
@@ -482,7 +481,6 @@ int Character::roll(const df::EventJoystick *p_je) {
     if (this->dodge_frames == 0) {
 #if defined _WIN32 || defined _WIN64
         if (this->on_ground && std::abs(p_je->getAxisValue()) > triggerThreshold){
-            df::LogManager::getInstance().writeLog("windows axis value is %f", std::abs(p_je->getAxisValue()));
 
 #else
         if (this->on_ground && p_je->getAxisValue() > triggerThreshold) {
@@ -516,7 +514,6 @@ int Character::dodge(const df::EventJoystick *p_je) {
         //Triggers from controllers are read differently based on OS
 #if defined _WIN32 || defined _WIN64
         if (std::abs(p_je->getAxisValue()) > triggerThreshold){
-            df::LogManager::getInstance().writeLog("windows axis value is %f", std::abs(p_je->getAxisValue()));
 #else
         if (p_je->getAxisValue() > triggerThreshold) {
 #endif

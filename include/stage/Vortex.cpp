@@ -30,16 +30,17 @@ Vortex::Vortex() {
     this->setTransparency('#');
 
 
-    setStageBounds(df::Box(df::Position(), 540, 96));
+    setStageBounds(df::Box(df::Position(), 520, 96));
 
-    this->starting_positions[0] = df::Position(135, 40);
-    this->starting_positions[1] = df::Position(225, 40);
-    this->starting_positions[2] = df::Position(315, 40);
-    this->starting_positions[3] = df::Position(405, 40);
+    this->setPos(df::Position(260, 72));
 
-    this->respawn_position = df::Position(270, 60);
+    this->respawn_position = df::Position(this->getPos().getX(), 60);
 
-    this->setPos(df::Position(270, 72));
+    this->starting_positions[0] = df::Position(this->getPos().getX() - 135, 40);
+    this->starting_positions[1] = df::Position(this->getPos().getX() - 45, 40);
+    this->starting_positions[2] = df::Position(this->getPos().getX() + 45, 40);
+    this->starting_positions[3] = df::Position(this->getPos().getX() + 135, 40);
+
 
     Platform *p1 = new Platform(VORTEX);
     Platform *p2 = new Platform(VORTEX);
