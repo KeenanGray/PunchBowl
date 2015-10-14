@@ -110,10 +110,7 @@ class Character : public df::Object {
         // The ID of the joystick this character listens to
         unsigned int joystick_id;
 
-        // The number of simultaneous jumps the character can do
-        int num_multi_jumps;
-
-
+     
         df::Position startPos;
 
         // Stored value of the joystick x axis
@@ -141,6 +138,8 @@ class Character : public df::Object {
         int hit_sound_cycle;
 
     protected:
+        // The number of simultaneous jumps the character can do
+        int num_multi_jumps;
         // The current jump number the character is on
         int count_multi_jumps;
 

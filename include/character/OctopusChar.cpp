@@ -80,7 +80,7 @@ OctopusChar::OctopusChar() {
     this->air_back_s = 10;
     this->recovery_s = 12;
 
-    this->count_multi_jumps = 5;
+    this->num_multi_jumps = 8;
     this->jump_speed = -0.4;
     this->terminal_velocity = 0.32;
 
