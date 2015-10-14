@@ -161,8 +161,8 @@ int Organizer::eventHandler(const df::Event *p_e) {
                 charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
             }
             else{
-                    characterCount++;
-                    charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
+                characterCount++;
+                charArray[p_se->getSelectedPlayerId()] = p_se->getSelectedChar();
             }
 
             if (characterCount == this->player_count){
@@ -170,9 +170,10 @@ int Organizer::eventHandler(const df::Event *p_e) {
             }
             else
                 charactersSelected = false;
-        } else {
+        }
+        else {
             df::ResourceManager::getInstance().getMusic("main")->stop();
-            switch(p_se->getSelectedStage()) {
+            switch (p_se->getSelectedStage()) {
                 case ULTIMATE_TERMINAL:
                     df::ResourceManager::getInstance().getMusic("combat1")->play(true);
                     this->p_stage = new UltimateTerminal;
@@ -468,7 +469,8 @@ void Organizer::selectStage(){
         tmp_sel->setPos(df::Position(world_manager.getBoundary().getHorizontal() / 2, world_manager.getBoundary().getVertical() / 2));
         tmp_sel->setObjectColor(df::MAGENTA);
         this->player_count++;
-    } else {
+    }
+    else {
         Selector *tmp_sel = new Selector;
         tmp_sel->setPlayerId(0);
         tmp_sel->setJoystickId(input_manager.getJoysticks()[0]);
@@ -550,15 +552,16 @@ void Organizer::draw() {
         max_horiz = std::min(world_manager.getBoundary().getHorizontal(), max_horiz + 48);
         int temp_height = (max_vert - min_vert);
         int temp_width = (max_horiz - min_horiz);
-        if (temp_height*4 > temp_width) {
+        if (temp_height * 4 > temp_width) {
             world_manager.setView(df::Box(
-                df::Position(min_horiz, min_vert),
-                temp_height*4,
+                df::Position(min_horiz, max_vert - temp_height),
+                temp_height * 4,
                 temp_height)
                 );
-        } else {
+        }
+        else {
             world_manager.setView(df::Box(
-                df::Position(min_horiz, min_vert),
+                df::Position(min_horiz, max_vert - temp_width / 4),
                 temp_width,
                 temp_width / 4)
                 );
@@ -575,7 +578,7 @@ void Organizer::draw() {
         std::ostringstream i;
         i << characterCount;
         std::string CharacterNumberStr = "Characters Selected " + i.str();
-    
+
         if (!charactersSelected){
             graphics_manager.drawString(df::Position(5, 25), "A [Key A] to Select", df::LEFT_JUSTIFIED, df::WHITE);
             graphics_manager.drawString(df::Position(5, 26), "B [Key X] to Cancel", df::LEFT_JUSTIFIED, df::WHITE);
