@@ -38,7 +38,7 @@ Organizer::Organizer() {
     LivesCounter->setValue(numberOfLives);
     LivesCounter->setAltitude(df::MAX_ALTITUDE);
     LivesCounter->setViewString("");
-    LivesCounter->setPos(df::Position(16, 18));
+    LivesCounter->setPos(df::Position(22, 18));
 
     df::ResourceManager::getInstance().getMusic("main")->play(true);
 }
