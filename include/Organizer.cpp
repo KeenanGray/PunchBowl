@@ -554,14 +554,14 @@ void Organizer::draw() {
         int temp_width = (max_horiz - min_horiz);
         if (temp_height * 4 > temp_width) {
             world_manager.setView(df::Box(
-                df::Position(min_horiz, max_vert - temp_height),
+                df::Position((min_horiz + max_horiz - temp_height * 4) / 2, max_vert - temp_height),
                 temp_height * 4,
                 temp_height)
                 );
         }
         else {
             world_manager.setView(df::Box(
-                df::Position(min_horiz, max_vert - temp_width / 4),
+                df::Position((min_horiz + max_horiz - temp_width) / 2, max_vert - temp_width / 4),
                 temp_width,
                 temp_width / 4)
                 );

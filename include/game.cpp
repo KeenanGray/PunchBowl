@@ -22,8 +22,6 @@ int main(int argc, char *argv[]) {
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
     df::LogManager &log_manager = df::LogManager::getInstance();
-    log_manager.setLogLevel(-2);
-    log_manager.setFlush(true);
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
