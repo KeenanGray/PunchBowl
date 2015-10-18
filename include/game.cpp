@@ -19,9 +19,27 @@
 void loadResources();
 
 int main(int argc, char *argv[]) {
+    // Basic command line argument parsing
+    // TODO: Find an actual tool for this
+    int window_height = 768;
+    if (argc >= 2) {
+        window_height = atoi(argv[1]);
+    }
+    bool fullscreen = false;
+    if (argc >= 3) {
+        if (argv[2][0] == 'f') {
+            fullscreen = true;
+        }
+    }
+
+    df::LogManager &log_manager = df::LogManager::getInstance();
+    log_manager.startUp();
+    
+    df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
+    graphics_manager.startUp(window_height*16/9, window_height, fullscreen);
+    
     df::GameManager &game_manager = df::GameManager::getInstance();
     game_manager.startUp();
-    df::LogManager &log_manager = df::LogManager::getInstance();
 
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
 
