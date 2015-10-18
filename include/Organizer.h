@@ -4,6 +4,7 @@
 #include <sstream>
 // Dragonfly Engine headers
 // Events
+#include "EventBeforeDraw.h"
 #include "EventKeyboard.h"
 #include "EventOut.h"
 #include "EventStep.h"
@@ -81,6 +82,7 @@ private:
         df::ViewObject *LivesCounter;
         int numberOfLives;
         
+        void beforeDraw();
 
 public:
     static Organizer &getInstance();

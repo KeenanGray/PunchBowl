@@ -3,6 +3,7 @@
  */
 
 // Managers
+#include "EventBeforeDraw.h"
 #include "ResourceManager.h"
 
 // Punchbowl headers
@@ -29,6 +30,8 @@ Scythe::Scythe(ScytheGirlChar *init_scythe_girl) {
     this->scythe_270_ccw = resource_manager.getSprite("scythe-270-ccw");
     this->scythe_270_cw = resource_manager.getSprite("scythe-270-cw");
 
+    this->registerInterest(df::BEFOREDRAW_EVENT);
+
     this->setSpriteSlowdown(0);
     //this->setSprite(this->scythe_0_ccw);
     this->updatePosition();
@@ -36,6 +39,9 @@ Scythe::Scythe(ScytheGirlChar *init_scythe_girl) {
 
 
 int Scythe::eventHandler(const df::Event *p_e) {
+    if (p_e->getType() == df::BEFOREDRAW_EVENT) {
+        this->updatePosition();
+    }
     return 0;
 }
 
@@ -48,11 +54,6 @@ void Scythe::updatePosition() {
         scythe_girl->getPos().getX() + this->relative_pos.getX(),
         scythe_girl->getPos().getY() + this->relative_pos.getY()
         ));
-}
-
-void Scythe::draw() {
-    this->updatePosition();
-    df::Object::draw();
 }
 
 void Scythe::switchOrientation(ScytheOrientation orientation) {

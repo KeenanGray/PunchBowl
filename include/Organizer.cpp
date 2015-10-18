@@ -9,6 +9,7 @@ Organizer::Organizer() {
     setAltitude(0);
     registerInterest(df::JOYSTICK_EVENT);
     registerInterest(df::KEYBOARD_EVENT);
+    registerInterest(df::BEFOREDRAW_EVENT);
     registerInterest(EVENT_SELECTED);
     registerInterest(EVENT_DEATH);
 
@@ -245,6 +246,10 @@ int Organizer::eventHandler(const df::Event *p_e) {
         df::Sound *p_sound = df::ResourceManager::getInstance().getSound("death");
         p_sound->play();
 
+        return 1;
+    }
+    if (p_e->getType() == df::BEFOREDRAW_EVENT) {
+        this->beforeDraw();
         return 1;
     }
     return 0;
@@ -516,9 +521,9 @@ Character *Organizer::getCharacter(Characters character){
     }
 }
 
-void Organizer::draw() {
-    df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
+void Organizer::beforeDraw() {
     if (state == GAME_SCREEN) {
+        df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
         df::WorldManager &world_manager = df::WorldManager::getInstance();
 
         df::LogManager &l_m = df::LogManager::getInstance();
@@ -568,12 +573,16 @@ void Organizer::draw() {
         }
         this->setPos(world_manager.getView().getPos());
     }
+}
+
+void Organizer::draw() {
+    df::GraphicsManager &graphics_manager = df::GraphicsManager::getInstance();
+    df::WorldManager &world_manager = df::WorldManager::getInstance();
     if (state == SPLASH_SCREEN) {
         Object::draw();
         graphics_manager.drawString(df::Position(5, 24), "Y [Key I] Lives +", df::LEFT_JUSTIFIED, df::WHITE);
         graphics_manager.drawString(df::Position(5, 25), "A [Key K] Lives -", df::LEFT_JUSTIFIED, df::WHITE);
     }
-
     if (this->state != SPLASH_SCREEN && this->state != GAME_SCREEN) {
         std::ostringstream i;
         i << characterCount;
@@ -583,7 +592,6 @@ void Organizer::draw() {
             graphics_manager.drawString(df::Position(5, 25), "A [Key A] to Select", df::LEFT_JUSTIFIED, df::WHITE);
             graphics_manager.drawString(df::Position(5, 26), "B [Key X] to Cancel", df::LEFT_JUSTIFIED, df::WHITE);
             graphics_manager.drawString(df::Position(5, 27), CharacterNumberStr, df::LEFT_JUSTIFIED, df::WHITE);
-
         }
         else{
             graphics_manager.drawString(df::Position(5, 25), "Press Start [Key P] to Play", df::LEFT_JUSTIFIED, df::WHITE);

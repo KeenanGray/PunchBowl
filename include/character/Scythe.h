@@ -49,7 +49,6 @@ class Scythe : public df::Object {
         void setRelativePos(df::Position new_pos);
 
         int eventHandler(const df::Event *p_e);
-        virtual void draw();
 
         void switchOrientation(ScytheOrientation orientation);
 };

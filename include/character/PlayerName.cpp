@@ -28,6 +28,7 @@ void PlayerName::draw(){
 void PlayerName::setName(std::string new_name){
     name = new_name;
 }
+
 std::string PlayerName::getName() const{
     return name;
 }
