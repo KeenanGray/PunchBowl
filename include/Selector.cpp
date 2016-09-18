@@ -1,5 +1,7 @@
 #include "Selector.h"
 
+#include <cmath>
+
 Selector::Selector(){
     df::ResourceManager &resource_manager = df::ResourceManager::getInstance();
     setType("Selector");
